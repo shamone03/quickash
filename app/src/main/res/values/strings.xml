@@ -3,4 +3,5 @@
     <string name="email_placeholder">Email</string>
     <string name="password_placeholder">Password</string>
     <string name="passwordRe_placeholder">Re-enter Password</string>
+    <string name="personName_placeholder">Display Name</string>
 </resources>
