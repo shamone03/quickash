@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "609134879486",
+    "project_id": "csci3130group8quickcash",
+    "storage_bucket": "csci3130group8quickcash.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609134879486:android:43fabb4a58ea37b27c3baf",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609134879486-md1uvujsfgdd644ukpl54puuke62hp0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbQqJ4ro0_9MUHuhiEiPBZlkcQNazitvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609134879486-md1uvujsfgdd644ukpl54puuke62hp0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609134879486:android:a26bf5f38e218c327c3baf",
+        "android_client_info": {
+          "package_name": "com.example.csci3130courseproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609134879486-md1uvujsfgdd644ukpl54puuke62hp0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbQqJ4ro0_9MUHuhiEiPBZlkcQNazitvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609134879486-md1uvujsfgdd644ukpl54puuke62hp0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
