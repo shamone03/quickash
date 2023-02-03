@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         passwordField = (EditText)findViewById(R.id.Sign_In_Password);
     }
 
-    // Checks  when the button is clicked, returning true if both are valid
+    // Checks when the button is clicked, returning true if both are valid
     public void Sign_In_Request(View view) {
         String emailAddress = emailField.getText().toString();
         String password = passwordField.getText().toString();
