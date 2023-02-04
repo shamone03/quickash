@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".SignInActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="-73dp">
 
@@ -13,6 +13,7 @@
         android:layout_width="209dp"
         android:layout_height="66dp"
         android:layout_marginBottom="28dp"
+        android:onClick="Sign_In_Request"
         android:text="Sign In"
         app:layout_constraintBottom_toTopOf="@+id/Sign_In_Sign_Up_Link"
         app:layout_constraintEnd_toEndOf="parent"

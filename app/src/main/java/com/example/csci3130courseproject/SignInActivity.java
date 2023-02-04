@@ -13,16 +13,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
     private EditText emailField, passwordField;
     FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.sign_in);
 
         mAuth = FirebaseAuth.getInstance();
         emailField = (EditText)findViewById(R.id.Sign_In_Email);
@@ -38,10 +37,12 @@ public class MainActivity extends AppCompatActivity {
         if (emailAddress.contains("@") == false || emailAddress.contains(".") == false) {
             // Email address is not valid
             Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_SHORT).show();
+            Log.i("SignIn", "Failed email validation");
             return;
         } else if (password.length() < 6 || password.length() > 24) {
             // Password can't exist as sign up would not allow it
             Toast.makeText(getApplicationContext(), "Invalid password", Toast.LENGTH_SHORT).show();
+            Log.i("SignIn", "Failed password validation");
             return;
         }
 
@@ -51,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Log.d("Firebase", "signInWithEmail:success");
+                    Log.i("Firebase", "signInWithEmail:success");
                     // TODO: Transition to dashboard
                 } else {
                     Log.w("Firebase", "signInWithEmail:failure", task.getException());
+                    Toast.makeText(getApplicationContext(), "There was a problem logging in", Toast.LENGTH_SHORT).show();
                 }
             }
         });
