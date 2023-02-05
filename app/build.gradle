@@ -51,3 +51,7 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 }
+
+task prepareKotlinBuildScriptModel {
+
+}
