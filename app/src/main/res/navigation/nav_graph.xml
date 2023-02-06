@@ -9,7 +9,17 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.csci3130courseproject.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_listingSearchFragment"
+            app:destination="@id/listingSearchFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_createListingFragment"
+            app:destination="@id/createListingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.csci3130courseproject.SignInFragment"
@@ -44,4 +54,8 @@
         android:name="com.example.csci3130courseproject.CreateListingFragment"
         android:label="fragment_create_listing"
         tools:layout="@layout/fragment_create_listing" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.csci3130courseproject.ProfileFragment"
+        android:label="EditProfileFragment" />
 </navigation>
