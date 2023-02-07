@@ -78,7 +78,7 @@ public class SignInFragment extends Fragment {
 
         // Attempt Firebase sign-in
         mAuth.signInWithEmailAndPassword(emailAddress, password)
-            .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
