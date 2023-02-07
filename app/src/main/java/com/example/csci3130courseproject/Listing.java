@@ -1,5 +1,8 @@
 package com.example.csci3130courseproject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Listing extends DatabaseObject {
     private int listingId, employerId, duration, urgency, salary;
     // Find appropriate data types for date and location
@@ -16,31 +19,17 @@ public class Listing extends DatabaseObject {
         this.description = description;
     }
 
-    public int getListingId() {
-        return listingId;
-    }
+    @Override
+    public Map<String, Object> mapValues() {
+        Map<String, Object> map = new HashMap<>();
 
-    public int getEmployerId() {
-        return employerId;
-    }
+        map.put("title", title);
+        map.put("description", description);
+        map.put("employerId", employerId);
+        map.put("duration",duration);
+        map.put("salary", salary);
+        map.put("urgency", urgency);
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public int getUrgency() {
-        return urgency;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
+        return map;
     }
 }

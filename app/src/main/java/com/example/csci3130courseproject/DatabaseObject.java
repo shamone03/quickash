@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Superclass of objects that interact with the realtime database.
@@ -33,12 +34,19 @@ public abstract class DatabaseObject {
     }
 
     /**
+     * Maps all values to be replicated to firebase during a push().
+     * Allows for field name declarations & enforces data rules through implicit Map rules
+     * @return Map containing all values to be sent to firebase
+     */
+    public abstract Map<String, Object> mapValues();
+
+    /**
      * Sends a push request to Firebase, adding the object's data to the realtime database.
      * @return Task describing the outcome of the push request.
      */
     public Task<Void> push() {
         DatabaseReference databaseReference = databaseReferences.get(this.getClass().getSimpleName());
 
-        return databaseReference.push().setValue(this);
+        return databaseReference.push().setValue(this.mapValues());
     }
 }
