@@ -1,6 +1,7 @@
 package com.example.csci3130courseproject;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -18,7 +19,7 @@ public abstract class DatabaseObject {
             = new HashMap<String, DatabaseReference>();
 
     public DatabaseObject() {
-        if (database != null) {
+        if (database == null) {
             database = FirebaseDatabase.getInstance();
         }
 

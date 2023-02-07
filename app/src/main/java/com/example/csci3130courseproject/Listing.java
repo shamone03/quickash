@@ -15,4 +15,32 @@ public class Listing extends DatabaseObject {
         this.title = title;
         this.description = description;
     }
+
+    public int getListingId() {
+        return listingId;
+    }
+
+    public int getEmployerId() {
+        return employerId;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public int getUrgency() {
+        return urgency;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
