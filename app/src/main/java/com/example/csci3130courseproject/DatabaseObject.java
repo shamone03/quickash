@@ -65,6 +65,7 @@ public abstract class DatabaseObject {
     public Task<DataSnapshot> getRecord(String key) {
         recordKey = key;
         DatabaseReference databaseReference = getDatabaseReference();
+
         return databaseReference.child(key).get();
     }
 
@@ -75,6 +76,7 @@ public abstract class DatabaseObject {
     public Task<Void> pushRecord() {
         DatabaseReference databaseReference = getDatabaseReference();
         recordKey = databaseReference.push().getKey();
+
         return databaseReference.push().setValue(this.mapValues());
     }
 
@@ -84,7 +86,12 @@ public abstract class DatabaseObject {
      * @return Task describing the outcome of the update request.
      */
     public Task<Void> updateData(Map<String, Object> data) {
+        if (recordKey == null) {
+            throw new NullPointerException("Object has not been linked to a Firebase record");
+        }
+
         DatabaseReference databaseReference = getDatabaseReference();
+
         return databaseReference.child(recordKey).updateChildren(data);
     }
 
@@ -93,9 +100,14 @@ public abstract class DatabaseObject {
      * @return Task describing the outcome of the delete request
      */
     public Task<Void> deleteRecord() {
+        if (recordKey == null) {
+            throw new NullPointerException("Object has not been linked to a Firebase record");
+        }
+
         DatabaseReference databaseReference = getDatabaseReference();
         Task<Void> task = databaseReference.child(recordKey).removeValue();
         recordKey = null;
+
         return task;
     }
 }
