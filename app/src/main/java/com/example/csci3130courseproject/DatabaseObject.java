@@ -63,10 +63,17 @@ public abstract class DatabaseObject {
      * @return Task describing the outcome of the get request.
      */
     public Task<DataSnapshot> getRecord(String key) {
-        recordKey = key;
         DatabaseReference databaseReference = getDatabaseReference();
+        Task<DataSnapshot> record = databaseReference.child(key).get();
 
-        return databaseReference.child(key).get();
+        // If no firebase record associated with key, object is not fully initialized
+        if (record.getResult().exists() == true) {
+            recordKey = key;
+        } else {
+            Log.w("Firebase", "getRecord: Record with key " + key + " could not be found in firebase.");
+        }
+
+        return record;
     }
 
     /**
