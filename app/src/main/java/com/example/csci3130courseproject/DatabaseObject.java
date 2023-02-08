@@ -40,7 +40,7 @@ public abstract class DatabaseObject {
     /**
      * Maps all values to be replicated to firebase during a push().
      * Allows for field name declarations & enforces data rules through implicit Map rules.
-     * @return Map containing all values to be sent to firebase.
+     * @return Map of key-value pairs containing all data to be sent to firebase.
      */
     public abstract Map<String, Object> mapValues();
 
