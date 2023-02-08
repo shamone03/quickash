@@ -6,11 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +22,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,22 +85,41 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        EditText email = getView().findViewById(R.id.signupEmail);
+        EditText password = getView().findViewById(R.id.editTextTextPassword);
+        Button signUpButton = getView().findViewById(R.id.signUpButton);
 
-
-        mAuth.createUserWithEmailAndPassword("aryah2@email.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-//                    Log.i("signup", "");
-                    Toast.makeText(activity, "Signed Up", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                if (signUpUser(email.getText().toString(), password.getText().toString())) {
+                    Toast.makeText(getActivity(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
                 } else {
-//                    Log.i("signup", "");
-                    Toast.makeText(activity, "Sign Up failed", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+//        if ( signUpUser(email.getText().toString(), password.getText().toString())) {
+//            Toast.makeText(getActivity(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
+//
+//        } else {
+//            Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
+//        }
+
+
+    }
+
+    public boolean signUpUser(String email, String password) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        AtomicBoolean result = new AtomicBoolean(false);
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                result.set(task.isSuccessful());
+            }
+        });
+        return result.get();
     }
 }
