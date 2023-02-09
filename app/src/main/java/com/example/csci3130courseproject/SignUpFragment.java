@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -88,8 +89,19 @@ public class SignUpFragment extends Fragment {
         EditText signupPassword = (EditText) getView().findViewById(R.id.signupPassword);
         EditText signupRePassword = (EditText) getView().findViewById(R.id.signupRepassword);
         Switch accountTypeSwitch = (Switch) getView().findViewById(R.id.accountTypeSwitch);
+        Button signupButton = (Button) getView().findViewById(R.id.signUpButton);
+    }
 
+    boolean validString(String str, int CheckType) {
+        final int EMAIL_STR_TYPE = 0;
+        final int PASS_STR_TYPE = 1;
 
-
+        switch (CheckType) {
+            case EMAIL_STR_TYPE:
+                return (str.contains("@") && str.contains("."));
+            case PASS_STR_TYPE:
+                return (str.length() > 6 && str.length() < 24);
+        }
+        return false;
     }
 }
