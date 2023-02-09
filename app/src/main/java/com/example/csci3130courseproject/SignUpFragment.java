@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,20 +84,12 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+        EditText signupEmail = (EditText) getView().findViewById(R.id.signupEmail);
+        EditText signupPassword = (EditText) getView().findViewById(R.id.signupPassword);
+        EditText signupRePassword = (EditText) getView().findViewById(R.id.signupRepassword);
+        Switch accountTypeSwitch = (Switch) getView().findViewById(R.id.accountTypeSwitch);
 
-        mAuth.createUserWithEmailAndPassword("aryah2@email.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-//                    Log.i("signup", "");
-                    Toast.makeText(activity, "Signed Up", Toast.LENGTH_SHORT).show();
-                } else {
-//                    Log.i("signup", "");
-                    Toast.makeText(activity, "Sign Up failed", Toast.LENGTH_SHORT).show();
 
-                }
-            }
-        });
 
     }
 }
