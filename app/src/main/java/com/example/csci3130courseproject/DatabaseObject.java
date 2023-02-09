@@ -3,7 +3,13 @@ package com.example.csci3130courseproject;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +25,10 @@ public abstract class DatabaseObject {
     private static FirebaseDatabase database;
     private static HashMap<String, DatabaseReference> databaseReferences = new HashMap<>();
 
-    protected String recordKey;
+    private String recordKey;
+
+    /** Map of key-value pairs containing all data to be sent to firebase. **/
+    private HashMap<String, Object> recordValues = new HashMap<>();
 
     /**
      * Called implicitly before the construction of a subclass object.
@@ -40,13 +49,6 @@ public abstract class DatabaseObject {
     }
 
     /**
-     * Maps all values to be replicated to firebase during a push().
-     * Allows for field name declarations & enforces data rules through implicit Map rules.
-     * @return Map of key-value pairs containing all data to be sent to firebase.
-     */
-    public abstract Map<String, Object> mapValues();
-
-    /**
      * @return The DatabaseReference object associated with the subclass.
      */
     public DatabaseReference getDatabaseReference() {
@@ -58,33 +60,50 @@ public abstract class DatabaseObject {
     }
 
     /**
-     * Retrieves a record related to the subclass via a key
+     * Retrieves a record related to the subclass via a key and puts values into recordValues.
      * @param key String key used by Firebase to uniquely identify the data record.
-     * @return Task describing the outcome of the get request.
      */
-    public Task<DataSnapshot> getRecord(String key) {
+    public void getRecord(String key) {
         DatabaseReference databaseReference = getDatabaseReference();
-        Task<DataSnapshot> record = databaseReference.child(key).get();
-
-        // If no firebase record associated with key, object is not fully initialized
-        if (record.getResult().exists() == true) {
-            recordKey = key;
-        } else {
-            Log.w("Firebase", "getRecord: Record with key " + key + " could not be found in firebase.");
-        }
-
-        return record;
+        databaseReference.child(key).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("Firebase", "Error getting data", task.getException());
+                }
+                else {
+                    for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                        String key = snapshot.getKey();
+                        recordValues.put(key, snapshot.getValue());
+                    }
+                    recordKey = key;
+                }
+            }
+        });
     }
 
     /**
      * Sends a push request to Firebase, adding a record of the object to the realtime database.
      * @return Task describing the outcome of the push request.
      */
-    public Task<Void> pushRecord() {
+    public Task<Void> setRecord() {
         DatabaseReference databaseReference = getDatabaseReference();
         recordKey = databaseReference.push().getKey();
 
-        return databaseReference.push().setValue(this.mapValues());
+        return databaseReference.child(recordKey).setValue(recordValues);
+    }
+
+    /**
+     * Sends a push request to Firebase, adding a record of the object with a custom key to the realtime database.
+     * If specified key already exists, the record will be overwritten.
+     * @param key Custom key you want the record to be associated with
+     * @return Task describing the outcome of the push request.
+     */
+    public Task<Void> setRecord(String key) {
+        DatabaseReference databaseReference = getDatabaseReference();
+        recordKey = key;
+
+        return databaseReference.child(recordKey).setValue(recordValues);
     }
 
     /**
@@ -116,5 +135,13 @@ public abstract class DatabaseObject {
         recordKey = null;
 
         return task;
+    }
+
+    public Object getValue(String key) {
+        return recordValues.get(key);
+    }
+
+    public void setValue(String key, Object value) {
+        recordValues.put(key,value);
     }
 }

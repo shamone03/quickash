@@ -1,35 +1,23 @@
 package com.example.csci3130courseproject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Listing extends DatabaseObject {
-    private int listingId, employerId, duration, urgency, salary;
-    // Find appropriate data types for date and location
-    private String title, description;
-
-    public Listing(int listingId, int employerId, int duration, int urgency, int salary,
-                   String title, String description) {
-        this.listingId = listingId;
-        this.employerId = employerId;
-        this.duration = duration;
-        this.urgency = urgency;
-        this.salary = salary;
-        this.title = title;
-        this.description = description;
+    /**
+     * Create a new Listing object from app data
+     */
+    public Listing(String employerId, String title, HashMap<String, Boolean> employeeIdMap) {
+        // Adding values to be replicated to Firebase
+        setValue("employer", employerId);
+        setValue("title", title);
+        setValue("employees", employeeIdMap);
     }
 
-    @Override
-    public Map<String, Object> mapValues() {
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("title", title);
-        map.put("description", description);
-        map.put("employerId", employerId);
-        map.put("duration",duration);
-        map.put("salary", salary);
-        map.put("urgency", urgency);
-
-        return map;
+    /**
+     * Create a new Listing object from a Firebase record
+     * @param key
+     */
+    public Listing(String key){
+        getRecord(key);
     }
 }
