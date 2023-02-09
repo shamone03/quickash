@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,13 +88,22 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         EditText email = getView().findViewById(R.id.signupEmail);
         EditText password = getView().findViewById(R.id.editTextTextPassword);
+        EditText rePassword = getView().findViewById(R.id.editTextTextPassword2);
         Button signUpButton = getView().findViewById(R.id.signUpButton);
+
+
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!validateEmail(email.getText().toString())) {
+                    return;
+                }
+                if (!validatePasswords(password.getText().toString(), rePassword.getText().toString())) {
+                    return;
+                }
+
                 if (signUpUser(email.getText().toString(), password.getText().toString())) {
-                    Toast.makeText(getActivity(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
                 } else {
                     Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
@@ -101,17 +111,36 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-//        if ( signUpUser(email.getText().toString(), password.getText().toString())) {
-//            Toast.makeText(getActivity(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
-//
-//        } else {
-//            Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
-//        }
-
-
     }
 
-    public boolean signUpUser(String email, String password) {
+    private boolean validateEmail(String email) {
+        if (!Pattern.compile("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matcher(email).find()) {
+            Toast.makeText(getActivity(), "Invalid email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePasswords(String password, String rePassword) {
+        if (!password.equals(rePassword)) {
+            Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() < 6) {
+            Toast.makeText(getActivity(), "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() > 24) {
+            Toast.makeText(getActivity(), "Password should be at most 24 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean signUpUser(String email, String password) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         AtomicBoolean result = new AtomicBoolean(false);
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
