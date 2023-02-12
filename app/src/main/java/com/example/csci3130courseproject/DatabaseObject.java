@@ -4,6 +4,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.compose.runtime.snapshots.Snapshot;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.SuccessContinuation;
@@ -55,8 +56,25 @@ public abstract class DatabaseObject {
         return databaseReferences.get(this.getClass().getSimpleName());
     }
 
+    /**
+     *
+     * @return The key for the DatabaseObject
+     */
     public String getRecordKey(){
         return recordKey;
+    }
+
+    /**
+     * Builds the DatabaseObject from a DataSnapshot
+     * @param snapshot Datasnapshot containing the record
+     */
+    protected void buildFromSnapshot(DataSnapshot snapshot) {
+        recordKey = snapshot.getKey();
+
+        for (DataSnapshot data: snapshot.getChildren()) {
+            Log.d("Testing", data.getKey());
+            Log.d("Testing", data.getValue().toString());
+        }
     }
 
     /**
@@ -64,6 +82,7 @@ public abstract class DatabaseObject {
      * @param key String key used by Firebase to uniquely identify the data record.
      */
     public void getRecord(String key) {
+        // TODO: Prevent reference-level get requests
         DatabaseReference databaseReference = getDatabaseReference();
         databaseReference.child(key).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -72,11 +91,7 @@ public abstract class DatabaseObject {
                     Log.e("Firebase", "Error getting data", task.getException());
                 }
                 else {
-                    for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                        String key = snapshot.getKey();
-                        recordValues.put(key, snapshot.getValue());
-                    }
-                    recordKey = key;
+                    buildFromSnapshot(task.getResult());
                 }
             }
         });
@@ -137,10 +152,20 @@ public abstract class DatabaseObject {
         return task;
     }
 
+    /**
+     *
+     * @param key String key used locally to uniquely identify the data record.
+     * @return Value associated with the key
+     */
     public Object getValue(String key) {
         return recordValues.get(key);
     }
 
+    /**
+     *
+     * @param key String key used locally to uniquely identify the data record.
+     * @param value Value associated with the key
+     */
     public void setValue(String key, Object value) {
         recordValues.put(key,value);
     }
