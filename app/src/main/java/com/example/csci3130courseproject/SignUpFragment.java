@@ -86,31 +86,37 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EditText email = getView().findViewById(R.id.signupEmail);
-        EditText password = getView().findViewById(R.id.editTextTextPassword);
-        EditText rePassword = getView().findViewById(R.id.editTextTextPassword2);
         Button signUpButton = getView().findViewById(R.id.signUpButton);
-
-
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateEmail(email.getText().toString())) {
-                    return;
-                }
-                if (!validatePasswords(password.getText().toString(), rePassword.getText().toString())) {
-                    return;
-                }
+                signUpUser(view);
+            }
+        });
+    }
 
-                if (signUpUser(email.getText().toString(), password.getText().toString())) {
+    public void signUpUser(View view) {
+        EditText email = getView().findViewById(R.id.signupEmail);
+        EditText password = getView().findViewById(R.id.editTextTextPassword);
+        EditText rePassword = getView().findViewById(R.id.editTextTextPassword2);
+        if (!validateEmail(email.getText().toString())) {
+            return;
+        }
+        if (!validatePasswords(password.getText().toString(), rePassword.getText().toString())) {
+            return;
+        }
+
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
                     Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
                 } else {
                     Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
-
     }
 
     private boolean validateEmail(String email) {
@@ -140,15 +146,4 @@ public class SignUpFragment extends Fragment {
         return true;
     }
 
-    private boolean signUpUser(String email, String password) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        AtomicBoolean result = new AtomicBoolean(false);
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                result.set(task.isSuccessful());
-            }
-        });
-        return result.get();
-    }
 }
