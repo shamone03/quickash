@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -112,16 +114,11 @@ public class SignUpFragment extends Fragment {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if (task.isSuccessful()) {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users");
-                    ArrayList<String> jobPostings = new ArrayList<>();
-                    jobPostings.add("job1");
-                    jobPostings.add("job2");
-                    jobPostings.add("job3");
-                    jobPostings.add("job4");
-                    User newUser = new User(jobPostings, jobPostings);
-//                    Toast.makeText(getActivity(), , Toast.LENGTH_LONG).show();
+                    User newUser = new User(new ArrayList<>(), new ArrayList<>());
                     String uid = task.getResult().getUser().getUid();
                     userRef.child(uid).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -135,7 +132,12 @@ public class SignUpFragment extends Fragment {
                         }
                     });
                 } else {
-                    Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
+                    if (((FirebaseAuthException) task.getException()).getErrorCode().equals("ERROR_EMAIL_ALREADY_IN_USE")) {
+                        Toast.makeText(getActivity(), "This email address is already in use", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("SIGNUP", ((FirebaseAuthException) task.getException()).getErrorCode());
+                        Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
