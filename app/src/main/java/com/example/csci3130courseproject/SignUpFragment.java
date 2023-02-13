@@ -22,7 +22,10 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
@@ -110,7 +113,27 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference userRef = database.getReference("users");
+                    ArrayList<String> jobPostings = new ArrayList<>();
+                    jobPostings.add("job1");
+                    jobPostings.add("job2");
+                    jobPostings.add("job3");
+                    jobPostings.add("job4");
+                    User newUser = new User(jobPostings, jobPostings);
+//                    Toast.makeText(getActivity(), , Toast.LENGTH_LONG).show();
+                    String uid = task.getResult().getUser().getUid();
+                    userRef.child(uid).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getActivity(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
+                            } else {
+                                Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else {
                     Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
                 }
