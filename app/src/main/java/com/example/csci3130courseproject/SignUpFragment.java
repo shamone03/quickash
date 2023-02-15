@@ -2,11 +2,29 @@ package com.example.csci3130courseproject;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +41,7 @@ public class SignUpFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    FragmentActivity activity;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -58,7 +77,73 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        activity = getActivity();
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Button signUpButton = getView().findViewById(R.id.signUpButton);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signUpUser(view);
+            }
+        });
+    }
+
+    public void signUpUser(View view) {
+        EditText email = getView().findViewById(R.id.signupEmail);
+        EditText password = getView().findViewById(R.id.editTextTextPassword);
+        EditText rePassword = getView().findViewById(R.id.editTextTextPassword2);
+        if (!validateEmail(email.getText().toString())) {
+            return;
+        }
+        if (!validatePasswords(password.getText().toString(), rePassword.getText().toString())) {
+            return;
+        }
+
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
+                } else {
+                    Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+    private boolean validateEmail(String email) {
+        if (!Pattern.compile("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matcher(email).find()) {
+            Toast.makeText(getActivity(), "Invalid email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePasswords(String password, String rePassword) {
+        if (!password.equals(rePassword)) {
+            Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() < 6) {
+            Toast.makeText(getActivity(), "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() > 24) {
+            Toast.makeText(getActivity(), "Password should be at most 24 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
 }
