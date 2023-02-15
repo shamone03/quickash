@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="106dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="140dp"
         android:layout_marginBottom="595dp"
         android:text="Create a Job Posting"
@@ -37,11 +37,26 @@
         app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
 
     <EditText
+        android:id="@+id/createJP_PostExpires"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="101dp"
+        android:ems="10"
+        android:hint="Posting Expires"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createJP_priority" />
+
+    <EditText
         android:id="@+id/createJP_JobSalary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
         android:hint="Job Salary"
@@ -56,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="80dp"
         android:ems="12"
         android:hint="(Optional) Workplace Address"
@@ -66,47 +81,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createJP_JobSalary" />
 
-    <EditText
-        android:id="@+id/createJP_PostExpires"
+    <Button
+        android:id="@+id/submitJP_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="101dp"
-        android:ems="10"
-        android:hint="Posting Expires"
-        android:inputType="date"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="152dp"
+        android:layout_marginBottom="105dp"
+        android:text="Post Job"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createJP_PostingTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="281dp"
         android:layout_height="54dp"
         android:layout_marginStart="65dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="65dp"
-        android:layout_marginBottom="28dp"
         android:text="Note: If Workplace Address is left empty, you will be promted to use your current address as workplace address."
-        app:layout_constraintBottom_toTopOf="@+id/submitJP_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createJP_JobAddress" />
 
-    <Button
-        android:id="@+id/submitJP_button"
+    <Spinner
+        android:id="@+id/createJP_priority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="151dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="103dp"
-        android:text="Post Job"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="175dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="175dp"
+        android:entries="@array/priorityList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/createJP_PostingTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
