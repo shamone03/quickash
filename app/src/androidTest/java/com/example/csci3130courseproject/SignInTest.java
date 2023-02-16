@@ -8,12 +8,15 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,6 +34,11 @@ public class SignInTest {
 //    @Rule
 //    public ActivityScenarioRule<MainActivity> myRule = new ActivityScenarioRule<>(MainActivity.class);
 
+    @Before
+    public void launchMainActivity() {
+        ActivityScenario.launch(MainActivity.class);
+    }
+
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -40,24 +48,21 @@ public class SignInTest {
 
     @Test
     public void signInPageVisible() {
-        ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.Sign_In_Email)).check(matches(withText("")));
         onView(withId(R.id.Sign_In_Password)).check(matches(withText("")));
     }
 
     @Test
     public void userSignedIn() throws InterruptedException {
-        ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
         onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
         onView(withId(R.id.Sign_In_Request)).perform(click());
         Thread.sleep(5000); // temporary fix, should use idlingresource or smthn
-        onView(withId(R.id.welcome_label)).check(matches(withText("Hello")));
+        onView(withId(R.id.fragment_dashboard)).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkSwitchToSignUp() {
-        ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.GoToSignUp)).perform(click());
         onView(withId(R.id.signupEmail)).check(matches(withText("")));
     }
