@@ -2,6 +2,8 @@ package com.example.csci3130courseproject;
 
 import android.content.Context;
 
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -45,4 +47,6 @@ public class JobSearchTest {
     public void checkIfSearchPageVisible() {
         onView(withId(R.id.searchPage)).check(matches(isDisplayed()));
     }
+
+
 }
