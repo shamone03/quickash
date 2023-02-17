@@ -22,50 +22,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link CreateListingFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Handles the creation of new job listings
  */
 public class CreateListingFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public CreateListingFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateListingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CreateListingFragment newInstance(String param1, String param2) {
-        CreateListingFragment fragment = new CreateListingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -89,17 +52,15 @@ public class CreateListingFragment extends Fragment {
                 Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
                 HashMap<String, Boolean> employees = new HashMap<>();
 
-                // Create job posting
+                // Create job posting object and send to firebase
                 Listing newListing = new Listing(posterID, jobTitle, jobDuration, jobSalary, priorityLevel, employees);
                 newListing.setRecord();
 
-                // Change view:
+                // Navigate back to dashboard fragment:
                 Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_dashboardFragment);
             }
         });
     }
-
-    // Methods:
 
     public EditText getJobTitleField(){
         return (EditText) getView().findViewById(R.id.createJP_PostingTitle);
@@ -126,5 +87,4 @@ public class CreateListingFragment extends Fragment {
     }
 
     public Spinner getJobPriorityField() { return (Spinner) getView().findViewById(R.id.createJP_priority); }
-
 }
