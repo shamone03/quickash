@@ -1,17 +1,24 @@
 package com.example.csci3130courseproject;
 
 import android.content.Context;
+import android.view.KeyEvent;
 
+import androidx.test.espresso.action.EspressoKey;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import androidx.test.core.app.ActivityScenario;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.actionWithAssertions;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
@@ -44,5 +51,22 @@ public class JobSearchTest {
     @Test
     public void checkIfSearchPageVisible() {
         onView(withId(R.id.searchPage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkIfSearching_isValid() {
+        onView(withId(R.id.searchBar)).perform(typeText("dog"));
+        //onView(withId(R.id.searchBar)).perform(pressImeActionButton());
+        onView(withId(R.id.searchBar)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.searchPage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkIfSearched_matchesCard() throws InterruptedException {
+        onView(withId(R.id.searchBar)).perform(typeText("dog"));
+        onView(withId(R.id.searchBar)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        Thread.sleep(4000);
+        //onView(withId(R.id.searchBar)).check(matches(withText(String.valueOf(withId(R.id.titleLabel)))));
+        onView(withParent(withId(R.id.listingCardList))).check(matches(isDisplayed()));
     }
 }
