@@ -8,10 +8,11 @@
     <!-- create job posting drop-down menu -->
     <string name="menuInfo">Job priority</string>
     <string-array name="priorityList">
-        <item>Low (1+ Months)</item>
-        <item>Medium (1 Month)</item>
-        <item>High (1-2 Weeks)</item>
-        <item>Urgent (Same day)</item>
+        <string>Job Priority</string>
+        <item name="low">Low (1+ Months)</item>
+        <item name="medium">Medium (1 Month)</item>
+        <item name="high">High (1-2 Weeks)</item>
+        <item name="max">Urgent (Same day)</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
