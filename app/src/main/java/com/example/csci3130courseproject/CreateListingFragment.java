@@ -72,15 +72,16 @@ public class CreateListingFragment extends Fragment {
         }
     }
 
-    public String getJobTitle(){
-        EditText jobTitleTextField = (EditText) getView().findViewById(R.id.createJP_PostingTitle);
-        return jobTitleTextField.getText().toString();
+    public EditText getJobTitleField(){
+        return (EditText) getView().findViewById(R.id.createJP_PostingTitle);
+    }
+
+    public EditText getJobSalaryField(){
+        return (EditText) getView().findViewById(R.id.createJP_JobSalary);
     }
 
     public double getJobSalary(){
-        EditText jobSalaryTextField = (EditText) getView().findViewById(R.id.createJP_JobSalary);
-        Double salary = toDouble(jobSalaryTextField.getText().toString());
-        return salary;
+        return toDouble(getJobSalaryField().getText().toString());
     }
 
 }
