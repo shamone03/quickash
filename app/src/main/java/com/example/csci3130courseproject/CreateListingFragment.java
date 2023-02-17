@@ -29,6 +29,7 @@ public class CreateListingFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static Priority.PRIORITY selectedPriority;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -79,7 +80,7 @@ public class CreateListingFragment extends Fragment {
         Button createPosting = (Button) getView().findViewById(R.id.createJP_button);
     }
 
-    // Methods:
+    // Helper Methods:
     private double toDouble(String text) throws NumberFormatException{
         try {
             return Double.parseDouble(text);
@@ -96,8 +97,14 @@ public class CreateListingFragment extends Fragment {
         }
     }
 
+    // Methods:
+
     public EditText getJobTitleField(){
         return (EditText) getView().findViewById(R.id.createJP_PostingTitle);
+    }
+
+    public String getJobTitle(){
+        return getJobTitleField().getText().toString();
     }
 
     public EditText getJobSalaryField(){
@@ -112,19 +119,22 @@ public class CreateListingFragment extends Fragment {
         return (EditText) getView().findViewById(R.id.createJP_JobDurration);
     }
 
+    public int getJobDuration(){
+        return toInt(getJobDurationField().getText().toString());
+    }
+
     public Spinner getJobPriorityField() { return (Spinner) getView().findViewById(R.id.createJP_priority); }
 
-    public String getJobPriority(Spinner priorityList){
-        return priorityList.getSelectedItem().toString();
-    }
 
     // Click method:
     public void onButtonClick(){
         String posterID = FirebaseAuth.getInstance().getUid();
-        EditText jobTitle = getJobTitleField();
-        EditText jobSalaryField = getJobSalaryField();
-        EditText jobDurationField = getJobDurationField();
-        String priorityLevel = getJobPriority(getJobPriorityField());
+        String jobTitle = getJobTitle();
+        double jobSalaryField = getJobSalary();
+        int jobDurationField = getJobDuration();
+        Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
+
+
 
     }
 
