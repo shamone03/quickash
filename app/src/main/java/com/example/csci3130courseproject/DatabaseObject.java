@@ -23,12 +23,15 @@ import java.util.Map;
  * Handles database communication overhead.
  */
 public abstract class DatabaseObject {
+    /** Reference to the Group 8 Firebase realtime database.*/
     private static FirebaseDatabase database;
+    /** Static hashmap holding all DatabaseReferences for the subclasses implementing DatabaseObject*/
     private static HashMap<String, DatabaseReference> databaseReferences = new HashMap<>();
 
+    /** Key of the database record as referenced in Firebase.*/
     private String recordKey;
 
-    /** Map of key-value pairs containing all data to be sent to firebase. **/
+    /** Map of key-value pairs containing all data to be sent to Firebase.*/
     private HashMap<String, Object> recordValues = new HashMap<>();
 
     /**
@@ -65,7 +68,7 @@ public abstract class DatabaseObject {
 
     /**
      * Builds the DatabaseObject from a DataSnapshot
-     * @param snapshot Datasnapshot containing the record
+     * @param snapshot DataSnapshot containing the record
      */
     protected void buildFromSnapshot(DataSnapshot snapshot) {
         recordKey = snapshot.getKey();
