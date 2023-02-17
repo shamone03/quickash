@@ -120,6 +120,10 @@ public class SignUpFragment extends Fragment {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users");
                     User newUser = new User(new ArrayList<>(), new ArrayList<>());
+
+                    newUser.addJobPosting("hob1");
+                    newUser.addJobsTaken("hob2");
+
                     String uid = task.getResult().getUser().getUid();
                     userRef.child(uid).setValue(newUser);
                 } else {

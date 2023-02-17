@@ -10,13 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DashboardFragment#newInstance} factory method to
+ * Use the {@link UserProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment {
+public class UserProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,10 +25,9 @@ public class DashboardFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String name, phoneNumber, address, email, password;
 
-    public DashboardFragment() {
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -37,19 +37,20 @@ public class DashboardFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Dashboard.
+     * @return A new instance of fragment UserProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
+    public static UserProfileFragment newInstance(String param1, String param2) {
+        UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
+    /*
     @Override
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -58,29 +59,31 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+     */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
 
-        Button goToUserProfile = (Button)getView().findViewById(R.id.userProfileButton);
+        Button securityNavigation = (Button)getView().findViewById(R.id.securityNavigationButton);
 
-        goToUserProfile.setOnClickListener(new View.OnClickListener() {
+        securityNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dashboardToUserProfile(view);
+                userProfileToSecurity(view);
             }
         });
 
 
     }
 
-    public void dashboardToUserProfile(View view){
-        Navigation.findNavController(view).navigate(R.id.action_dashboardFragment_to_userProfileFragment);
+    public void userProfileToSecurity(View view){
+        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_securityFragment);
     }
 }
