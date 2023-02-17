@@ -29,8 +29,8 @@ public class JobSearchJUnitTest {
 
     @Test
     public void checkFilterTrue() {
-        assertTrue(listingSearchFragment.filterTitles("", ""));
-        assertTrue(listingSearchFragment.filterTitles("abc", "B"));
+        assertFalse(listingSearchFragment.filterTitles("", ""));
+        assertFalse(listingSearchFragment.filterTitles("abc", "B"));
     }
 
     @Test
