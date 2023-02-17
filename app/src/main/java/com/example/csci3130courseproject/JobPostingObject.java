@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class JobPostingObject {
 
-    private User jobPoster;
+    private String jobPosterID;
     private HashMap<String, Boolean> userApplied;
     private String jobTitle;
     private String priority;
@@ -18,9 +18,9 @@ public class JobPostingObject {
 
     public JobPostingObject(){}
 
-    public JobPostingObject(User poster, HashMap<String, Boolean> userApplied, String title, String priority, double jobSalary,
+    public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, String priority, double jobSalary,
                             double jobDuration, Location location){
-        this.jobPoster = poster;
+        this.jobPosterID = posterID;
         this.userApplied = userApplied;
         this.jobTitle = title;
         this.priority = priority;
@@ -37,8 +37,8 @@ public class JobPostingObject {
         this.jobLocation = jobLocation;
     }
 
-    public void setJobPoster(User jobPoster) {
-        this.jobPoster = jobPoster;
+    public void setJobPoster(String jobPosterID) {
+        this.jobPosterID = jobPosterID;
     }
 
     public void setJobSalary(double jobSalary) {
@@ -73,8 +73,8 @@ public class JobPostingObject {
         return priority;
     }
 
-    public User getJobPoster() {
-        return jobPoster;
+    public String getJobPoster() {
+        return jobPosterID;
     }
 
 

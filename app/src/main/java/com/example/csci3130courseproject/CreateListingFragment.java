@@ -1,5 +1,6 @@
 package com.example.csci3130courseproject;
 
+import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,10 +77,6 @@ public class CreateListingFragment extends Fragment {
         Button createPosting = (Button) getView().findViewById(R.id.createJP_button);
     }
 
-    public void onButtonClick(){
-
-    }
-
     // Methods:
     private double toDouble(String text) throws NumberFormatException{
         try {
@@ -94,6 +96,27 @@ public class CreateListingFragment extends Fragment {
 
     public double getJobSalary(){
         return toDouble(getJobSalaryField().getText().toString());
+    }
+
+    public EditText getJobDurationField(){
+        return (EditText) getView().findViewById(R.id.createJP_JobDurration);
+    }
+
+    public Spinner getJobPriorityField() { return (Spinner) getView().findViewById(R.id.createJP_priority); }
+
+    public String getJobPriority(Spinner priorityList){
+        return priorityList.getSelectedItem().toString();
+    }
+
+    // Click method:
+    public void onButtonClick(){
+        String posterID = FirebaseAuth.getInstance().getUid();
+        EditText jobTitle = getJobTitleField();
+        EditText jobSalaryField = getJobSalaryField();
+        EditText jobDurationField = getJobDurationField();
+        String priorityLevel = getJobPriority(getJobPriorityField());
+
+
     }
 
 }

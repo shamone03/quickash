@@ -139,7 +139,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private boolean validateEmail(String email) {
-        if (!Pattern.compile("[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matcher(email).find()) {
+        if (!Pattern.compile("[A-z\\d]+@[A-z\\d]+\\.[A-z\\d]+").matcher(email).find()) {
             Toast.makeText(getActivity(), "Invalid email", Toast.LENGTH_SHORT).show();
             return false;
         }
