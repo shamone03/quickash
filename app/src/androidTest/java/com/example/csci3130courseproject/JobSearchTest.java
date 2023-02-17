@@ -23,4 +23,9 @@ public class JobSearchTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.csci3130courseproject", appContext.getPackageName());
     }
+
+    @Test
+    public void searchPage_visible() {
+
+    }
 }

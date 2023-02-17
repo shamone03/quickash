@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,6 +41,7 @@ public class ListingSearchFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_listing_search, container, false);
     }
+
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
@@ -78,7 +80,14 @@ public class ListingSearchFragment extends Fragment {
                 return false;
             }
         });
+        searchBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchBar.onActionViewExpanded();
+            }
+        });
     }
+
 
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
