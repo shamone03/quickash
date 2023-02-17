@@ -4,10 +4,12 @@ import android.location.Location;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 public class JobPostingObject {
 
     private User jobPoster;
+    private HashMap<String, Boolean> userApplied;
     private String jobTitle;
     private String priority;
     private double jobDuration;
@@ -16,9 +18,10 @@ public class JobPostingObject {
 
     public JobPostingObject(){}
 
-    public JobPostingObject(User poster, String title, String priority, double jobSalary,
+    public JobPostingObject(User poster, HashMap<String, Boolean> userApplied, String title, String priority, double jobSalary,
                             double jobDuration, Location location){
         this.jobPoster = poster;
+        this.userApplied = userApplied;
         this.jobTitle = title;
         this.priority = priority;
         this.jobSalary = jobSalary;

@@ -8,7 +8,7 @@
     <!-- create job posting drop-down menu -->
     <string name="menuInfo">Job priority</string>
     <string-array name="priorityList">
-        <string>Job Priority</string>
+        <string name="priorityMenuTitle">Job Priority</string>
         <item name="low">Low (1+ Months)</item>
         <item name="medium">Medium (1 Month)</item>
         <item name="high">High (1-2 Weeks)</item>
