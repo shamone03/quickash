@@ -9,7 +9,11 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.csci3130courseproject.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_createListingFragment"
+            app:destination="@id/createListingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.csci3130courseproject.SignInFragment"
