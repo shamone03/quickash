@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CreateListingFragment#newInstance} factory method to
@@ -82,7 +84,15 @@ public class CreateListingFragment extends Fragment {
         try {
             return Double.parseDouble(text);
         } catch (NumberFormatException e) {
-            throw new NumberFormatException();
+            throw e;
+        }
+    }
+
+    private int toInt(String text) throws NumberFormatException {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e){
+            throw e;
         }
     }
 
@@ -115,7 +125,6 @@ public class CreateListingFragment extends Fragment {
         EditText jobSalaryField = getJobSalaryField();
         EditText jobDurationField = getJobDurationField();
         String priorityLevel = getJobPriority(getJobPriorityField());
-
 
     }
 

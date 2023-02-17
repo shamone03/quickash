@@ -10,13 +10,22 @@ public class Listing extends DatabaseObject {
     /**
      * Create a new Listing object from app data
      */
-    public Listing(String employerId, String title, int hours, int salary, HashMap<String, Boolean> employeeIdMap) {
+    public Listing(String employerId, String title, int hours, int salary, int priority, HashMap<String, Boolean> employeeIdMap) {
         // Adding values to be replicated to Firebase
         setValue("employer", employerId);
         setValue("title", title);
         setValue("hours", hours);
         setValue("salary", salary);
+        setValue("priority", priority);
         setValue("employees", employeeIdMap);
+    }
+
+    public Listing(JobPostingObject jobPosting){
+        setValue("employer", jobPosting.getJobPoster());
+        setValue("title", jobPosting.getJobTitle());
+        setValue("hours", jobPosting.getJobDuration());
+        setValue("salary", jobPosting.getJobSalary());
+        setValue("employees", jobPosting.getUserApplied());
     }
 
     /**

@@ -11,30 +11,26 @@ public class JobPostingObject {
     private String jobPosterID;
     private HashMap<String, Boolean> userApplied;
     private String jobTitle;
-    private String priority;
-    private double jobDuration;
+    private Priority.PRIORITY priority;
+    private int jobDuration;
     private double jobSalary;
     private Location jobLocation;
 
     public JobPostingObject(){}
 
     public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, String priority, double jobSalary,
-                            double jobDuration, Location location){
+                            int jobDuration, Location location){
         this.jobPosterID = posterID;
         this.userApplied = userApplied;
         this.jobTitle = title;
-        this.priority = priority;
+        this.priority = Priority.getPriorityFromString(priority);
         this.jobSalary = jobSalary;
         this.jobDuration = jobDuration;
         this.jobLocation = location;
     }
     // Set job attributes
-    public void setJobDuration(double jobDuration) {
+    public void setJobDuration(int jobDuration) {
         this.jobDuration = jobDuration;
-    }
-
-    public void setJobLocation(Location jobLocation) {
-        this.jobLocation = jobLocation;
     }
 
     public void setJobPoster(String jobPosterID) {
@@ -50,7 +46,7 @@ public class JobPostingObject {
     }
 
     public void setPriority(String priority) {
-        this.priority = priority;
+        this.priority = Priority.getPriorityFromString(priority);
     }
 
     // Get job attributes
@@ -61,15 +57,11 @@ public class JobPostingObject {
         return jobSalary;
     }
 
-    public Location getJobLocation() {
-        return jobLocation;
-    }
-
     public String getJobTitle() {
         return jobTitle;
     }
 
-    public String getPriority() {
+    public Priority.PRIORITY getPriority() {
         return priority;
     }
 
@@ -77,5 +69,8 @@ public class JobPostingObject {
         return jobPosterID;
     }
 
+    public HashMap<String, Boolean> getUserApplied() { return userApplied; }
+
 
 }
+
