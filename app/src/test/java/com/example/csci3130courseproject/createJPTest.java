@@ -17,8 +17,4 @@ public class createJPTest {
     @AfterClass
     public static void garbageCollect(){ System.gc(); }
 
-    @Test
-    public void jobTitleIsEmptyPassing(){  }
-
-
 }
