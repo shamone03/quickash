@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/background_rounded_preview">
+
+    <TextView
+        android:id="@+id/titleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:hint="Title"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="10pt"/>
+
+    <TextView
+        android:id="@+id/hoursLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:hint="Hours: 0"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="8pt"/>
+
+    <TextView
+        android:id="@+id/salaryLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:hint="Salary: 0"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="8pt"/>
+
+</LinearLayout>
