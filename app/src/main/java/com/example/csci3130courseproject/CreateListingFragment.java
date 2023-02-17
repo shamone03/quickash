@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +78,8 @@ public class CreateListingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         Button createPosting = (Button) getView().findViewById(R.id.createJP_button);
+
+        createPosting.setOnClickListener(onButtonClick(getView()));
     }
 
     // Helper Methods:
@@ -126,14 +129,19 @@ public class CreateListingFragment extends Fragment {
 
 
     // Click method:
-    public void onButtonClick(){
+    public View.OnClickListener onButtonClick(View view){
         String posterID = FirebaseAuth.getInstance().getUid();
         String jobTitle = getJobTitle();
-        double jobSalaryField = getJobSalary();
-        int jobDurationField = getJobDuration();
+        double jobSalary = getJobSalary();
+        int jobDuration = getJobDuration();
         Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
 
         // Create job posting
+        new CreateJobPosting(posterID, jobTitle, jobSalary, jobDuration, priorityLevel);
+        // Change view:
+        Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_dashboardFragment);
+        // TODO: Change return to database post success check
+        return null;
     }
 
 }

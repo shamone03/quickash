@@ -44,5 +44,9 @@
         android:id="@+id/createListingFragment"
         android:name="com.example.csci3130courseproject.CreateListingFragment"
         android:label="fragment_create_listing"
-        tools:layout="@layout/fragment_create_listing" />
+        tools:layout="@layout/fragment_create_listing" >
+        <action
+            android:id="@+id/action_createListingFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
 </navigation>
