@@ -108,12 +108,12 @@ public class ListingSearchFragment extends Fragment {
         pagedListings.add(listing);
     }
 
-    public boolean filterTitles(String title) {
+    public boolean filterTitles(String title, String query) {
         String lowerTitle = title.toLowerCase();
-        String query = searchBar.getQuery().toString().toLowerCase();
+
         if (query.equals("")) {
             return true;
-        } else if (lowerTitle.contains(query)) {
+        } else if (lowerTitle.contains(query.toLowerCase())) {
             return true;
         } else {
             return false;
@@ -126,9 +126,9 @@ public class ListingSearchFragment extends Fragment {
 
         for (Object[] listingReference : pagedListings) {
             Listing listing = (Listing)listingReference[0];
-
+            String query = searchBar.getQuery().toString().toLowerCase();
             // Filtering listings based on criteria provided by the user
-            if (filterTitles(String.valueOf(listing.getValue("title"))) == false) {
+            if (filterTitles(String.valueOf(listing.getValue("title")), query) == false) {
                 continue;
             }
 
