@@ -57,7 +57,6 @@ public abstract class DatabaseObject {
     }
 
     /**
-     *
      * @return The key for the DatabaseObject
      */
     public String getRecordKey(){
@@ -152,7 +151,7 @@ public abstract class DatabaseObject {
     }
 
     /**
-     *
+     * Gets a value from the locally stored record
      * @param key String key used locally to uniquely identify the data record.
      * @return Value associated with the key
      */
@@ -161,7 +160,7 @@ public abstract class DatabaseObject {
     }
 
     /**
-     *
+     * Sets a value in the locally stored record
      * @param key String key used locally to uniquely identify the data record.
      * @param value Value associated with the key
      */
