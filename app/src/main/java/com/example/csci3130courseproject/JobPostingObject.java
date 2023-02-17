@@ -45,8 +45,8 @@ public class JobPostingObject {
         this.jobTitle = jobTitle;
     }
 
-    public void setPriority(String priority) {
-        this.priority = Priority.getPriorityFromString(priority);
+    public void setPriority(Priority.PRIORITY priority) {
+        this.priority = priority;
     }
 
     // Get job attributes

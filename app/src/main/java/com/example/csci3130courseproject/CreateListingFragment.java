@@ -29,7 +29,6 @@ public class CreateListingFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static Priority.PRIORITY selectedPriority;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -134,8 +133,7 @@ public class CreateListingFragment extends Fragment {
         int jobDurationField = getJobDuration();
         Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
 
-
-
+        // Create job posting
     }
 
 }
