@@ -19,13 +19,17 @@ public class Listing extends DatabaseObject {
         setValue("employees", employeeIdMap);
     }
 
+    /**
+     * Create a new Listing object from a DataSnapshot
+     * @param snapshot DataSnapshot holding the record and its child data objects
+     */
     public Listing(DataSnapshot snapshot) {
         buildFromSnapshot(snapshot);
     }
 
     /**
-     * Create a new Listing object from a Firebase record
-     * @param key
+     * Create a new Listing object from a Firebase record key
+     * @param key String key referencing the record in Firebase
      */
     public Listing(String key){
         getRecord(key);

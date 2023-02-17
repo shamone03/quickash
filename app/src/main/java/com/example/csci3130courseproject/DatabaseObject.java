@@ -72,8 +72,7 @@ public abstract class DatabaseObject {
         recordKey = snapshot.getKey();
 
         for (DataSnapshot data: snapshot.getChildren()) {
-            Log.d("Testing", data.getKey());
-            Log.d("Testing", data.getValue().toString());
+            setValue(data.getKey(), data.getValue());
         }
     }
 

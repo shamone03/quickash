@@ -10,6 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Space;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -24,7 +30,9 @@ import java.util.ArrayList;
 public class ListingSearchFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-    private ArrayList<Listing> pagedListings = new ArrayList<>();
+    private ArrayList<Object[]> pagedListings = new ArrayList<>();
+    private LinearLayout cardPreviewList;
+    private SearchView searchBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +42,8 @@ public class ListingSearchFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
+        searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference(Listing.class.getSimpleName());
         Query query = databaseReference.orderByChild("salary");
@@ -42,16 +52,79 @@ public class ListingSearchFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot listingSnapshot: dataSnapshot.getChildren()) {
-                    Listing listing = new Listing(listingSnapshot);
-                    pagedListings.add(listing);
+                    createListingPreview(listingSnapshot);
                 }
+                updateList();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Getting Post failed, log a message
                 Log.w("Testing", "loadPost:onCancelled", databaseError.toException());
             }
         });
+
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                updateList();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (searchBar.getQuery().toString().equals("")) {
+                    updateList();
+                }
+                return false;
+            }
+        });
+    }
+
+    public void createListingPreview(DataSnapshot listingSnapshot) {
+        // Creating Listing object and view to display data to user
+        Listing newListing = new Listing(listingSnapshot);
+        View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
+
+        // Modifying placeholder text to match data from Listing object
+        TextView title = listingPreview.findViewById(R.id.titleLabel);
+        TextView hours = listingPreview.findViewById(R.id.hoursLabel);
+        TextView salary = listingPreview.findViewById(R.id.salaryLabel);
+
+        title.setText(String.valueOf(newListing.getValue("title")));
+        hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
+        salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
+
+        // Adding Listing object and View to ArrayList to be referenced later
+        Object[] listing = {newListing, listingPreview};
+        pagedListings.add(listing);
+    }
+
+    public boolean filterTitles(String title) {
+        String lowerTitle = title.toLowerCase();
+        String query = searchBar.getQuery().toString().toLowerCase();
+        if (query.equals("")) {
+            return true;
+        } else if (lowerTitle.contains(query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void updateList() {
+        // Clearing previously displayed listing previews
+        cardPreviewList.removeAllViews();
+
+        for (Object[] listingReference : pagedListings) {
+            Listing listing = (Listing)listingReference[0];
+
+            // Filtering listings based on criteria provided by the user
+            if (filterTitles(String.valueOf(listing.getValue("title"))) == false) {
+                continue;
+            }
+
+            // Adding view to list layout
+            cardPreviewList.addView((View)listingReference[1]);
+        }
     }
 }
