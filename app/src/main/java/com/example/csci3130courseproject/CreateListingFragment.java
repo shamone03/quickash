@@ -2,11 +2,14 @@ package com.example.csci3130courseproject;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -61,6 +64,15 @@ public class CreateListingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_listing, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+        Button createPosting = (Button) getView().findViewById(R.id.createJP_button);
+    }
+
+    public void onButtonClick(){
+
     }
 
     // Methods:
