@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/listingSearchFragment">
+    app:startDestination="@id/signInFragment">
 
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.csci3130courseproject.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
-        <action
-            android:id="@+id/action_dashboardFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.csci3130courseproject.SignInFragment"
@@ -23,8 +19,8 @@
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
         <action
-            android:id="@+id/action_signInFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/action_signInFragment_to_listingSearchFragment"
+            app:destination="@id/listingSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -39,7 +35,17 @@
         android:id="@+id/listingSearchFragment"
         android:name="com.example.csci3130courseproject.ListingSearchFragment"
         android:label="fragment_listing_search"
-        tools:layout="@layout/fragment_listing_search" />
+        tools:layout="@layout/fragment_listing_search" >
+        <action
+            android:id="@+id/action_listingSearchFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_listingSearchFragment_to_securityFragment"
+            app:destination="@id/securityFragment" />
+        <action
+            android:id="@+id/action_listingSearchFragment_to_createListingFragment"
+            app:destination="@id/createListingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createListingFragment"
         android:name="com.example.csci3130courseproject.CreateListingFragment"

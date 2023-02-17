@@ -49,7 +49,7 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void isSuccessful(boolean successful) {
                         if (successful) {
-                            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_dashboardFragment);
+                            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_listingSearchFragment);
                         } else {
                             Toast.makeText(getActivity(), "Invalid email or password", Toast.LENGTH_SHORT).show();
                         }

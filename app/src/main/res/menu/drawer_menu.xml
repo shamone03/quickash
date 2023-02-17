@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/userProfileFragmentMenuItem"
+            android:title="Profile"
+            android:icon="@drawable/icon_profile"/>
+        <item
+            android:id="@+id/jobListingsFragmentMenuItem"
+            android:title="View Listings"
+            android:icon="@drawable/icon_joblistings"/>
+        <item
+            android:id="@+id/jobsTakenFragmentMenuItem"
+            android:title="View jobs taken"
+            android:icon="@drawable/icon_jobs_taken"/>
+    </group>
+</menu>

@@ -81,6 +81,6 @@ public class DashboardFragment extends Fragment {
     }
 
     public void dashboardToUserProfile(View view){
-        Navigation.findNavController(view).navigate(R.id.action_dashboardFragment_to_userProfileFragment);
+        Navigation.findNavController(view).navigate(R.id.action_listingSearchFragment_to_userProfileFragment);
     }
 }
