@@ -9,7 +9,6 @@ public class Priority {
         HIGH,
         URGENT
     }
-    private final String[] itemPositionValue = new String[] {"NAN", "low", "medium", "high", "urgent"};
     public static PRIORITY setLowPriority(){
         return PRIORITY.LOW;
     }
