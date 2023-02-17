@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,4 +62,25 @@ public class CreateListingFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_listing, container, false);
     }
+
+    // Methods:
+    private double toDouble(String text) throws NumberFormatException{
+        try {
+            return Double.parseDouble(text);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException();
+        }
+    }
+
+    public String getJobTitle(){
+        EditText jobTitleTextField = (EditText) getView().findViewById(R.id.createJP_PostingTitle);
+        return jobTitleTextField.getText().toString();
+    }
+
+    public double getJobSalary(){
+        EditText jobSalaryTextField = (EditText) getView().findViewById(R.id.createJP_JobSalary);
+        Double salary = toDouble(jobSalaryTextField.getText().toString());
+        return salary;
+    }
+
 }
