@@ -79,24 +79,21 @@ public class CreateListingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         Button createPosting = (Button) getView().findViewById(R.id.createJP_button);
 
-        createPosting.setOnClickListener(onButtonClick(getView()));
-    }
+        createPosting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String posterID = FirebaseAuth.getInstance().getUid();
+                String jobTitle = getJobTitle();
+                String jobSalary = getJobSalary();
+                String jobDuration = getJobDuration();
+                Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
 
-    // Helper Methods:
-    private double toDouble(String text) throws NumberFormatException{
-        try {
-            return Double.parseDouble(text);
-        } catch (NumberFormatException e) {
-            throw e;
-        }
-    }
-
-    private int toInt(String text) throws NumberFormatException {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e){
-            throw e;
-        }
+                // Create job posting
+                new CreateJobPosting(posterID, jobTitle, jobSalary, jobDuration, priorityLevel);
+                // Change view:
+                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_dashboardFragment);
+            }
+        });
     }
 
     // Methods:
@@ -113,35 +110,18 @@ public class CreateListingFragment extends Fragment {
         return (EditText) getView().findViewById(R.id.createJP_JobSalary);
     }
 
-    public double getJobSalary(){
-        return toDouble(getJobSalaryField().getText().toString());
+    public String getJobSalary(){
+        return getJobSalaryField().getText().toString();
     }
 
     public EditText getJobDurationField(){
         return (EditText) getView().findViewById(R.id.createJP_JobDurration);
     }
 
-    public int getJobDuration(){
-        return toInt(getJobDurationField().getText().toString());
+    public String getJobDuration(){
+        return getJobDurationField().getText().toString();
     }
 
     public Spinner getJobPriorityField() { return (Spinner) getView().findViewById(R.id.createJP_priority); }
-
-
-    // Click method:
-    public View.OnClickListener onButtonClick(View view){
-        String posterID = FirebaseAuth.getInstance().getUid();
-        String jobTitle = getJobTitle();
-        double jobSalary = getJobSalary();
-        int jobDuration = getJobDuration();
-        Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
-
-        // Create job posting
-        new CreateJobPosting(posterID, jobTitle, jobSalary, jobDuration, priorityLevel);
-        // Change view:
-        Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_dashboardFragment);
-        // TODO: Change return to database post success check
-        return null;
-    }
 
 }
