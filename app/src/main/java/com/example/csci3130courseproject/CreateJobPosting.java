@@ -33,7 +33,8 @@ public class CreateJobPosting {
         newPosting.setJobDuration(toInt(jobDuration));
         newPosting.setPriority(priority);
 
-        new Listing(newPosting);
+        Listing newPost = new Listing(newPosting);
+        newPost.setRecord();
     }
     public CreateJobPosting(JobPostingObject jobObject) {
         new Listing(jobObject);
