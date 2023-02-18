@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +41,14 @@ public class UserProfileFragment extends Fragment {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    /*
+        This function checks the validity of the entered name string i.e. its not null or empty.
+        Then based on that either updates the profile and returns true, or returns false.
+        This boolean is used to create toasts for the same.
+     */
     public boolean changeUserValues(FirebaseUser currentUser, EditText nameField){
-        if(nameField.getText().toString() != null && nameField.getText().toString() != "") {
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(nameField.getText().toString()).build();
+        if(nameField.getText().toString().trim() != null && !nameField.getText().toString().trim().equals("")) {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(nameField.getText().toString().trim()).build();
             currentUser.updateProfile(profileUpdates);
             return true;
         }
@@ -79,7 +85,7 @@ public class UserProfileFragment extends Fragment {
                 //Toast for the result.
                 if(changeResult){
 
-                    Toast.makeText(getActivity(),"Details Changed Successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Details Changes Successfully", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getActivity(),"Error Occurred. Try again!", Toast.LENGTH_SHORT).show();
                 }
