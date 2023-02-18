@@ -11,57 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UserProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 public class UserProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String name, phoneNumber, address, email, password;
+    private EditText nameField;
 
     public UserProfileFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserProfileFragment newInstance(String param1, String param2) {
-        UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    /*
-
-
-    @Override
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,11 +32,59 @@ public class UserProfileFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
+    /*
+        This function gets the current user using FirebaseAuth, and outputs the user as a FirebaseUser
+        object.
+     */
+    public FirebaseUser getUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public boolean changeUserValues(FirebaseUser currentUser, EditText nameField){
+        if(nameField.getText().toString() != null && nameField.getText().toString() != "") {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(nameField.getText().toString()).build();
+            currentUser.updateProfile(profileUpdates);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        nameField = (EditText)getView().findViewById(R.id.existingUserName);
 
+        /*
+            Buttons
+         */
+        //Navigation to go to the security fragment
         Button securityNavigation = (Button)getView().findViewById(R.id.securityNavigationButton);
 
+        //Button to submit the display name.
+        Button submitProfileInformation = (Button)getView().findViewById(R.id.submitProfileButton);
+
+        /*
+            New On click listener which calls getUser() and changeUserValues.
+            changeUserValues takes in the currentUser, and the nameField, and changes the user name.
+            If changeUserValues returns true, then a Toast saying details changed successfully,
+            Else error called, and a Toast for the same.
+         */
+        submitProfileInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseUser currentUser = getUser();
+                boolean changeResult = changeUserValues(currentUser,nameField);
+
+                //Toast for the result.
+                if(changeResult){
+
+                    Toast.makeText(getActivity(),"Details Changed Successfully!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(),"Error Occurred. Try again!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         securityNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,7 +94,11 @@ public class UserProfileFragment extends Fragment {
 
 
     }
-
+    /*
+        Action to navigate to the security features.
+        This action occurs when the button "Security" is pressed.
+        The onClickListener and function are implemented above.
+     */
     public void userProfileToSecurity(View view){
         Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_securityFragment);
     }
