@@ -5,6 +5,13 @@
     <string name="passwordPlaceHolder">Enter Password</string>
     <string name="repasswordPlaceHolder">Re-enter Password</string>
     <string name="suAccountType">Employer Account</string>
+    <!-- create job posting drop-down menu -->
+    <string-array name="priorityList">
+        <item id="LOWPriority">Low (1+ Months)</item>
+        <item id="MEDPriority">Medium (1 Month)</item>
+        <item id="HIGPriority">High (1-2 Weeks)</item>
+        <item id="MAXPriority">Urgent (Same day)</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

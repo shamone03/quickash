@@ -21,7 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment that handles the sign-in process
  */
 public class SignInFragment extends Fragment {
     private EditText emailField, passwordField;
@@ -66,6 +66,13 @@ public class SignInFragment extends Fragment {
         });
     }
 
+    /**
+     * Takes information given by the user via the interactable elements of the UI, and attempts
+     * to sign them into Firebase.
+     * @param email Email address of the user
+     * @param password Password of the user
+     * @param callback
+     */
     public void signInUser(String email, String password, UserCallback callback) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -75,7 +82,11 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    public void SignInToSignUp(View view) {
+    /**
+     * Sends the user to the SignUpFragment UI
+     * @param view View that the button resides in
+     */
+    private void SignInToSignUp(View view) {
         Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_signUpFragment);
     }
 }
