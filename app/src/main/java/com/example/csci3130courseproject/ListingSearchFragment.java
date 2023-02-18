@@ -48,7 +48,7 @@ public class ListingSearchFragment extends Fragment {
         databaseReference = database.getReference(Listing.class.getSimpleName());
         Query query = databaseReference.orderByChild("salary");
 
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot listingSnapshot: dataSnapshot.getChildren()) {

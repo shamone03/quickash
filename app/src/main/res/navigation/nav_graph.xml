@@ -50,7 +50,11 @@
         android:id="@+id/createListingFragment"
         android:name="com.example.csci3130courseproject.CreateListingFragment"
         android:label="fragment_create_listing"
-        tools:layout="@layout/fragment_create_listing" />
+        tools:layout="@layout/fragment_create_listing" >
+        <action
+            android:id="@+id/action_createListingFragment_to_listingSearchFragment"
+            app:destination="@id/listingSearchFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.csci3130courseproject.UserProfileFragment"
