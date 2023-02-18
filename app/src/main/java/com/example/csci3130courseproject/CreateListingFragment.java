@@ -62,18 +62,30 @@ public class CreateListingFragment extends Fragment {
         });
     }
 
+    /**
+     * @return String value representing the title of the job
+     */
     public String getJobTitle() {
         return titleField.getText().toString();
     }
 
+    /**
+     * @return Integer value representing the salary of the job
+     */
     public int getJobSalary() {
         return Integer.valueOf(salaryField.getText().toString());
     }
 
+    /**
+     * @return Integer value representing the duration of the job
+     */
     public int getJobDuration() {
         return Integer.valueOf(durationField.getText().toString());
     }
 
+    /**
+     * @return Priority enumerator matching the spinner value
+     */
     public Priority.PRIORITY getJobPriority() {
         return Priority.getPriorityFromSpinner(priorityField);
     }
