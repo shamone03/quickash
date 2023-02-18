@@ -25,11 +25,9 @@ import java.util.HashMap;
  * Handles the creation of new job listings
  */
 public class CreateListingFragment extends Fragment {
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    EditText titleField, salaryField, durationField;
+    Spinner priorityField;
+    Button createPosting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,20 +38,22 @@ public class CreateListingFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
-        Button createPosting = (Button) getView().findViewById(R.id.createJP_button);
+        createPosting = getView().findViewById(R.id.createJP_button);
+        titleField = getView().findViewById(R.id.createJP_PostingTitle);
+        salaryField = getView().findViewById(R.id.createJP_JobSalary);
+        durationField = getView().findViewById(R.id.createJP_JobDurration);
+        priorityField = getView().findViewById(R.id.createJP_priority);
 
         createPosting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Preparing listing values
                 String posterID = FirebaseAuth.getInstance().getUid();
-                String jobTitle = getJobTitle();
-                int jobSalary = getJobSalary();
-                int jobDuration = getJobDuration();
-                Priority.PRIORITY priorityLevel = Priority.getPriorityFromSpinner(getJobPriorityField());
                 HashMap<String, Boolean> employees = new HashMap<>();
 
                 // Create job posting object and send to firebase
-                Listing newListing = new Listing(posterID, jobTitle, jobDuration, jobSalary, priorityLevel, employees);
+                Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
+                        getJobSalary(), getJobPriority(), employees);
                 newListing.setRecord();
 
                 // Navigate back to dashboard fragment:
@@ -62,29 +62,19 @@ public class CreateListingFragment extends Fragment {
         });
     }
 
-    public EditText getJobTitleField(){
-        return (EditText) getView().findViewById(R.id.createJP_PostingTitle);
+    public String getJobTitle() {
+        return titleField.getText().toString();
     }
 
-    public String getJobTitle(){
-        return getJobTitleField().getText().toString();
+    public int getJobSalary() {
+        return Integer.valueOf(salaryField.getText().toString());
     }
 
-    public EditText getJobSalaryField(){
-        return (EditText) getView().findViewById(R.id.createJP_JobSalary);
+    public int getJobDuration() {
+        return Integer.valueOf(durationField.getText().toString());
     }
 
-    public int getJobSalary(){
-        return Integer.valueOf(getJobSalaryField().getText().toString());
+    public Priority.PRIORITY getJobPriority() {
+        return Priority.getPriorityFromSpinner(priorityField);
     }
-
-    public EditText getJobDurationField(){
-        return (EditText) getView().findViewById(R.id.createJP_JobDurration);
-    }
-
-    public int getJobDuration(){
-        return Integer.valueOf(getJobDurationField().getText().toString());
-    }
-
-    public Spinner getJobPriorityField() { return (Spinner) getView().findViewById(R.id.createJP_priority); }
 }
