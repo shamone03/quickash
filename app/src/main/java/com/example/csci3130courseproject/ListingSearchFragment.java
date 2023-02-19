@@ -30,6 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Handles the sign-up process
+ */
 public class ListingSearchFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -50,8 +53,10 @@ public class ListingSearchFragment extends Fragment {
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference(Listing.class.getSimpleName());
+        // TODO: Replace hardcoded query with a spinner read
         Query query = databaseReference.orderByChild("salary");
 
+        // Retrieves all Listing records from firebase and
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -63,7 +68,7 @@ public class ListingSearchFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Getting Post failed, log a message
-                Log.w("Testing", "loadPost:onCancelled", databaseError.toException());
+                Log.w("Firebase", "loadPost:onCancelled", databaseError.toException());
             }
         });
 
@@ -89,6 +94,9 @@ public class ListingSearchFragment extends Fragment {
      * @param listingSnapshot DataSnapshot containing all Listing records currently in firebase
      */
     public void createListingPreview(DataSnapshot listingSnapshot) {
+        // Clearing old Listings to make way for new Listings
+        pagedListings.clear();
+
         // Creating Listing object and view to display data to user
         Listing newListing = new Listing(listingSnapshot);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
@@ -123,13 +131,15 @@ public class ListingSearchFragment extends Fragment {
     }
 
     /**
-     *
-     * @param title
-     * @return
+     * Compares the search bar query with a title to determine if the title should be included
+     * @param title String representing the query used to filter the titles of Listing objects
+     * @return Boolean representing if the title passes the query
      */
     public boolean filterTitles(String title) {
         String lowerTitle = title.toLowerCase();
         String query = searchBar.getQuery().toString().toLowerCase();
+
+        // Defaults to true if query field is empty
         if (query.equals("")) {
             return true;
         } else if (lowerTitle.contains(query)) {
@@ -140,7 +150,8 @@ public class ListingSearchFragment extends Fragment {
     }
 
     /**
-     *
+     * Updates the list of job Listings by deleting old UI cards and adding new ones based on
+     * the filter and sort criteria.
      */
     public void updateList() {
         // Clearing previously displayed listing previews
