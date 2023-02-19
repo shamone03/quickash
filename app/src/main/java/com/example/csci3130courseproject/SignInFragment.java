@@ -41,7 +41,6 @@ public class SignInFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         emailField = (EditText)getView().findViewById(R.id.Sign_In_Email);
         passwordField = (EditText)getView().findViewById(R.id.Sign_In_Password);
 
