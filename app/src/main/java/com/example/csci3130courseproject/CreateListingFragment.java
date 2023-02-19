@@ -1,6 +1,5 @@
 package com.example.csci3130courseproject;
 
-import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +15,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
@@ -57,7 +54,7 @@ public class CreateListingFragment extends Fragment {
                 newListing.setRecord();
 
                 // Navigate back to dashboard fragment:
-                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_dashboardFragment);
+//                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
             }
         });
     }
@@ -70,6 +67,14 @@ public class CreateListingFragment extends Fragment {
     }
 
     /**
+     * isEmptyJobTitle() checks if Job Title field is empty
+     * @return true if Job Title field is empty
+     */
+    protected static boolean isEmptyJobTitle(String jobTitle) {
+        return jobTitle.isEmpty();
+    }
+
+    /**
      * @return Integer value representing the salary of the job
      */
     public int getJobSalary() {
@@ -77,10 +82,42 @@ public class CreateListingFragment extends Fragment {
     }
 
     /**
+     * isEmptyJobSalary() checks if the Job Salary field is empty
+     * @return true if field is empty
+     */
+    protected static boolean isEmptyJobSalary(String jobSalary) {
+        return jobSalary.isEmpty();
+    }
+
+    /**
+     * isJobSalaryValid() checks if the Job Salary field is valid
+     * @return true if Job Salary > 0
+     */
+    protected static boolean isJobSalaryValid(int jobSalary) {
+        return jobSalary>0;
+    }
+
+    /**
      * @return Integer value representing the duration of the job
      */
     public int getJobDuration() {
         return Integer.valueOf(durationField.getText().toString());
+    }
+
+    /**
+     * isEmptyJobDuration() checks if the Job Description field is empty
+     * @return true if field is empty
+     */
+    protected static boolean isEmptyJobDuration(String hours){
+        return hours.isEmpty();
+    }
+
+    /**
+     * isJobDurationValid() checks if the Job duration field is valid
+     * @return true if hours > 0 and hours < 24
+     */
+    protected static boolean isJobDurationValid(int hours){
+        return ((hours>0) && (hours<24));
     }
 
     /**

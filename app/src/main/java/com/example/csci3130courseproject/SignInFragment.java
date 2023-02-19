@@ -3,8 +3,11 @@ package com.example.csci3130courseproject;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 /**
  * Fragment that handles the sign-in process
@@ -49,7 +54,7 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void isSuccessful(boolean successful) {
                         if (successful) {
-                            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_dashboardFragment);
+                            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_listingSearchFragment);
                         } else {
                             Toast.makeText(getActivity(), "Invalid email or password", Toast.LENGTH_SHORT).show();
                         }

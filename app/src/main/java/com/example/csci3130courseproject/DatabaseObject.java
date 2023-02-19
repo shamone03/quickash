@@ -124,17 +124,16 @@ public abstract class DatabaseObject {
 
     /**
      * Updates the data of an existing record in Firebase's realtime database.
-     * @param data Key-value pair map to be sent to Firebase.
      * @return Task describing the outcome of the update request.
      */
-    public Task<Void> updateData(Map<String, Object> data) {
+    public Task<Void> updateData() {
         if (recordKey == null) {
             throw new NullPointerException("Object has not been linked to a Firebase record");
         }
 
         DatabaseReference databaseReference = getDatabaseReference();
 
-        return databaseReference.child(recordKey).updateChildren(data);
+        return databaseReference.child(recordKey).updateChildren(recordValues);
     }
 
     /**
