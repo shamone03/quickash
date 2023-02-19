@@ -15,8 +15,10 @@ import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -26,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.*;
 
 /**
@@ -37,8 +40,12 @@ import static org.junit.Assert.*;
 public class JobSearchTest {
 
     @Before
-    public void launchMainActivity() {
+    public void launchMainActivity() throws InterruptedException {
         ActivityScenario.launch(MainActivity.class);
+        onView(withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
+        onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
+        onView(withId(R.id.Sign_In_Request)).perform(click());
+        Thread.sleep(5000); // wait to sign in
     }
 
     @Test
@@ -56,7 +63,6 @@ public class JobSearchTest {
     @Test
     public void checkIfSearching_isValid() {
         onView(withId(R.id.searchBar)).perform(typeText("dog"));
-        //onView(withId(R.id.searchBar)).perform(pressImeActionButton());
         onView(withId(R.id.searchBar)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
         onView(withId(R.id.searchPage)).check(matches(isDisplayed()));
     }
