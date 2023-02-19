@@ -44,4 +44,20 @@ public class Listing extends DatabaseObject {
     public Listing(String key){
         getRecord(key);
     }
+
+
+    public void addEmployee(String userId) {
+        HashMap<String, Boolean> employees;
+
+        if (getValue("employees") == null) {
+            employees = new HashMap<>();
+            employees.put(userId,false);
+            setValue("employees",employees);
+        } else {
+            employees = (HashMap<String, Boolean>) getValue("employees");
+            employees.put(userId,false);
+        }
+
+        updateData();
+    }
 }

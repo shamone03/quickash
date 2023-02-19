@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.widget.SearchView;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +33,8 @@ import java.util.ArrayList;
 public class ListingSearchFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
     private LinearLayout cardPreviewList;
     private SearchView searchBar;
@@ -89,10 +94,24 @@ public class ListingSearchFragment extends Fragment {
         TextView title = listingPreview.findViewById(R.id.titleLabel);
         TextView hours = listingPreview.findViewById(R.id.hoursLabel);
         TextView salary = listingPreview.findViewById(R.id.salaryLabel);
+        TextView employer = listingPreview.findViewById(R.id.employerLabel);
 
         title.setText(String.valueOf(newListing.getValue("title")));
         hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
         salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
+        employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
+
+        AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+        // Connecting up button event listener
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (applyButton.getText().toString().equals("Apply")) {
+                    newListing.addEmployee(user.getUid());
+                    applyButton.setText("Applied");
+                }
+            }
+        });
 
         // Adding Listing object and View to ArrayList to be referenced later
         Object[] listing = {newListing, listingPreview};
