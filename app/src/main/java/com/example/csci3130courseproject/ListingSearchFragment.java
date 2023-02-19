@@ -33,7 +33,6 @@ import java.util.ArrayList;
 public class ListingSearchFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
     private LinearLayout cardPreviewList;
@@ -107,8 +106,9 @@ public class ListingSearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (applyButton.getText().toString().equals("Apply")) {
-                    newListing.addEmployee(user.getUid());
                     applyButton.setText("Applied");
+                    applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+                    newListing.addEmployee(user.getUid());
                 }
             }
         });
