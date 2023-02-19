@@ -58,7 +58,7 @@ public class SignInTest {
         onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
         onView(withId(R.id.Sign_In_Request)).perform(click());
         Thread.sleep(5000); // temporary fix, should use idlingresource or smthn
-        onView(withId(R.id.fragment_dashboard)).check(matches(isDisplayed()));
+        onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
     }
 
     @Test
