@@ -84,6 +84,10 @@ public class ListingSearchFragment extends Fragment {
         });
     }
 
+    /**
+     * Converts DataSnapshots into Listing objects, creating an associated
+     * @param listingSnapshot DataSnapshot containing all Listing records currently in firebase
+     */
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         Listing newListing = new Listing(listingSnapshot);
@@ -100,8 +104,8 @@ public class ListingSearchFragment extends Fragment {
         salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
         employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
 
+        // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
-        // Connecting up button event listener
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +122,11 @@ public class ListingSearchFragment extends Fragment {
         pagedListings.add(listing);
     }
 
+    /**
+     *
+     * @param title
+     * @return
+     */
     public boolean filterTitles(String title) {
         String lowerTitle = title.toLowerCase();
         String query = searchBar.getQuery().toString().toLowerCase();
@@ -130,6 +139,9 @@ public class ListingSearchFragment extends Fragment {
         }
     }
 
+    /**
+     *
+     */
     public void updateList() {
         // Clearing previously displayed listing previews
         cardPreviewList.removeAllViews();
