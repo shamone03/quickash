@@ -60,6 +60,7 @@ public class ListingSearchFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                pagedListings.clear();
                 for (DataSnapshot listingSnapshot: dataSnapshot.getChildren()) {
                     createListingPreview(listingSnapshot);
                 }
@@ -95,7 +96,6 @@ public class ListingSearchFragment extends Fragment {
      */
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Clearing old Listings to make way for new Listings
-        pagedListings.clear();
 
         // Creating Listing object and view to display data to user
         Listing newListing = new Listing(listingSnapshot);
