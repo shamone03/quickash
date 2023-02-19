@@ -6,10 +6,8 @@ import static org.junit.Assert.assertTrue;
 import androidx.fragment.app.Fragment;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Assert.*;
 
 public class createJPTest {
     static Fragment jobPostingFragment;
@@ -38,9 +36,25 @@ public class createJPTest {
 
     @Test
     public void checkIfJobSalaryIsValid(){
-        assertTrue(CreateListingFragment.isJobSalaryValid(0.1));
-        assertTrue(CreateListingFragment.isJobSalaryValid(2000));
         assertFalse(CreateListingFragment.isJobSalaryValid(-1));
+        assertFalse(CreateListingFragment.isJobSalaryValid(-100));
+        assertTrue(CreateListingFragment.isJobSalaryValid(2000));
+        assertTrue(CreateListingFragment.isJobSalaryValid(3000));
+    }
+
+    @Test
+    public void checkIfJobDescriptionIsEmpty(){
+        assertTrue(CreateListingFragment.isEmptyJobDuration(""));
+        assertFalse(CreateListingFragment.isEmptyJobDuration("This job is about xyz abc"));
+        assertFalse(CreateListingFragment.isEmptyJobDuration("Rate of pay is $24 hourly "));
+    }
+
+    @Test
+    public void checkIfJobDescriptionIsValid(){
+        assertFalse(CreateListingFragment.isJobDurationValid(-1));
+        assertFalse(CreateListingFragment.isJobDurationValid(100));
+        assertTrue(CreateListingFragment.isJobDurationValid(20));
+        assertTrue(CreateListingFragment.isJobDurationValid(3));
     }
 
 }
