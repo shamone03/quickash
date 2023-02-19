@@ -28,4 +28,19 @@ public class createJPTest {
         assertFalse(CreateListingFragment.isEmptyJobTitle("ab2^&3cd"));
     }
 
+    @Test
+    public void checkIfJobSalaryIsEmpty(){
+        assertTrue(CreateListingFragment.isEmptyJobSalary(""));
+        assertFalse(CreateListingFragment.isEmptyJobSalary("50000"));
+        assertFalse(CreateListingFragment.isEmptyJobSalary("5.0"));
+        assertFalse(CreateListingFragment.isEmptyJobSalary("78.998"));
+    }
+
+    @Test
+    public void checkIfJobSalaryIsValid(){
+        assertTrue(CreateListingFragment.isJobSalaryValid(0.1));
+        assertTrue(CreateListingFragment.isJobSalaryValid(2000));
+        assertFalse(CreateListingFragment.isJobSalaryValid(-1));
+    }
+
 }

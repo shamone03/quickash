@@ -69,6 +69,10 @@ public class CreateListingFragment extends Fragment {
         return titleField.getText().toString();
     }
 
+    /**
+     * isEmptyJobTitle() checks if Job Title field is empty
+     * @return true if Job Title field is empty
+     */
     protected static boolean isEmptyJobTitle(String jobTitle) {
         return jobTitle.isEmpty();
     }
@@ -79,6 +83,23 @@ public class CreateListingFragment extends Fragment {
     public int getJobSalary() {
         return Integer.valueOf(salaryField.getText().toString());
     }
+
+    /**
+     * isEmptyJobSalary() checks if the Job Salary field is empty
+     * @return true if field is empty
+     */
+    protected static boolean isEmptyJobSalary(String jobSalary) {
+        return jobSalary.isEmpty();
+    }
+
+    /**
+     * isJobSalaryValid() checks if the Job Salary field is valid
+     * @return true if Job Salary > 0
+     */
+    protected static boolean isJobSalaryValid(double jobSalary) {
+        return jobSalary>0;
+    }
+
     /**
      * @return Integer value representing the duration of the job
      */
