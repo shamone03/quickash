@@ -15,5 +15,10 @@
             android:id="@+id/createListingFragment"
             android:title="Create Job Posting"
             android:icon="@drawable/icon_jobs_taken"/>
+
+        <item
+            android:id="@+id/signInFragment"
+            android:title="Sign Out"
+            android:icon="@drawable/icon_signout"/>
     </group>
 </menu>

@@ -3,8 +3,11 @@ package com.example.csci3130courseproject;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 /**
  * Fragment that handles the sign-in process
@@ -36,6 +41,7 @@ public class SignInFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         emailField = (EditText)getView().findViewById(R.id.Sign_In_Email);
         passwordField = (EditText)getView().findViewById(R.id.Sign_In_Password);
 

@@ -1,10 +1,16 @@
 package com.example.csci3130courseproject;
 
+import static android.app.PendingIntent.getActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(findViewById(R.id.toolbar));
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        FirebaseAuth.getInstance().signOut();
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.createListingFragment, R.id.userProfileFragment, R.id.listingSearchFragment)
+                R.id.createListingFragment, R.id.userProfileFragment, R.id.listingSearchFragment, R.id.signInFragment)
                 .setOpenableLayout(drawerLayout)
                 .build();
 
@@ -40,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.drawer_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.drawer_menu, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {

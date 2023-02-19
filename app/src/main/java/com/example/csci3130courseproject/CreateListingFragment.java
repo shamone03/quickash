@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,8 @@ public class CreateListingFragment extends Fragment {
                 newListing.setRecord();
 
                 // Navigate back to dashboard fragment:
-                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+
+//                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
             }
         });
     }
