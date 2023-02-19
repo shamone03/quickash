@@ -53,16 +53,21 @@ public class ListingSearchFragment extends Fragment {
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference(Listing.class.getSimpleName());
+
         // TODO: Replace hardcoded query with a spinner read
         Query query = databaseReference.orderByChild("salary");
 
         // Retrieves all Listing records from firebase and
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Clearing old Listings to make way for new Listings
+                pagedListings.clear();
+
                 for (DataSnapshot listingSnapshot: dataSnapshot.getChildren()) {
                     createListingPreview(listingSnapshot);
                 }
+
                 updateList();
             }
             @Override
@@ -94,9 +99,6 @@ public class ListingSearchFragment extends Fragment {
      * @param listingSnapshot DataSnapshot containing all Listing records currently in firebase
      */
     public void createListingPreview(DataSnapshot listingSnapshot) {
-        // Clearing old Listings to make way for new Listings
-        pagedListings.clear();
-
         // Creating Listing object and view to display data to user
         Listing newListing = new Listing(listingSnapshot);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
