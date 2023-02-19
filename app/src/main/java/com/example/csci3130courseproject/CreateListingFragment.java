@@ -69,13 +69,16 @@ public class CreateListingFragment extends Fragment {
         return titleField.getText().toString();
     }
 
+    protected static boolean isEmptyJobTitle(String jobTitle) {
+        return jobTitle.isEmpty();
+    }
+
     /**
      * @return Integer value representing the salary of the job
      */
     public int getJobSalary() {
         return Integer.valueOf(salaryField.getText().toString());
     }
-
     /**
      * @return Integer value representing the duration of the job
      */
