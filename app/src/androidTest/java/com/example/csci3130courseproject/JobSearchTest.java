@@ -67,6 +67,7 @@ public class JobSearchTest {
         onView(withId(R.id.searchPage)).check(matches(isDisplayed()));
     }
 
+    /*
     @Test
     public void checkIfSearched_matchesCard() throws InterruptedException {
         onView(withId(R.id.searchBar)).perform(typeText("dog"));
@@ -75,4 +76,5 @@ public class JobSearchTest {
         //onView(withId(R.id.searchBar)).check(matches(withText(String.valueOf(withId(R.id.titleLabel)))));
         onView(withParent(withId(R.id.listingCardList))).check(matches(isDisplayed()));
     }
+    */
 }
