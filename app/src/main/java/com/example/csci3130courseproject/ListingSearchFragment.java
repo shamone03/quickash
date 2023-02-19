@@ -41,6 +41,10 @@ public class ListingSearchFragment extends Fragment {
     private LinearLayout cardPreviewList;
     private SearchView searchBar;
 
+    public ListingSearchFragment() {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -137,14 +141,11 @@ public class ListingSearchFragment extends Fragment {
      * @param title String representing the query used to filter the titles of Listing objects
      * @return Boolean representing if the title passes the query
      */
-    public boolean filterTitles(String title) {
+    protected static boolean filterTitles(String title, String query) {
         String lowerTitle = title.toLowerCase();
-        String query = searchBar.getQuery().toString().toLowerCase();
-
-        // Defaults to true if query field is empty
         if (query.equals("")) {
             return true;
-        } else if (lowerTitle.contains(query)) {
+        } else if (lowerTitle.contains(query.toLowerCase())) {
             return true;
         } else {
             return false;
@@ -161,9 +162,9 @@ public class ListingSearchFragment extends Fragment {
 
         for (Object[] listingReference : pagedListings) {
             Listing listing = (Listing)listingReference[0];
-
+            String query = searchBar.getQuery().toString().toLowerCase();
             // Filtering listings based on criteria provided by the user
-            if (filterTitles(String.valueOf(listing.getValue("title"))) == false) {
+            if (filterTitles(String.valueOf(listing.getValue("title")), query) == false) {
                 continue;
             }
 

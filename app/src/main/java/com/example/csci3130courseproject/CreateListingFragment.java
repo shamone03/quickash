@@ -54,7 +54,7 @@ public class CreateListingFragment extends Fragment {
                 newListing.setRecord();
 
                 // Navigate back to dashboard fragment:
-                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_dashboardFragment);
+                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
             }
         });
     }

@@ -14,13 +14,7 @@ import java.util.List;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@RunWith(JUnit4.class)
 public class JobSearchJUnitTest {
-    ListingSearchFragment listingSearchFragment;
-    @Before
-    public void setup() {
-        listingSearchFragment = new ListingSearchFragment();
-    }
 
     @Test
     public void addition_isCorrect() {
@@ -29,13 +23,13 @@ public class JobSearchJUnitTest {
 
     @Test
     public void checkFilterTrue() {
-        assertTrue(listingSearchFragment.filterTitles("", ""));
-        assertTrue(listingSearchFragment.filterTitles("abc", "B"));
+        assertTrue(ListingSearchFragment.filterTitles("", ""));
+        assertTrue(ListingSearchFragment.filterTitles("abc", "B"));
     }
 
     @Test
     public void checkFilterFalse() {
-        assertFalse(listingSearchFragment.filterTitles("B", "abc"));
+        assertFalse(ListingSearchFragment.filterTitles("B", "abc"));
     }
 
 }
