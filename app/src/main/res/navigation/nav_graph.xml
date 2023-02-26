@@ -9,17 +9,7 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.csci3130courseproject.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
-        <action
-            android:id="@+id/action_dashboardFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
-        <action
-            android:id="@+id/action_dashboardFragment_to_listingSearchFragment"
-            app:destination="@id/listingSearchFragment" />
-        <action
-            android:id="@+id/action_dashboardFragment_to_createListingFragment"
-            app:destination="@id/createListingFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.csci3130courseproject.SignInFragment"
@@ -29,17 +19,14 @@
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
         <action
-            android:id="@+id/action_signInFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/action_signInFragment_to_listingSearchFragment"
+            app:destination="@id/listingSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.csci3130courseproject.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
-        <action
-            android:id="@+id/action_signUpFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
@@ -48,14 +35,41 @@
         android:id="@+id/listingSearchFragment"
         android:name="com.example.csci3130courseproject.ListingSearchFragment"
         android:label="fragment_listing_search"
-        tools:layout="@layout/fragment_listing_search" />
+        tools:layout="@layout/fragment_listing_search" >
+        <action
+            android:id="@+id/action_listingSearchFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_listingSearchFragment_to_securityFragment"
+            app:destination="@id/securityFragment" />
+        <action
+            android:id="@+id/action_listingSearchFragment_to_createListingFragment"
+            app:destination="@id/createListingFragment" />
+        <action
+            android:id="@+id/action_listingSearchFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createListingFragment"
         android:name="com.example.csci3130courseproject.CreateListingFragment"
         android:label="fragment_create_listing"
-        tools:layout="@layout/fragment_create_listing" />
+        tools:layout="@layout/fragment_create_listing" >
+        <action
+            android:id="@+id/action_createListingFragment_to_listingSearchFragment"
+            app:destination="@id/listingSearchFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.csci3130courseproject.ProfileFragment"
-        android:label="EditProfileFragment" />
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.csci3130courseproject.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_userProfileFragment_to_securityFragment"
+            app:destination="@id/securityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/securityFragment"
+        android:name="com.example.csci3130courseproject.SecurityFragment"
+        android:label="fragment_security"
+        tools:layout="@layout/fragment_security" />
 </navigation>
