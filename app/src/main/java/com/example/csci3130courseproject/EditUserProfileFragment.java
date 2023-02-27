@@ -1,13 +1,11 @@
 package com.example.csci3130courseproject;
 
 import android.os.Bundle;
-<<<<<<< Updated upstream
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +17,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class UserProfileFragment extends Fragment {
+public class EditUserProfileFragment extends Fragment {
 
-    private EditText nameField;
+    private FirebaseAuth mAuth;
+    private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
+            locationField, preferredJobsField, creditCardField,
+            creditCardCVVField, phoneField, countryField, provinceField, cityField, addressField, creditCardNumberField, ccvField;
 
-    public UserProfileFragment() {
+    public EditUserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -31,6 +32,21 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+        emailField = (EditText)getView().findViewById(R.id.User_Email);
+        passwordField = (EditText)getView().findViewById(R.id.User_Password);
+        nameField = (EditText)getView().findViewById(R.id.Name);
+        phoneField = (EditText)getView().findViewById(R.id.Phone_Num);
+        dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
+        countryField = (EditText)getView().findViewById(R.id.Country);
+        provinceField = (EditText)getView().findViewById(R.id.Province);
+        cityField = (EditText)getView().findViewById(R.id.City);
+        addressField = (EditText)getView().findViewById(R.id.Address);
+        creditCardNumberField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
+        ccvField = (EditText)getView().findViewById(R.id.Ccv);
+
         return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
@@ -95,51 +111,12 @@ public class UserProfileFragment extends Fragment {
         securityNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userProfileToSecurity(view);
+                userProfileToEditUserProfile(view);
             }
         });
-
-
     }
-    /*
-        Action to navigate to the security features.
-        This action occurs when the button "Security" is pressed.
-        The onClickListener and function are implemented above.
-     */
-    public void userProfileToSecurity(View view){
-        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_securityFragment);
+
+    public void userProfileToEditUserProfile(View view){
+        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_editUserProfileFragment);
     }
 }
-=======
-import android.widget.EditText;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-public class UserProfileFragment extends AppCompatActivity {
-
-    FirebaseAuth mAuth;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_profile);
-
-        mAuth = FirebaseAuth.getInstance();
-        emailField = (EditText)findViewById(R.id.User_Email);
-        passwordField = (EditText)findViewById(R.id.User_Password);
-        nameField = (EditText)findViewById(R.id.Name);
-        phoneField = (EditText)findViewById(R.id.Phone_Num);
-        dateOfBirthField = (EditText)findViewById(R.id.Date_Of_Birth);
-        countryField = (EditText)findViewById(R.id.Country);
-        provinceField = (EditText)findViewById(R.id.Province);
-        cityField = (EditText)findViewById(R.id.City);
-        addressField = (EditText)findViewById(R.id.Address);
-        creditCardNumberField = (EditText)findViewById(R.id.Credit_Card_Num);
-        scvField = (EditText)findViewById(R.id.Scv);
-
-    }
-}
-
->>>>>>> Stashed changes

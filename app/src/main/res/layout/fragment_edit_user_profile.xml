@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7FE8FF"
     android:padding="10dp"
     android:orientation="vertical">
 
-<!--    Maybe add a profile picture here eventually-->
 
     <EditText
         android:id="@+id/User_Email"
@@ -101,13 +101,23 @@
         android:layout_weight="1"
         android:text="Credit Card" />
     <EditText
-        android:id="@+id/Scv"
+        android:id="@+id/Ccv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:centerVertical="true"
         android:layout_marginLeft="10dp"
         android:textSize="14sp"
         android:layout_weight="1"
-        android:text="SCV" />
+        android:text="CCV" />
+    <Button
+        android:id="@+id/submitSecurityChangeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="128dp"
+        android:text="Submit Changes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </LinearLayout>
