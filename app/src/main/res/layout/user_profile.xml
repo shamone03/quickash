@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:background="#A5FFEC"
-    android:padding="25dp">
+    android:layout_height="match_parent"
+    android:background="#7FE8FF"
+    android:padding="10dp"
+    android:orientation="vertical">
 
 <!--    Maybe add a profile picture here eventually-->
+
     <EditText
         android:id="@+id/User_Email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:textSize="14sp"
-        android:text="Email" />
+        android:centerVertical="true"
+        android:text="Email"
+        android:textSize="14sp" />
+
     <EditText
         android:id="@+id/User_Password"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:centerVertical="true"
+        android:layout_height="58dp"
         android:layout_marginLeft="10dp"
-        android:textSize="14sp"
         android:layout_toRightOf="@+id/User_Email"
         android:layout_weight="1"
-        android:text="Password" />
+        android:centerVertical="true"
+        android:text="Password"
+        android:textSize="14sp" />
+
     <EditText
         android:id="@+id/Name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:centerVertical="true"
+        android:layout_height="52dp"
         android:layout_marginLeft="10dp"
-        android:textSize="14sp"
         android:layout_weight="1"
-        android:text="Name" />
+        android:centerVertical="true"
+        android:text="Name"
+        android:textSize="14sp" />
     <EditText
         android:id="@+id/Phone_Num"
         android:layout_width="wrap_content"
