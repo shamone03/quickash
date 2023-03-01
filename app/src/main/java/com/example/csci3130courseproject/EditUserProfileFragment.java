@@ -76,16 +76,8 @@ public class EditUserProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        nameField = (EditText)getView().findViewById(R.id.existingUserName);
-
-        /*
-            Buttons
-         */
-        //Navigation to go to the security fragment
-        Button securityNavigation = (Button)getView().findViewById(R.id.securityNavigationButton);
-
         //Button to submit the display name.
-        Button submitProfileInformation = (Button)getView().findViewById(R.id.submitProfileButton);
+        Button submitProfileInformation = (Button)getView().findViewById(R.id.submitChangesButton);
 
         /*
             New On click listener which calls getUser() and changeUserValues.
@@ -97,6 +89,8 @@ public class EditUserProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseUser currentUser = getUser();
+                //Change this to update all user fields. Check in with Alex about
+                //database integration/firebase
                 boolean changeResult = changeUserValues(currentUser,nameField);
 
                 //Toast for the result.
@@ -108,15 +102,9 @@ public class EditUserProfileFragment extends Fragment {
                 }
             }
         });
-        securityNavigation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userProfileToEditUserProfile(view);
-            }
-        });
     }
 
-    public void userProfileToEditUserProfile(View view){
-        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_editUserProfileFragment);
+    public void editUserProfileToUserProfile(View view){
+        Navigation.findNavController(view).navigate(R.id.action_editUserProfile_to_userProfileFragment);
     }
 }

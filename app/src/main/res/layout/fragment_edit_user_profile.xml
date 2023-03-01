@@ -110,7 +110,7 @@
         android:layout_weight="1"
         android:text="CCV" />
     <Button
-        android:id="@+id/submitSecurityChangeButton"
+        android:id="@+id/submitChangesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="115dp"
