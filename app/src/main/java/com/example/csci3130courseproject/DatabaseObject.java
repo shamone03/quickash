@@ -12,8 +12,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +27,18 @@ import java.util.Map;
 public abstract class DatabaseObject {
     /** Reference to the Group 8 Firebase realtime database.*/
     private static FirebaseDatabase database;
-    /** Static hashmap holding all DatabaseReferences for the subclasses implementing DatabaseObject*/
+    /** Static hashmap holding all DatabaseReferences for the subclasses implementing DatabaseObject.*/
     private static HashMap<String, DatabaseReference> databaseReferences = new HashMap<>();
-
     /** Key of the database record as referenced in Firebase.*/
-    private String recordKey;
-
-    /** Map of key-value pairs containing all data to be sent to Firebase.*/
-    private HashMap<String, Object> recordValues = new HashMap<>();
+    private String recordKey = "";
+    /** Boolean tracking the build status of the object to determine the validity of function calls.*/
+    private Boolean built = false;
+    /** Map containing all data to be sent to Firebase.*/
+    private HashMap<String, Object> localValues = new HashMap<>();
+    /** Map containing the record values that are currently stored in Firebase.*/
+    private HashMap<String, Object> firebaseValues = new HashMap<>();
+    /** Map containing the delta between localValues and firebaseValues.*/
+    private HashMap<String, Object> valueDelta = new HashMap<>();
 
     /**
      * Called implicitly before the construction of a subclass object.
@@ -55,85 +61,102 @@ public abstract class DatabaseObject {
     /**
      * @return The DatabaseReference object associated with the subclass.
      */
-    public DatabaseReference getDatabaseReference() {
+    public DatabaseReference getReference() {
         return databaseReferences.get(this.getClass().getSimpleName());
     }
 
     /**
      * @return The key for the DatabaseObject
      */
-    public String getRecordKey(){
+    public String getKey(){
         return recordKey;
     }
 
     /**
-     * Builds the DatabaseObject from a DataSnapshot
+     * Builds the DatabaseObject from a DataSnapshot,
      * @param snapshot DataSnapshot containing the record
      */
-    protected void buildFromSnapshot(DataSnapshot snapshot) {
-        recordKey = snapshot.getKey();
+    public void build(DataSnapshot snapshot) {
+        if (recordKey.equals("")) {
+            recordKey = snapshot.getKey();
 
-        for (DataSnapshot data: snapshot.getChildren()) {
-            setValue(data.getKey(), data.getValue());
+            // Adding values from snapshot to the firebaseValues map
+            for (DataSnapshot data: snapshot.getChildren()) {
+                firebaseValues.put(data.getKey(), data.getValue());
+            }
+
+            syncLocalValues();
         }
+
+        // Setting up value update listener to keep firebaseValues up to date
+        getReference().child(recordKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                firebaseValues.clear();
+
+                for (DataSnapshot data: dataSnapshot.getChildren()) {
+                    firebaseValues.put(data.getKey(), data.getValue());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Firebase", "Read failed: Code " + databaseError.getCode() +
+                        "\nFirebase values may not be up to date.");
+            }
+        });
+
+        built = true;
     }
 
     /**
      * Retrieves a record related to the subclass via a key and puts values into recordValues.
      * @param key String key used by Firebase to uniquely identify the data record.
      */
-    public void getRecord(String key) {
+    public Task<DataSnapshot> getRecord(String key) {
         // TODO: Prevent reference-level get requests
-        DatabaseReference databaseReference = getDatabaseReference();
-        databaseReference.child(key).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("Firebase", "Error getting data", task.getException());
-                }
-                else {
-                    buildFromSnapshot(task.getResult());
-                }
-            }
-        });
+        DatabaseReference databaseReference = getReference();
+        return databaseReference.child(key).get();
     }
 
     /**
-     * Sends a push request to Firebase, adding a record of the object to the realtime database.
+     * Sends a setValue request to Firebase, adding a record of the object to the realtime database.
      * @return Task describing the outcome of the push request.
      */
     public Task<Void> setRecord() {
-        DatabaseReference databaseReference = getDatabaseReference();
-        recordKey = databaseReference.push().getKey();
-
-        return databaseReference.child(recordKey).setValue(recordValues);
+        return setRecord(getReference().push().getKey());
     }
 
     /**
-     * Sends a push request to Firebase, adding a record of the object with a custom key to the realtime database.
+     * Sends a setValue request to Firebase, adding a record of the object with a custom key to the
+     * realtime database.
      * If specified key already exists, the record will be overwritten.
      * @param key Custom key you want the record to be associated with
      * @return Task describing the outcome of the push request.
      */
     public Task<Void> setRecord(String key) {
-        DatabaseReference databaseReference = getDatabaseReference();
+        DatabaseReference databaseReference = getReference();
         recordKey = key;
 
-        return databaseReference.child(recordKey).setValue(recordValues);
+        return databaseReference.child(key).setValue(localValues);
     }
 
     /**
      * Updates the data of an existing record in Firebase's realtime database.
      * @return Task describing the outcome of the update request.
      */
-    public Task<Void> updateData() {
+    public Task<Void> updateRecord() {
         if (recordKey == null) {
             throw new NullPointerException("Object has not been linked to a Firebase record");
         }
 
-        DatabaseReference databaseReference = getDatabaseReference();
+        DatabaseReference databaseReference = getReference();
 
-        return databaseReference.child(recordKey).updateChildren(recordValues);
+        HashMap<String, Object> temporaryMap = new HashMap<>();
+        temporaryMap.putAll(valueDelta);
+        syncLocalValues();
+
+        return databaseReference.child(recordKey).updateChildren(temporaryMap);
     }
 
     /**
@@ -145,28 +168,54 @@ public abstract class DatabaseObject {
             throw new NullPointerException("Object has not been linked to a Firebase record");
         }
 
-        DatabaseReference databaseReference = getDatabaseReference();
-        Task<Void> task = databaseReference.child(recordKey).removeValue();
+        Task<Void> task = getReference().child(recordKey).removeValue();
         recordKey = null;
 
         return task;
     }
 
     /**
-     * Gets a value from the locally stored record
+     * Gets a value from the locally stored record.
      * @param key String key used locally to uniquely identify the data record.
      * @return Value associated with the key
      */
-    public Object getValue(String key) {
-        return recordValues.get(key);
+    public Object getLocalValue(String key) {
+        return localValues.get(key);
+    }
+
+    public Object getFirebaseValue(String key) {
+        return localValues.get(key);
     }
 
     /**
-     * Sets a value in the locally stored record
+     * Sets a value in the locally stored record.
      * @param key String key used locally to uniquely identify the data record.
      * @param value Value associated with the key
      */
-    public void setValue(String key, Object value) {
-        recordValues.put(key,value);
+    public void setLocalValue(String key, Object value) {
+        localValues.put(key,value);
+        valueDelta.put(key,value);
+    }
+
+    /**
+     * Resets all changes made to the local record and keeps it up to date with the Firebase
+     * record.
+     */
+    public void syncLocalValues() {
+        localValues.clear();
+        valueDelta.clear();
+        localValues.putAll(firebaseValues);
+    }
+
+    /**
+     * Returns a string representation of the maps relevant to this object.
+     * @return
+     */
+    public String toString() {
+        return "Reference: " + getReference() +
+                "\n\nKey: " + getKey() +
+                "\n\nLocal values:\n" + localValues.toString() +
+                "\n\nFirebase values:\n" + firebaseValues.toString() +
+                "\n\nDelta:\n" + valueDelta.toString();
     }
 }

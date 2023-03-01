@@ -10,23 +10,14 @@ public class Listing extends DatabaseObject {
     /**
      * Create a new Listing object from app data
      */
-    public Listing(String employerId, String title, int hours, int salary, Priority.PRIORITY priority, HashMap<String, Boolean> employeeIdMap) {
+    public Listing(String employerId, String title, int hours, int salary, Priority.PRIORITY priority) {
         // Adding values to be replicated to Firebase
-        setValue("employer", employerId);
-        setValue("title", title);
-        setValue("hours", hours);
-        setValue("salary", salary);
-        setValue("priority", priority.toString());
-        setValue("employees", employeeIdMap);
-    }
-
-    public Listing(JobPostingObject jobPosting){
-        setValue("employer", jobPosting.getJobPoster());
-        setValue("title", jobPosting.getJobTitle());
-        setValue("hours", jobPosting.getJobDuration());
-        setValue("salary", jobPosting.getJobSalary());
-        setValue("priority", jobPosting.getPriority().toString());
-        setValue("employees", jobPosting.getUserApplied());
+        setLocalValue("employer", employerId);
+        setLocalValue("title", title);
+        setLocalValue("hours", hours);
+        setLocalValue("salary", salary);
+        setLocalValue("priority", priority.toString());
+        setLocalValue("employees", new HashMap<String, Boolean>());
     }
 
     /**
@@ -34,7 +25,7 @@ public class Listing extends DatabaseObject {
      * @param snapshot DataSnapshot holding the record and its child data objects
      */
     public Listing(DataSnapshot snapshot) {
-        buildFromSnapshot(snapshot);
+        build(snapshot);
     }
 
     /**
@@ -45,19 +36,27 @@ public class Listing extends DatabaseObject {
         getRecord(key);
     }
 
+    public Listing() {
 
+    };
+
+
+    /**
+     *
+     * @param userId ID of the user to add to the employees table
+     */
     public void addEmployee(String userId) {
         HashMap<String, Boolean> employees;
 
-        if (getValue("employees") == null) {
+        if (getLocalValue("employees") == null) {
             employees = new HashMap<>();
             employees.put(userId,false);
-            setValue("employees",employees);
+            setLocalValue("employees",employees);
         } else {
-            employees = (HashMap<String, Boolean>) getValue("employees");
+            employees = (HashMap<String, Boolean>) getLocalValue("employees");
             employees.put(userId,false);
         }
 
-        updateData();
+        updateRecord();
     }
 }

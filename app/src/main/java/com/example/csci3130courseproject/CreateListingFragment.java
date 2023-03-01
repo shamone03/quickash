@@ -46,11 +46,10 @@ public class CreateListingFragment extends Fragment {
             public void onClick(View view) {
                 // Preparing listing values
                 String posterID = FirebaseAuth.getInstance().getUid();
-                HashMap<String, Boolean> employees = new HashMap<>();
 
                 // Create job posting object and send to firebase
                 Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
-                        getJobSalary(), getJobPriority(), employees);
+                        getJobSalary(), getJobPriority());
                 newListing.setRecord();
 
                 // Navigate back to dashboard fragment:

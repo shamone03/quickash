@@ -113,10 +113,10 @@ public class ListingSearchFragment extends Fragment {
         TextView salary = listingPreview.findViewById(R.id.salaryLabel);
         TextView employer = listingPreview.findViewById(R.id.employerLabel);
 
-        title.setText(String.valueOf(newListing.getValue("title")));
-        hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
-        salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
-        employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
+        title.setText(String.valueOf(newListing.getFirebaseValue("title")));
+        hours.setText("Hours: " + String.valueOf(newListing.getFirebaseValue("hours")));
+        salary.setText("Salary: " + String.valueOf(newListing.getFirebaseValue("salary")));
+        employer.setText("Employer: " + String.valueOf(newListing.getFirebaseValue("employer")));
 
         // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
@@ -164,7 +164,7 @@ public class ListingSearchFragment extends Fragment {
             Listing listing = (Listing)listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
             // Filtering listings based on criteria provided by the user
-            if (filterTitles(String.valueOf(listing.getValue("title")), query) == false) {
+            if (filterTitles(String.valueOf(listing.getFirebaseValue("title")), query) == false) {
                 continue;
             }
 
