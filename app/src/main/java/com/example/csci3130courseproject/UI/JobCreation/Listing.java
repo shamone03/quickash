@@ -1,7 +1,8 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.UI.JobCreation;
 
-import android.util.Log;
-
+import com.example.csci3130courseproject.Utils.Priority;
+import com.example.csci3130courseproject.Utils.DatabaseObject;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.HashMap;

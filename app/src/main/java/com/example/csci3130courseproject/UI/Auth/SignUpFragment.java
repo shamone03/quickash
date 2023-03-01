@@ -1,4 +1,4 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.UI.Auth;
 
 import android.os.Bundle;
 
@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.example.csci3130courseproject.Callbacks.UserCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -83,7 +86,7 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users");
-                    User newUser = new User(new ArrayList<>(), new ArrayList<>());
+                    UserObject newUser = new UserObject(new ArrayList<>(), new ArrayList<>());
                     String uid = task.getResult().getUser().getUid();
                     userRef.child(uid).setValue(newUser);
                 } else {
