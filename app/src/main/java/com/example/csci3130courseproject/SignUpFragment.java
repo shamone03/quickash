@@ -83,9 +83,9 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users");
-                    User newUser = new User(new ArrayList<>(), new ArrayList<>());
+                    User newUser = new User("Default Username");
                     String uid = task.getResult().getUser().getUid();
-                    userRef.child(uid).setValue(newUser);
+                    newUser.setRecord(uid);
                 } else {
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                     if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
