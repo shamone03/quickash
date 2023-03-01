@@ -104,7 +104,9 @@ public class ListingSearchFragment extends Fragment {
      */
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
-        Listing newListing = new Listing(listingSnapshot);
+        Listing newListing = new Listing();
+        newListing.build(listingSnapshot);
+
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
         // Modifying placeholder text to match data from Listing object
