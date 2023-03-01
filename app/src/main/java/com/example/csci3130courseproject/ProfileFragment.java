@@ -12,8 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
+
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,18 +33,20 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        TextView emailField = (TextView) getView().findViewById(R.id.email);
-        TextView passwordField = (TextView) getView().findViewById(R.id.password);
-        TextView nameField = (TextView) getView().findViewById(R.id.name);
-        TextView phoneNumberField = (TextView) getView().findViewById(R.id.phoneNumber);
-        TextView dateOfBirthField = (TextView) getView().findViewById(R.id.dateOfBirth);
-        TextView locationField = (TextView) getView().findViewById(R.id.location);
-        TextView preferredJobsField = (TextView) getView().findViewById(R.id.preferredJobs);
-        TextView creditCardField = (TextView) getView().findViewById(R.id.creditCardNumber);
-        TextView creditCardCVVField = (TextView) getView().findViewById(R.id.CCV);
-        phoneNumberField = (TextView)getView().findViewById(R.id.phoneNumber);
+        TextView emailField = (TextView) requireView().findViewById(R.id.email);
+        TextView passwordField = (TextView) requireView().findViewById(R.id.password);
+        TextView nameField = (TextView) requireView().findViewById(R.id.name);
+        TextView phoneNumberField = (TextView) requireView().findViewById(R.id.phoneNumber);
+        TextView dateOfBirthField = (TextView) requireView().findViewById(R.id.dateOfBirth);
+        TextView locationField = (TextView) requireView().findViewById(R.id.location);
+        TextView preferredJobsField = (TextView) requireView().findViewById(R.id.preferredJobs);
+        TextView creditCardField = (TextView) requireView().findViewById(R.id.creditCardNumber);
+        TextView creditCardCVVField = (TextView) requireView().findViewById(R.id.CCV);
 
-        Button editInformationButton = (Button)getView().findViewById(R.id.editProfile);
+        Button editInformationButton = (Button)requireView().findViewById(R.id.editProfile);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference(Listing.class.getSimpleName());
 
         editInformationButton.setOnClickListener(new View.OnClickListener() {
             @Override
