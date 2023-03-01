@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import com.example.csci3130courseproject.UI.JobCreation.ListingSearchFragment;
+import com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

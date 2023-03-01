@@ -1,4 +1,4 @@
-package com.example.csci3130courseproject.UI.JobCreation;
+package com.example.csci3130courseproject.UI.HomePage;
 
 import android.os.Bundle;
 
@@ -15,7 +15,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
-import com.example.csci3130courseproject.UI.JobCreation.Listing;
+import com.example.csci3130courseproject.Utils.Listing;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

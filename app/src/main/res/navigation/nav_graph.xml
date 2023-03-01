@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/listingSearchFragment"
-        android:name="com.example.csci3130courseproject.UI.JobCreation.ListingSearchFragment"
+        android:name="com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment"
         android:label="fragment_listing_search"
         tools:layout="@layout/fragment_listing_search" >
         <action
