@@ -40,9 +40,6 @@
             android:id="@+id/action_listingSearchFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <action
-            android:id="@+id/action_listingSearchFragment_to_securityFragment"
-            app:destination="@id/editUserProfileFragment" />
-        <action
             android:id="@+id/action_listingSearchFragment_to_createListingFragment"
             app:destination="@id/createListingFragment" />
         <action
@@ -60,17 +57,18 @@
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.csci3130courseproject.EditUserProfileFragment"
+        android:name="com.example.csci3130courseproject.ProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" >
+        tools:layout="@layout/fragment_user_profile">
         <action
             android:id="@+id/action_userProfileFragment_to_editUserProfileFragment"
             app:destination="@id/editUserProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/editUserProfileFragment"
+        android:name="com.example.csci3130courseproject.EditUserProfileFragment"
         android:label="fragment_edit_user_profile"
-        tools:layout="@layout/fragment_edit_user_profile" >
+        tools:layout="@layout/fragment_edit_user_profile">
         <action
             android:id="@+id/action_editUserProfile_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />

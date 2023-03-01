@@ -28,6 +28,8 @@ import java.util.Objects;
 /**
  * Fragment that handles the sign-in process
  */
+
+//TODO: Trying to sign in without any input crashes app.
 public class SignInFragment extends Fragment {
     private EditText emailField, passwordField;
 

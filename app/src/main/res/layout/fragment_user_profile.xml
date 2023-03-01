@@ -5,134 +5,154 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditUserProfileFragment">
-
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Email"
-        tools:layout_editor_absoluteX="209dp"
-        tools:layout_editor_absoluteY="24dp" />
-
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Password"
-        tools:layout_editor_absoluteX="209dp"
-        tools:layout_editor_absoluteY="87dp" />
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="209dp"
-        tools:layout_editor_absoluteY="148dp" />
-
-    <TextView
-        android:id="@+id/phoneNumber"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Phone Number"
-        tools:layout_editor_absoluteX="209dp"
-        tools:layout_editor_absoluteY="205dp" />
+    tools:context=".ProfileFragment">
 
     <TextView
         android:id="@+id/dateOfBirth"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
         android:inputType="textPersonName"
         android:text="Date of Birth"
-        tools:layout_editor_absoluteX="209dp"
-        tools:layout_editor_absoluteY="263dp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <TextView
         android:id="@+id/location"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
         android:inputType="textPersonName"
         android:text="Location"
-        tools:layout_editor_absoluteX="13dp"
-        tools:layout_editor_absoluteY="24dp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/preferredJobs"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1"
         android:inputType="textPersonName"
         android:text="Preferred jobs"
-        tools:layout_editor_absoluteX="13dp"
-        tools:layout_editor_absoluteY="87dp" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/creditCardNumber" />
 
     <TextView
-        android:id="@+id/creditCardNumber"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="75dp"
+        android:layout_weight="1"
         android:inputType="textPersonName"
-        android:text="Credit Card Number"
-        tools:layout_editor_absoluteX="13dp"
-        tools:layout_editor_absoluteY="148dp" />
+        android:text="Name"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/editTextTextPersonName9"-->
+    <!--        android:layout_width="166dp"-->
+    <!--        android:layout_height="46dp"-->
+    <!--        android:ems="10"-->
+    <!--        android:inputType="textPersonName"-->
+    <!--        android:text="Name"-->
+    <!--        tools:layout_editor_absoluteX="13dp"-->
+    <!--        tools:layout_editor_absoluteY="263dp" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/editTextTextPersonName10"-->
+    <!--        android:layout_width="166dp"-->
+    <!--        android:layout_height="46dp"-->
+    <!--        android:ems="10"-->
+    <!--        android:inputType="textPersonName"-->
+    <!--        android:text="Name"-->
+    <!--        tools:layout_editor_absoluteX="13dp"-->
+    <!--        tools:layout_editor_absoluteY="324dp" />-->
 
     <TextView
         android:id="@+id/CCV"
-        android:layout_width="166dp"
-        android:layout_height="46dp"
-        android:ems="10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
         android:inputType="textPersonName"
         android:text="CCV"
-        tools:layout_editor_absoluteX="13dp"
-        tools:layout_editor_absoluteY="205dp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateOfBirth" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/editTextTextPersonName9"-->
-<!--        android:layout_width="166dp"-->
-<!--        android:layout_height="46dp"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:text="Name"-->
-<!--        tools:layout_editor_absoluteX="13dp"-->
-<!--        tools:layout_editor_absoluteY="263dp" />-->
+    <TextView
+        android:id="@+id/creditCardNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1"
+        android:inputType="textPersonName"
+        android:text="Credit Card Number"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/editTextTextPersonName10"-->
-<!--        android:layout_width="166dp"-->
-<!--        android:layout_height="46dp"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:text="Name"-->
-<!--        tools:layout_editor_absoluteX="13dp"-->
-<!--        tools:layout_editor_absoluteY="324dp" />-->
+    <TextView
+        android:id="@+id/phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1"
+        android:inputType="textPersonName"
+        android:text="Phone Number"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:inputType="textPersonName"
+        android:text="Password"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:inputType="textPersonName"
+        android:text="Email"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <Button
         android:id="@+id/editProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
         android:text="Edit Profile"
-        tools:layout_editor_absoluteX="18dp"
-        tools:layout_editor_absoluteY="633dp" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="633dp" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

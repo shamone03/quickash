@@ -15,11 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth mAuth;
-    private TextView emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
-            locationField, preferredJobsField, creditCardField,
-            creditCardCVVField;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,16 +25,16 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        emailField = (TextView)getView().findViewById(R.id.email);
-        passwordField = (TextView)getView().findViewById(R.id.password);
-        nameField = (TextView)getView().findViewById(R.id.name);
-        phoneNumberField = (TextView)getView().findViewById(R.id.phoneNumber);
-        dateOfBirthField = (TextView)getView().findViewById(R.id.dateOfBirth);
-        locationField = (TextView)getView().findViewById(R.id.location);
-        preferredJobsField = (TextView)getView().findViewById(R.id.preferredJobs);
-        creditCardField = (TextView)getView().findViewById(R.id.creditCardNumber);
-        creditCardCVVField = (TextView)getView().findViewById(R.id.CCV);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        TextView emailField = (TextView) getView().findViewById(R.id.email);
+        TextView passwordField = (TextView) getView().findViewById(R.id.password);
+        TextView nameField = (TextView) getView().findViewById(R.id.name);
+        TextView phoneNumberField = (TextView) getView().findViewById(R.id.phoneNumber);
+        TextView dateOfBirthField = (TextView) getView().findViewById(R.id.dateOfBirth);
+        TextView locationField = (TextView) getView().findViewById(R.id.location);
+        TextView preferredJobsField = (TextView) getView().findViewById(R.id.preferredJobs);
+        TextView creditCardField = (TextView) getView().findViewById(R.id.creditCardNumber);
+        TextView creditCardCVVField = (TextView) getView().findViewById(R.id.CCV);
         phoneNumberField = (TextView)getView().findViewById(R.id.phoneNumber);
 
         Button editInformationButton = (Button)getView().findViewById(R.id.editProfile);

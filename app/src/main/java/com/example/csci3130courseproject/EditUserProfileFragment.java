@@ -35,19 +35,8 @@ public class EditUserProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-        emailField = (EditText)getView().findViewById(R.id.User_Email);
-        passwordField = (EditText)getView().findViewById(R.id.User_Password);
-        nameField = (EditText)getView().findViewById(R.id.Name);
-        phoneField = (EditText)getView().findViewById(R.id.Phone_Num);
-        dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
-        countryField = (EditText)getView().findViewById(R.id.Country);
-        provinceField = (EditText)getView().findViewById(R.id.Province);
-        cityField = (EditText)getView().findViewById(R.id.City);
-        addressField = (EditText)getView().findViewById(R.id.Address);
-        creditCardNumberField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
-        ccvField = (EditText)getView().findViewById(R.id.Ccv);
 
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        return inflater.inflate(R.layout.fragment_edit_user_profile, container, false);
     }
 
     /*
@@ -79,6 +68,17 @@ public class EditUserProfileFragment extends Fragment {
         //Button to submit the display name.
         Button submitProfileInformation = (Button)getView().findViewById(R.id.submitChangesButton);
 
+        emailField = (EditText)getView().findViewById(R.id.User_Email);
+        passwordField = (EditText)getView().findViewById(R.id.User_Password);
+        nameField = (EditText)getView().findViewById(R.id.Name);
+        phoneField = (EditText)getView().findViewById(R.id.Phone_Num);
+        dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
+        countryField = (EditText)getView().findViewById(R.id.Country);
+        provinceField = (EditText)getView().findViewById(R.id.Province);
+        cityField = (EditText)getView().findViewById(R.id.City);
+        addressField = (EditText)getView().findViewById(R.id.Address);
+        creditCardNumberField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
+        ccvField = (EditText)getView().findViewById(R.id.Ccv);
         /*
             New On click listener which calls getUser() and changeUserValues.
             changeUserValues takes in the currentUser, and the nameField, and changes the user name.
@@ -97,6 +97,7 @@ public class EditUserProfileFragment extends Fragment {
                 if(changeResult){
 
                     Toast.makeText(getActivity(),"Details Changes Successfully", Toast.LENGTH_SHORT).show();
+                    editUserProfileToUserProfile(view);
                 }else{
                     Toast.makeText(getActivity(),"Error Occurred. Try again!", Toast.LENGTH_SHORT).show();
                 }
