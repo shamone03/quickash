@@ -1,9 +1,9 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.Utils;
 
 import android.widget.Spinner;
 
 public class Priority {
-     enum PRIORITY {
+     public enum PRIORITY {
         LOW,
         MEDIUM,
         HIGH,

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.example.csci3130courseproject.SignInFragment"
+        android:name="com.example.csci3130courseproject.UI.Auth.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.csci3130courseproject.SignUpFragment"
+        android:name="com.example.csci3130courseproject.UI.Auth.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/listingSearchFragment"
-        android:name="com.example.csci3130courseproject.ListingSearchFragment"
+        android:name="com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment"
         android:label="fragment_listing_search"
         tools:layout="@layout/fragment_listing_search" >
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/createListingFragment"
-        android:name="com.example.csci3130courseproject.CreateListingFragment"
+        android:name="com.example.csci3130courseproject.UI.JobCreation.CreateListingFragment"
         android:label="fragment_create_listing"
         tools:layout="@layout/fragment_create_listing" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.csci3130courseproject.UserProfileFragment"
+        android:name="com.example.csci3130courseproject.UI.User.UserProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" >
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/securityFragment"
-        android:name="com.example.csci3130courseproject.SecurityFragment"
+        android:name="com.example.csci3130courseproject.UI.User.SecurityFragment"
         android:label="fragment_security"
         tools:layout="@layout/fragment_security" />
 </navigation>

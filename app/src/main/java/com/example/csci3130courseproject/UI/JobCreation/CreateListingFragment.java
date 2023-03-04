@@ -1,11 +1,10 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.UI.JobCreation;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.csci3130courseproject.Utils.Listing;
+import com.example.csci3130courseproject.Utils.Priority;
+import com.example.csci3130courseproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
