@@ -26,5 +26,8 @@ public class ViewJobAsEmployerTest {
         assertEquals("com.example.csci3130courseproject", appContext.getPackageName());
     }
 
+    public void checkIfPageVisible() {
+
+    }
 
 }

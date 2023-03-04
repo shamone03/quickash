@@ -11,7 +11,9 @@ import androidx.annotation.Nullable;
 
 import com.example.csci3130courseproject.R;
 
-class ViewJobEmployer extends Fragment {
+public class ViewJobEmployer extends Fragment {
+    // required empty constructor
+    public ViewJobEmployer() {  }
 
     @Nullable
     @Override
@@ -19,5 +21,10 @@ class ViewJobEmployer extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_view_job_employer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 }
