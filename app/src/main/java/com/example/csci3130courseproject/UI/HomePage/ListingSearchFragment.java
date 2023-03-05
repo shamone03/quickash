@@ -15,6 +15,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +27,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import kotlinx.coroutines.Job;
 
 /**
  * Handles the sign-up process
@@ -53,10 +56,11 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference(Listing.class.getSimpleName());
+        databaseReference = database.getReference(JobPostingObject.class.getSimpleName());
+
 
         // TODO: Replace hardcoded query with a spinner read
-        Query query = databaseReference.orderByChild("salary");
+        Query query = databaseReference.orderByChild("jobSalary");
 
         // Retrieves all Listing records from firebase and
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,7 +105,9 @@ public class ListingSearchFragment extends Fragment {
      */
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
-        Listing newListing = new Listing(listingSnapshot);
+//        Listing newListing = new Listing(listingSnapshot);
+
+        JobPostingObject newListing = listingSnapshot.getValue(JobPostingObject.class);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
         // Modifying placeholder text to match data from Listing object
@@ -110,10 +116,10 @@ public class ListingSearchFragment extends Fragment {
         TextView salary = listingPreview.findViewById(R.id.salaryLabel);
         TextView employer = listingPreview.findViewById(R.id.employerLabel);
 
-        title.setText(String.valueOf(newListing.getValue("title")));
-        hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
-        salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
-        employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
+        title.setText(String.valueOf(newListing.getJobTitle()));
+        hours.setText("Hours: " + String.valueOf(newListing.getJobDuration()));
+        salary.setText("Salary: " + String.valueOf(newListing.getJobSalary()));
+        employer.setText("Employer: " + String.valueOf(newListing.getJobPoster()));
 
         // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
@@ -123,7 +129,7 @@ public class ListingSearchFragment extends Fragment {
                 if (applyButton.getText().toString().equals("Apply")) {
                     applyButton.setText("Applied");
                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
-                    newListing.addEmployee(user.getUid());
+//                    newListing.addEmployee(user.getUid());
                 }
             }
         });
@@ -158,10 +164,10 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList.removeAllViews();
 
         for (Object[] listingReference : pagedListings) {
-            Listing listing = (Listing)listingReference[0];
+            JobPostingObject listing = (JobPostingObject) listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
             // Filtering listings based on criteria provided by the user
-            if (filterTitles(String.valueOf(listing.getValue("title")), query) == false) {
+            if (filterTitles(String.valueOf(listing.getJobTitle()), query) == false) {
                 continue;
             }
 

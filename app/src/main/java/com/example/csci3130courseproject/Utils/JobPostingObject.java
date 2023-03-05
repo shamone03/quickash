@@ -16,12 +16,12 @@ public class JobPostingObject {
 
     public JobPostingObject(){}
 
-    public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, String priority, double jobSalary,
+    public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, Priority.PRIORITY priority, double jobSalary,
                             int jobDuration, Location location){
         this.jobPosterID = posterID;
         this.userApplied = userApplied;
         this.jobTitle = title;
-        this.priority = Priority.getPriorityFromString(priority);
+        this.priority = priority;
         this.jobSalary = jobSalary;
         this.jobDuration = jobDuration;
         this.jobLocation = location;

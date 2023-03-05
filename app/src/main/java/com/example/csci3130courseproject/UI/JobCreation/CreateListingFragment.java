@@ -1,5 +1,6 @@
 package com.example.csci3130courseproject.UI.JobCreation;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
@@ -51,9 +54,16 @@ public class CreateListingFragment extends Fragment {
                 HashMap<String, Boolean> employees = new HashMap<>();
 
                 // Create job posting object and send to firebase
-                Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
-                        getJobSalary(), getJobPriority(), employees);
-                newListing.setRecord();
+//                Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
+//                        getJobSalary(), getJobPriority(), employees);
+//                newListing.setRecord();
+
+                JobPostingObject jobPostingObject = new JobPostingObject(posterID, new HashMap<String, Boolean>(), getJobTitle(), getJobPriority(),
+                        getJobSalary(), getJobDuration(), new Location(""));
+
+                FirebaseDatabase.getInstance().getReference("JobPostingObject").push().setValue(jobPostingObject);
+
+
 
                 // Navigate back to dashboard fragment:
 //                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
