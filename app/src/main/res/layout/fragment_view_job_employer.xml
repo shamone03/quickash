@@ -46,9 +46,11 @@
                     android:layout_marginEnd="120dp"
                     android:clickable="false"
                     android:ems="10"
+                    android:fontFamily="sans-serif"
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
                     android:text="Example Job Description"
+                    android:textColor="#404040"
                     app:counterEnabled="true"
                     app:counterMaxLength="300"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +73,36 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="0dp" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginEnd="253dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="Job Applicants"
+                    android:textColor="#000000"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/ViewJobEmployerJobApplicantsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
 
         </LinearLayout>
     </ScrollView>
