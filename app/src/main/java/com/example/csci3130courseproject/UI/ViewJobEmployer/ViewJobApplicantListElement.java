@@ -1,4 +1,4 @@
-package com.example.csci3130courseproject.UI.User.ViewJobEmployer;
+package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
 import android.os.Bundle;
 
