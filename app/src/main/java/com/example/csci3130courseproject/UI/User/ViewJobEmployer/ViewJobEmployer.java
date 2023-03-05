@@ -1,4 +1,4 @@
-package com.example.csci3130courseproject.UI.User;
+package com.example.csci3130courseproject.UI.User.ViewJobEmployer;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
