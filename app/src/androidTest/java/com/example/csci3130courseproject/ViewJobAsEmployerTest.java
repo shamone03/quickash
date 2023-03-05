@@ -6,6 +6,7 @@ import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMe
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -13,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 
-import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.core.app.ActivityScenario;
@@ -33,7 +33,6 @@ import org.mockito.Mockito;
 @RunWith(AndroidJUnit4.class)
 public class ViewJobAsEmployerTest {
     static NavController navController;
-    FragmentScenario fragmentScenario;
 
     @Before
     public void launchMainActivity() throws InterruptedException {
@@ -57,6 +56,11 @@ public class ViewJobAsEmployerTest {
     @Test
     public void checkIfPageVisible() {
 
+    }
+
+    @Test
+    public void button_isVisible() {
+        onView(withId(R.id.ViewJobEmployerSaveButton)).check(matches(isDisplayed()));
     }
 
 }
