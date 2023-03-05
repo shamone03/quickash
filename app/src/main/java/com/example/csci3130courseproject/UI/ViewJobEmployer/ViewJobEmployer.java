@@ -1,10 +1,13 @@
-package com.example.csci3130courseproject.UI.User;
+package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
@@ -20,8 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ViewJobEmployer extends Fragment {
+
+    Button saveEdit, applicants;
+    EditText jobDescription;
+    TextView jobTitle, applicantName;
+
     // required empty constructor
-    public ViewJobEmployer() {  }
+    public ViewJobEmployer() { }
 
     @Nullable
     @Override
@@ -42,4 +50,19 @@ public class ViewJobEmployer extends Fragment {
     public void getJobs(String uid, JobsCallback callback) {
 
     }
+
+    // returns string value representing applicant's name on profile
+    public String getJobApplicantName() {
+        return applicantName.getText().toString();
+    }
+
+    // returns String value representing job title
+    public String getJobTitle() {
+        return jobTitle.getText().toString();
+    }
+
+    public String getJobDescription() {
+        return jobDescription.getText().toString();
+    }
+
 }

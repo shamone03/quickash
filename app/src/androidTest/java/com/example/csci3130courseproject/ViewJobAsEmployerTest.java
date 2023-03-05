@@ -13,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
+import android.widget.Button;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -60,7 +61,7 @@ public class ViewJobAsEmployerTest {
 
     @Test
     public void button_isVisible() {
-        onView(withId(R.id.ViewJobEmployerSaveButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.ViewJobEmployerEditButton)).check(matches(isDisplayed()));
     }
 
 }
