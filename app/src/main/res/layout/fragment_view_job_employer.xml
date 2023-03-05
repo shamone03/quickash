@@ -49,7 +49,7 @@
                     android:fontFamily="sans-serif"
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
-                    android:text="Example Job Description"
+                    android:text="Example job description"
                     android:textColor="#404040"
                     app:counterEnabled="true"
                     app:counterMaxLength="300"
@@ -64,12 +64,12 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/ViewJobEmployerEditButton"
+                    android:id="@+id/ViewJobEmployerSaveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="263dp"
                     android:layout_marginEnd="54dp"
-                    android:text="Edit"
+                    android:text="Save"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="0dp" />
@@ -116,36 +116,52 @@
                             android:layout_marginEnd="10dp"
                             android:translationZ="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/JobApplicantAvatar"
                             android:layout_width="85dp"
-                            android:layout_height="59dp"
+                            android:layout_height="60dp"
+                            android:layout_marginStart="25dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="301dp"
+                            android:layout_marginBottom="14dp"
                             android:translationZ="2dp"
-                            tools:layout_editor_absoluteX="25dp"
-                            tools:layout_editor_absoluteY="16dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/JobApplicantXViewViewProfile"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/JobApplicantXViewViewProfile"
                             tools:src="@tools:sample/avatars" />
 
                         <TextView
                             android:id="@+id/JobApplicantName"
                             android:layout_width="180dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="126dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="105dp"
                             android:text="John Doe"
                             android:textColor="#FFFFFF"
                             android:translationZ="2dp"
-                            tools:layout_editor_absoluteX="126dp"
-                            tools:layout_editor_absoluteY="16dp" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/JopApplicantRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="126dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="176dp"
                             android:text="Employee Rating:"
                             android:textColor="#FFFFFF"
                             android:translationZ="2dp"
-                            tools:layout_editor_absoluteX="126dp"
-                            tools:layout_editor_absoluteY="46dp" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/JobApplicantName" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
