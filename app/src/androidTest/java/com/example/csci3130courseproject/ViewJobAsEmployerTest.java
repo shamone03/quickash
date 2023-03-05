@@ -60,7 +60,7 @@ public class ViewJobAsEmployerTest {
 
     @Test
     public void button_isVisible() {
-        onView(withId(R.id.ViewJobEmployerSaveButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.ViewJobEmployerEditButton)).check(matches(isDisplayed()));
     }
 
 }
