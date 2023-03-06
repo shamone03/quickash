@@ -13,10 +13,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kotlinx.coroutines.Job;
 
@@ -129,7 +134,10 @@ public class ListingSearchFragment extends Fragment {
                 if (applyButton.getText().toString().equals("Apply")) {
                     applyButton.setText("Applied");
                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
-//                    newListing.addEmployee(user.getUid());
+                    // adds the job id to current user doesn't currently check for duplicates
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+                    DatabaseReference jobsTaken = userRef.child(user.getUid()).child("jobsTaken");
+                    jobsTaken.push().setValue(listingSnapshot.getKey());
                 }
             }
         });
