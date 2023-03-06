@@ -138,7 +138,10 @@ public class ListingSearchFragment extends Fragment {
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
                     DatabaseReference jobsTaken = userRef.child(user.getUid()).child("jobsTaken");
                     jobsTaken.push().setValue(listingSnapshot.getKey());
+                    DatabaseReference jobsRef = FirebaseDatabase.getInstance().getReference("jobs");
 
+                    
+//                    Toast.makeText(getActivity(), newListing.getJobTitle(), Toast.LENGTH_SHORT).show();
 
                 }
             }
