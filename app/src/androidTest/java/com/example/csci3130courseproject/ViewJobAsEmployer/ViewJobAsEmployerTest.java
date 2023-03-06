@@ -1,4 +1,4 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.ViewJobAsEmployer;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
@@ -20,25 +20,37 @@ import androidx.navigation.Navigation;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.DrawerMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.example.csci3130courseproject.MainActivity;
+import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment;
+import com.example.csci3130courseproject.Utils.UserObject;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.ArrayList;
 
 @RunWith(AndroidJUnit4.class)
 public class ViewJobAsEmployerTest {
     static NavController navController;
 
+    @Mock
+    UserObject newApplicant = new UserObject(new ArrayList<>(), new ArrayList<>());
+
     @Before
     public void launchMainActivity() throws InterruptedException {
         ActivityScenario.launch(MainActivity.class);
-        onView(withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
+        onView(ViewMatchers.withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
         onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
         closeSoftKeyboard();
         onView(withId(R.id.Sign_In_Request)).perform(click());
@@ -62,6 +74,26 @@ public class ViewJobAsEmployerTest {
     @Test
     public void button_isVisible() {
         onView(withId(R.id.ViewJobEmployerSaveButton)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void jobTitle_isVisible() {
+
+    }
+
+    @Test
+    public void jobDescription_isVisible() {
+
+    }
+
+    @Test
+    public void jobApplicants_isVisible() {
+
+    }
+
+    @Test
+    public void applicantPreviewIsVisible() {
+
     }
 
 }

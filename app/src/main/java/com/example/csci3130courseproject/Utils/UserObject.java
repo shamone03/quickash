@@ -13,11 +13,22 @@ public class UserObject {
     /** Contains the jobId of all jobs taken by the user.*/
     private List<String> jobsTaken;
 
+    private double EmployerRating;
+
+    private double EmployeeRating;
+
     public UserObject() { }
 
     public UserObject(ArrayList<String> jobPostings, ArrayList<String> jobsTaken) {
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
+    }
+
+    public UserObject(ArrayList<String> jobPostings, ArrayList<String> jobsTaken, double employerRating, double employeeRating){
+        this.jobsTaken = jobsTaken;
+        this.jobPostings = jobPostings;
+        this.EmployerRating = employerRating;
+        this.EmployeeRating = employeeRating;
     }
 
     /**

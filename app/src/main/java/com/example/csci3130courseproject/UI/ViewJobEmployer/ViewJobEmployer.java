@@ -51,6 +51,14 @@ public class ViewJobEmployer extends Fragment {
 
     }
 
+    private void createApplicantPreview(){
+
+    }
+
+    public void populateApplicantListView(@NonNull View view){
+
+    }
+
     public void getJobs(String uid, JobsCallback callback) {
         FirebaseDatabase.getInstance().getReference("users").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
