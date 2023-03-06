@@ -19,6 +19,7 @@ import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class CreateListingFragment extends Fragment {
                 JobPostingObject jobPostingObject = new JobPostingObject(posterID, new HashMap<String, Boolean>(), getJobTitle(), getJobPriority(),
                         getJobSalary(), getJobDuration(), new Location(""));
 
-                FirebaseDatabase.getInstance().getReference("JobPostingObject").push().setValue(jobPostingObject);
+                FirebaseDatabase.getInstance().getReference("jobs").push().setValue(jobPostingObject);
 
 
 

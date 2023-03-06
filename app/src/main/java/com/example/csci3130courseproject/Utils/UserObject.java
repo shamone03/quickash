@@ -36,6 +36,14 @@ public class UserObject {
         jobsTaken.add(jobId);
     }
 
+    @Override
+    public String toString() {
+        return "UserObject{" +
+                "jobPostings=" + jobPostings +
+                ", jobsTaken=" + jobsTaken +
+                '}';
+    }
+
     /**
      * @return The list containing all job postings created by the user
      */
