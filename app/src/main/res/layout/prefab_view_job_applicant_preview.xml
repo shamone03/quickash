@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout4"
+    android:id="@+id/jobApplicant"
     android:layout_width="match_parent"
     android:layout_height="120dp"
     tools:context=".UI.ViewJobEmployer.ViewJobApplicantListElement">
@@ -40,6 +40,7 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
+        android:layout_marginBottom="15dp"
         android:text="John Doe"
         android:textColor="#FFFFFF"
         android:translationZ="2dp"

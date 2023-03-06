@@ -10,6 +10,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
@@ -35,6 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -45,10 +47,11 @@ public class ViewJobAsEmployerTest {
     static NavController navController;
 
     @Mock
-    UserObject newApplicant = new UserObject(new ArrayList<>(), new ArrayList<>());
+    UserObject newApplicant;
 
     @Before
     public void launchMainActivity() throws InterruptedException {
+        MockitoAnnotations.openMocks(this);
         ActivityScenario.launch(MainActivity.class);
         onView(ViewMatchers.withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
         onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
@@ -78,22 +81,23 @@ public class ViewJobAsEmployerTest {
 
     @Test
     public void jobTitle_isVisible() {
-
+        onView(withId(R.id.ViewJobEmployerJobTitle)).check(matches(isDisplayed()));
     }
 
     @Test
     public void jobDescription_isVisible() {
-
+        onView(withId(R.id.ViewJobEmployerJobDescription)).check(matches(isDisplayed()));
     }
 
     @Test
     public void jobApplicants_isVisible() {
-
+        onView(withId(R.id.ViewJobEmployerJobApplicantsContainer)).check(matches(isDisplayed()));
     }
 
     @Test
     public void applicantPreviewIsVisible() {
-
+        // As an employer I wish to see my job's applicants
+        onView(withId(R.id.jobApplicant)).check(matches(isDisplayed()));
     }
 
 }
