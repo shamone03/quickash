@@ -61,7 +61,7 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference(JobPostingObject.class.getSimpleName());
+        databaseReference = database.getReference("jobs");
 
 
         // TODO: Replace hardcoded query with a spinner read
@@ -138,6 +138,11 @@ public class ListingSearchFragment extends Fragment {
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
                     DatabaseReference jobsTaken = userRef.child(user.getUid()).child("jobsTaken");
                     jobsTaken.push().setValue(listingSnapshot.getKey());
+                    DatabaseReference jobsRef = FirebaseDatabase.getInstance().getReference("jobs");
+
+                    
+//                    Toast.makeText(getActivity(), newListing.getJobTitle(), Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
