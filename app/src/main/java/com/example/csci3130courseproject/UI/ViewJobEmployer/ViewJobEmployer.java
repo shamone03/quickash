@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.example.csci3130courseproject.Callbacks.JobsCallback;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.Listing;
+import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +45,14 @@ public class ViewJobEmployer extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
+    }
+
+    private void createApplicantPreview(){
+
+    }
+
+    public void populateApplicantListView(@NonNull View view){
 
     }
 
