@@ -36,7 +36,7 @@ public class JobSearchJUnitTest {
 
     @Test
     public void FilterSalaryFalse() {
-        assertTrue(ListingSearchFragment.filterSalary(9,10));
+        assertFalse(ListingSearchFragment.filterSalary(9,10));
     }
 
     @Test
