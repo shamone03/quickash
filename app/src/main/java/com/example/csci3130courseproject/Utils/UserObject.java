@@ -1,6 +1,4 @@
-package com.example.csci3130courseproject;
-
-import android.widget.ArrayAdapter;
+package com.example.csci3130courseproject.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +6,16 @@ import java.util.List;
 /**
  *
  */
-public class User {
+public class UserObject {
     /** Contains the jobId of all jobs created by the user.*/
     private List<String> jobPostings;
 
     /** Contains the jobId of all jobs taken by the user.*/
     private List<String> jobsTaken;
 
-    public User() { }
+    public UserObject() { }
 
-    public User(ArrayList<String> jobPostings, ArrayList<String> jobsTaken) {
+    public UserObject(ArrayList<String> jobPostings, ArrayList<String> jobsTaken) {
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
     }

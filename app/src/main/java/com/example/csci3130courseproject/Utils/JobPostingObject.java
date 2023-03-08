@@ -1,9 +1,7 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.Utils;
 
 import android.location.Location;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.HashMap;
 
 public class JobPostingObject {
