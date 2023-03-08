@@ -149,6 +149,10 @@ public class ListingSearchFragment extends Fragment {
         }
     }
 
+    public boolean filterSalary(int salary, int lowerBounds) {
+        return (lowerBounds < 0 || salary >= lowerBounds);
+    }
+
     /**
      * Updates the list of job Listings by deleting old UI cards and adding new ones based on
      * the filter and sort criteria.
