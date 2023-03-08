@@ -135,10 +135,10 @@ public class ListingSearchFragment extends Fragment {
 
     /**
      * Compares the search bar query with a title to determine if the title should be included
-     * @param title String representing the query used to filter the titles of Listing objects
+     * @param query String representing the query used to filter the titles of Listing objects
      * @return Boolean representing if the title passes the query
      */
-    protected static boolean filterTitles(String title, String query) {
+    public boolean filterTitle(String title, String query) {
         String lowerTitle = title.toLowerCase();
         if (query.equals("")) {
             return true;
@@ -161,7 +161,7 @@ public class ListingSearchFragment extends Fragment {
             Listing listing = (Listing)listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
             // Filtering listings based on criteria provided by the user
-            if (filterTitles(String.valueOf(listing.getValue("title")), query) == false) {
+            if (filterTitle(String.valueOf(listing.getValue("title")), query) == false) {
                 continue;
             }
 

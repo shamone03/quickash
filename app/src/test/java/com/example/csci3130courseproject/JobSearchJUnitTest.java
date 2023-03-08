@@ -20,13 +20,27 @@ public class JobSearchJUnitTest {
 
     @Test
     public void checkFilterTrue() {
-        assertTrue(ListingSearchFragment.filterTitles("", ""));
-        assertTrue(ListingSearchFragment.filterTitles("abc", "B"));
+        assertTrue(ListingSearchFragment.filterTitle("", ""));
+        assertTrue(ListingSearchFragment.filterTitle("abc", "B"));
     }
 
     @Test
     public void checkFilterFalse() {
-        assertFalse(ListingSearchFragment.filterTitles("B", "abc"));
+        assertFalse(ListingSearchFragment.filterTitle("B", "abc"));
     }
 
+    @Test
+    public void FilterSalaryTrue() {
+        assertTrue(ListingSearchFragment.filterSalary(11,10));
+    }
+
+    @Test
+    public void FilterSalaryFalse() {
+        assertTrue(ListingSearchFragment.filterSalary(9,10));
+    }
+
+    @Test
+    public void FilterSalaryEdgeTrue() {
+        assertTrue(ListingSearchFragment.filterSalary(10,10));
+    }
 }
