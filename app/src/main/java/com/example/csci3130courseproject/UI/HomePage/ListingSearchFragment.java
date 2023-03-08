@@ -159,6 +159,10 @@ public class ListingSearchFragment extends Fragment {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
+    private double calculateDistance(double x1, double y1, double x2, double y2) {
+        return Math.hypot(Math.abs(y2 - y1), Math.abs(x2 - x1));
+    }
+
     /**
      * Updates the list of job Listings by deleting old UI cards and adding new ones based on
      * the filter and sort criteria.
