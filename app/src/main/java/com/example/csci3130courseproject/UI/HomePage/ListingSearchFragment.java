@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
@@ -37,6 +39,8 @@ public class ListingSearchFragment extends Fragment {
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
     private LinearLayout cardPreviewList;
     private SearchView searchBar;
+    private Spinner filterSpinner;
+    private EditText filterInput;
 
     public ListingSearchFragment() {
 
@@ -54,6 +58,8 @@ public class ListingSearchFragment extends Fragment {
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference(Listing.class.getSimpleName());
+        filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
+        filterInput = (EditText)getView().findViewById(R.id.filterInput);
 
         // TODO: Replace hardcoded query with a spinner read
         Query query = databaseReference.orderByChild("salary");
@@ -133,6 +139,10 @@ public class ListingSearchFragment extends Fragment {
         pagedListings.add(listing);
     }
 
+    private String getFilter() {
+        return(filterSpinner.getSelectedItem().toString());
+    }
+
     /**
      * Compares the search bar query with a title to determine if the title should be included
      * @param query String representing the query used to filter the titles of Listing objects
@@ -141,16 +151,6 @@ public class ListingSearchFragment extends Fragment {
     public static boolean filterTitle(String title, String query) {
         String sanitizedTitle = title.toLowerCase();
         String sanitizedQuery = query.trim().toLowerCase();
-
-        /* Old code: keep until we can fix the related tests
-        if (query.equals("")) {
-            return true;
-        } else if (lowerTitle.contains(query.toLowerCase())) {
-            return true;
-        } else {
-            return false;
-        }
-         */
 
         return (sanitizedQuery.equals("") || sanitizedTitle.contains(sanitizedQuery));
     }
@@ -170,9 +170,21 @@ public class ListingSearchFragment extends Fragment {
         for (Object[] listingReference : pagedListings) {
             Listing listing = (Listing)listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
+
             // Filtering listings based on criteria provided by the user
             if (filterTitle(String.valueOf(listing.getValue("title")), query) == false) {
                 continue;
+            } else {
+                if (getFilter().equals("Pay rate")) {
+                    try {
+                        if (filterSalary(Integer.parseInt(listing.getValue("salary").toString()),
+                                Integer.parseInt(filterInput.getText().toString())) == false) {
+                            continue;
+                        }
+                    } catch(NumberFormatException e) {
+                        // Do nothing, an invalid number is the same as a negative and so wont filter
+                    }
+                }
             }
 
             // Adding view to list layout
