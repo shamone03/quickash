@@ -138,8 +138,11 @@ public class ListingSearchFragment extends Fragment {
      * @param query String representing the query used to filter the titles of Listing objects
      * @return Boolean representing if the title passes the query
      */
-    public boolean filterTitle(String title, String query) {
-        String lowerTitle = title.toLowerCase();
+    public static boolean filterTitle(String title, String query) {
+        String sanitizedTitle = title.toLowerCase();
+        String sanitizedQuery = query.trim().toLowerCase();
+
+        /* Old code: keep until we can fix the related tests
         if (query.equals("")) {
             return true;
         } else if (lowerTitle.contains(query.toLowerCase())) {
@@ -147,9 +150,12 @@ public class ListingSearchFragment extends Fragment {
         } else {
             return false;
         }
+         */
+
+        return (sanitizedQuery.equals("") || sanitizedTitle.contains(sanitizedQuery));
     }
 
-    public boolean filterSalary(int salary, int lowerBounds) {
+    public static boolean filterSalary(int salary, int lowerBounds) {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
