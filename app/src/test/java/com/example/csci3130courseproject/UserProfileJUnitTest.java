@@ -13,5 +13,5 @@ public class UserProfileJUnitTest {
         assertEquals(4, 2 + 2);
     }
 
-    //TODO: Add tests firebase integration. 
+    //TODO: Add tests firebase integration.
 }

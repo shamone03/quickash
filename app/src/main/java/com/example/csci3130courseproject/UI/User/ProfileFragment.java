@@ -44,6 +44,7 @@ public class ProfileFragment extends Fragment {
         TextView preferredJobsField = (TextView) requireView().findViewById(R.id.preferredJobs);
         TextView creditCardField = (TextView) requireView().findViewById(R.id.creditCardNumber);
         TextView creditCardCVVField = (TextView) requireView().findViewById(R.id.CCV);
+        TextView raitingField = (TextView) requireView().findViewById(R.id.raiting);
 
         Button editInformationButton = (Button)requireView().findViewById(R.id.editProfile);
 
