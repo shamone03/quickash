@@ -53,12 +53,26 @@ public class EditUserProfileFragment extends Fragment {
         Then based on that either updates the profile and returns true, or returns false.
         This boolean is used to create toasts for the same.
      */
+
+
     public boolean changeUserValues(FirebaseUser currentUser, EditText nameField){
         if(nameField.getText().toString().trim() != null && !nameField.getText().toString().trim().equals("")) {
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(nameField.getText().toString().trim()).build();
             currentUser.updateProfile(profileUpdates);
             return true;
         }
+
+//        UpdateRequest request = new UpdateRequest(uid)
+//                .setEmail("user@example.com")
+//                .setPhoneNumber("+11234567890")
+//                .setEmailVerified(true)
+//                .setPassword("newPassword")
+//                .setDisplayName("Jane Doe")
+//                .setPhotoUrl("http://www.example.com/12345678/photo.png")
+//                .setDisabled(true);
+//
+//        UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
+//        System.out.println("Successfully updated user: " + userRecord.getUid())
 
         return false;
     }

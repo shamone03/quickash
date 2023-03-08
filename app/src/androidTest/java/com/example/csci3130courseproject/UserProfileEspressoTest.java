@@ -43,4 +43,17 @@ public class UserProfileEspressoTest {
 //        onView(withId(R.id.submitChangesButton)).perform(click());
 //        onView(withId(R.id.listingSearchFragment)).perform(click());
 //    }
+
+//    @Test
+//    public void editProfile() {
+//        //TODO: edit profile and check to see the profile page shows the change.
+//    }
+
+//    @Test
+//    public void rateUser(){
+//        onView(withId(R.id.drawer_layout)).perform(click());
+//        onView(withId(R.id.userProfileFragment)).perform(click());
+//
+//        TODO: implement a test to add a rating to a user and make sure the average rating value updates.
+//    }
 }
