@@ -14,9 +14,9 @@ public class UserObject {
     /** Contains the jobId of all jobs taken by the user.*/
     private List<String> jobsTaken;
 
-    private double employerRating;
+    private double employerRating = 0;
 
-    private double employeeRating;
+    private double employeeRating = 0;
 
     public UserObject() { }
 

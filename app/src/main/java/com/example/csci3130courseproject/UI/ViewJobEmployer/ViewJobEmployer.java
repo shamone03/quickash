@@ -2,13 +2,13 @@ package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,21 +19,32 @@ import androidx.annotation.Nullable;
 import com.example.csci3130courseproject.Callbacks.JobsCallback;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
-import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ViewJobEmployer extends Fragment {
+    JobPostingObject currentJob;
+
+    ArrayList<Object[]> jobApplicants = new ArrayList<>();
 
     Button saveEdit, applicants;
     EditText jobDescription;
     TextView jobTitle, applicantName;
+
+    LinearLayout applicantsContainer;
+
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
 
     // required empty constructor
     public ViewJobEmployer() { }
@@ -49,14 +60,19 @@ public class ViewJobEmployer extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        database = FirebaseDatabase.getInstance();
+        // TODO: Modify child reference to be that of the specific job selected.
+        databaseReference = database.getReference("Listing").child("-NOf8LrJF1mzs_9lWcau").child("employees");
 
+        applicantsContainer = (LinearLayout) getView().findViewById(R.id.ViewJobEmployerJobApplicantsContainer);
 
-
+        // TODO: OrderByRating
+        Query applicants = databaseReference.orderByKey();
+        populateApplicantListView(getView(), applicants);
     }
 
     private void createApplicantPreview(DataSnapshot applicantSnapshot){
-        UserObject currentApplicant = applicantSnapshot.getValue(UserObject.class);
-        ViewGroup applicantsContainer = (ViewGroup) getView().findViewById(R.id.ViewJobEmployerJobApplicantsContainer);
+        // currentApplicant = applicantSnapshot.getValue(UserObject.class);
         View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, true);
 
         // Job Posting Preview Modifiable attributes:
@@ -67,8 +83,8 @@ public class ViewJobEmployer extends Fragment {
 
         // Load information:
         profilePicture.setImageURI(Uri.parse(""));
-        applicantName.setText(currentApplicant.getUsername());
-        applicantRating.setText(String.format("Employee Rating: %.2f",currentApplicant.getEmployeeRating()));
+        applicantName.setText("John Doe");
+        applicantRating.setText(String.format("Employee Rating: %.2f",2.5));
 
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,10 +93,22 @@ public class ViewJobEmployer extends Fragment {
             }
         });
 
+        jobApplicants.add(new Object[]{jobApplicantPreview});
+
     }
 
-    public void populateApplicantListView(@NonNull View view){
+    private void createApplicant(DatabaseReference userReference){
+        Task<DataSnapshot> userTask = userReference.get();
+        userTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                createApplicantPreview(task.getResult());
+            }
+        });
+    }
 
+    public void populateApplicantListView(@NonNull View view, Query applicants){
+        createApplicantPreview(null);
     }
 
     public void getJobs(String uid, JobsCallback callback) {
