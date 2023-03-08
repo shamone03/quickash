@@ -7,15 +7,16 @@ import java.util.List;
  *
  */
 public class UserObject {
+    private String username;
     /** Contains the jobId of all jobs created by the user.*/
     private List<String> jobPostings;
 
     /** Contains the jobId of all jobs taken by the user.*/
     private List<String> jobsTaken;
 
-    private double EmployerRating;
+    private double employerRating;
 
-    private double EmployeeRating;
+    private double employeeRating;
 
     public UserObject() { }
 
@@ -24,11 +25,12 @@ public class UserObject {
         this.jobPostings = jobPostings;
     }
 
-    public UserObject(ArrayList<String> jobPostings, ArrayList<String> jobsTaken, double employerRating, double employeeRating){
+    public UserObject(String username, ArrayList<String> jobPostings, ArrayList<String> jobsTaken, double employerRating, double employeeRating){
+        this.username = username;
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
-        this.EmployerRating = employerRating;
-        this.EmployeeRating = employeeRating;
+        this.employerRating = employerRating;
+        this.employeeRating = employeeRating;
     }
 
     /**
@@ -67,6 +69,18 @@ public class UserObject {
      */
     public List<String> getJobsTaken() {
         return jobsTaken;
+    }
+
+    public double getEmployeeRating() {
+        return employeeRating;
+    }
+
+    public double getEmployerRating() {
+        return employerRating;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
 

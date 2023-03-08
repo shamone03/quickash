@@ -1,5 +1,6 @@
 package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import androidx.annotation.Nullable;
 
 import com.example.csci3130courseproject.Callbacks.JobsCallback;
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,7 +54,28 @@ public class ViewJobEmployer extends Fragment {
 
     }
 
-    private void createApplicantPreview(){
+    private void createApplicantPreview(DataSnapshot applicantSnapshot){
+        UserObject currentApplicant = applicantSnapshot.getValue(UserObject.class);
+        ViewGroup applicantsContainer = (ViewGroup) getView().findViewById(R.id.ViewJobEmployerJobApplicantsContainer);
+        View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, true);
+
+        // Job Posting Preview Modifiable attributes:
+        ImageView profilePicture = jobApplicantPreview.findViewById(R.id.jobApplicantAvatar);
+        TextView applicantName = jobApplicantPreview.findViewById(R.id.jobApplicantName);
+        TextView applicantRating = jobApplicantPreview.findViewById(R.id.jopApplicantRating);
+        Button applicantButton = jobApplicantPreview.findViewById(R.id.jobApplicantButton);
+
+        // Load information:
+        profilePicture.setImageURI(Uri.parse(""));
+        applicantName.setText(currentApplicant.getUsername());
+        applicantRating.setText(String.format("Employee Rating: %.2f",currentApplicant.getEmployeeRating()));
+
+        applicantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Move to user profile & acceptance button
+            }
+        });
 
     }
 

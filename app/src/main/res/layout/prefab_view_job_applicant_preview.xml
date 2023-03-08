@@ -33,6 +33,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/jobApplicantButton"
         app:layout_constraintStart_toStartOf="@+id/jobApplicantButton"
         app:layout_constraintTop_toTopOf="@+id/jobApplicantButton"
+        app:srcCompat="@drawable/googleg_disabled_color_18"
         tools:src="@tools:sample/avatars" />
 
     <TextView
