@@ -139,14 +139,18 @@ public class ListingSearchFragment extends Fragment {
         pagedListings.add(listing);
     }
 
+    /**
+     * @return String representation of the selected drop-down filter
+     */
     private String getFilter() {
         return(filterSpinner.getSelectedItem().toString());
     }
 
     /**
      * Compares the search bar query with a title to determine if the title should be included
+     * @param title Title of the job listing
      * @param query String representing the query used to filter the titles of Listing objects
-     * @return Boolean representing if the title passes the query
+     * @return Boolean true if the title passes the query
      */
     public static boolean filterTitle(String title, String query) {
         String sanitizedTitle = title.toLowerCase();
@@ -155,10 +159,23 @@ public class ListingSearchFragment extends Fragment {
         return (sanitizedQuery.equals("") || sanitizedTitle.contains(sanitizedQuery));
     }
 
+    /**
+     * @param salary Salary that the job listing is offering
+     * @param lowerBounds Lowest value that will pass
+     * @return Boolean true if the salary is above the lower bounds
+     */
     public static boolean filterSalary(int salary, int lowerBounds) {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
+    /**
+     * Calculates the distances between two positions in 3d space
+     * @param x1 X coordinate for the first position
+     * @param y1 y coordinate for the first position
+     * @param x2 x coordinate for the second position
+     * @param y2 y coordinate for the second position
+     * @return Straight-line distance between the two positions
+     */
     private double calculateDistance(double x1, double y1, double x2, double y2) {
         return Math.hypot(Math.abs(y2 - y1), Math.abs(x2 - x1));
     }
@@ -178,7 +195,7 @@ public class ListingSearchFragment extends Fragment {
             // Filtering listings based on criteria provided by the user
             if (filterTitle(String.valueOf(listing.getValue("title")), query) == false) {
                 continue;
-            } else {
+            } else { // Filtering based on current filter settings
                 if (getFilter().equals("Pay rate")) {
                     try {
                         if (filterSalary(Integer.parseInt(listing.getValue("salary").toString()),
@@ -186,8 +203,10 @@ public class ListingSearchFragment extends Fragment {
                             continue;
                         }
                     } catch(NumberFormatException e) {
-                        // Do nothing, an invalid number is the same as a negative and so wont filter
+                        // Do nothing. an invalid number is the same as a negative and so wont filter
                     }
+                } else if (getFilter().equals("Distance")) {
+                    // Waiting on Kayleen's location implementation
                 }
             }
 
