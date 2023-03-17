@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
@@ -37,6 +39,8 @@ public class ListingSearchFragment extends Fragment {
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
     private LinearLayout cardPreviewList;
     private SearchView searchBar;
+    private Spinner filterSpinner;
+    private EditText filterInput;
 
     public ListingSearchFragment() {
 
@@ -54,6 +58,8 @@ public class ListingSearchFragment extends Fragment {
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference(Listing.class.getSimpleName());
+        filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
+        filterInput = (EditText)getView().findViewById(R.id.filterInput);
 
         // TODO: Replace hardcoded query with a spinner read
         Query query = databaseReference.orderByChild("salary");
@@ -134,19 +140,54 @@ public class ListingSearchFragment extends Fragment {
     }
 
     /**
-     * Compares the search bar query with a title to determine if the title should be included
-     * @param title String representing the query used to filter the titles of Listing objects
-     * @return Boolean representing if the title passes the query
+     * @return String representation of the selected drop-down filter
      */
-    protected static boolean filterTitles(String title, String query) {
-        String lowerTitle = title.toLowerCase();
-        if (query.equals("")) {
-            return true;
-        } else if (lowerTitle.contains(query.toLowerCase())) {
-            return true;
-        } else {
-            return false;
-        }
+    private String getFilter() {
+        return(filterSpinner.getSelectedItem().toString());
+    }
+
+    /**
+     * Determines if the job posting was posted by the current user
+     * @param employerID String representation of query used to filter
+     * @return
+     */
+    public boolean filterMyPositings(String employerID){
+        String userid = user.getUid();
+        return (employerID.equals(userid.toLowerCase()));
+    }
+
+    /**
+     * Compares the search bar query with a title to determine if the title should be included
+     * @param title Title of the job listing
+     * @param query String representing the query used to filter the titles of Listing objects
+     * @return Boolean true if the title passes the query
+     */
+    public static boolean filterTitle(String title, String query) {
+        String sanitizedTitle = title.toLowerCase();
+        String sanitizedQuery = query.trim().toLowerCase();
+
+        return (sanitizedQuery.equals("") || sanitizedTitle.contains(sanitizedQuery));
+    }
+
+    /**
+     * @param salary Salary that the job listing is offering
+     * @param lowerBounds Lowest value that will pass
+     * @return Boolean true if the salary is above the lower bounds
+     */
+    public static boolean filterSalary(int salary, int lowerBounds) {
+        return (lowerBounds < 0 || salary >= lowerBounds);
+    }
+
+    /**
+     * Calculates the distances between two positions in 3d space
+     * @param x1 X coordinate for the first position
+     * @param y1 y coordinate for the first position
+     * @param x2 x coordinate for the second position
+     * @param y2 y coordinate for the second position
+     * @return Straight-line distance between the two positions
+     */
+    private double calculateDistance(double x1, double y1, double x2, double y2) {
+        return Math.hypot(Math.abs(y2 - y1), Math.abs(x2 - x1));
     }
 
     /**
@@ -160,9 +201,28 @@ public class ListingSearchFragment extends Fragment {
         for (Object[] listingReference : pagedListings) {
             Listing listing = (Listing)listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
+
             // Filtering listings based on criteria provided by the user
-            if (filterTitles(String.valueOf(listing.getValue("title")), query) == false) {
+            if (filterTitle(String.valueOf(listing.getValue("title")), query) == false) {
                 continue;
+            } else { // Filtering based on current filter settings
+                if (getFilter().equals("Pay rate")) {
+                    try {
+                        if (filterSalary(Integer.parseInt(listing.getValue("salary").toString()),
+                                Integer.parseInt(filterInput.getText().toString())) == false) {
+                            continue;
+                        }
+                    } catch(NumberFormatException e) {
+                        // Do nothing. an invalid number is the same as a negative and so wont filter
+                    }
+                } else if (getFilter().equals("Distance")) {
+                    // Waiting on Kayleen's location implementation
+                }else if (getFilter().equals("My Postings")){
+                    if (filterMyPositings(listing.getValue("employer").toString()) == false){
+                        // Add modified cardPreview
+                        continue;
+                    }
+                }
             }
 
             // Adding view to list layout
