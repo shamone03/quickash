@@ -14,10 +14,6 @@
             android:title="View Listings"
             android:icon="@drawable/icon_joblistings"/>
         <item
-            android:id="@+id/viewJobEmployer"
-            android:title="View Jobs Posted"
-            android:icon="@drawable/icon_jobs_taken"/>
-        <item
             android:id="@+id/createListingFragment"
             android:title="Create Job Posting"
             android:icon="@drawable/icon_jobs_taken"/>
