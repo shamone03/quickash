@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.Listing;
+import com.example.csci3130courseproject.Utils.UserJobs;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -102,6 +103,7 @@ public class ListingSearchFragment extends Fragment {
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         Listing newListing = new Listing(listingSnapshot);
+        UserJobs currentUserJobs = new UserJobs(listingSnapshot);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
         // Modifying placeholder text to match data from Listing object

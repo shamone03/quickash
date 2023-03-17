@@ -16,8 +16,12 @@ import android.widget.Spinner;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserJobs;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -54,6 +58,14 @@ public class CreateListingFragment extends Fragment {
                 Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
                         getJobSalary(), getJobPriority(), employees);
                 newListing.setRecord();
+
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                UserJobs currentUserJobs = new UserJobs(currentUser);
+                String jobID = newListing.getRecordKey();
+                currentUserJobs.addCurrentCreatedJobs(jobID);
+
+
 
                 // Navigate back to dashboard fragment:
 //                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
