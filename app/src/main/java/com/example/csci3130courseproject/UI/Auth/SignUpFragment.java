@@ -83,13 +83,7 @@ public class SignUpFragment extends Fragment {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference userRef = database.getReference("users");
-                    UserObject newUser = new UserObject(new ArrayList<>(), new ArrayList<>());
-                    String uid = task.getResult().getUser().getUid();
-                    userRef.child(uid).setValue(newUser);
-                } else {
+                if (!task.isSuccessful()) {
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                     if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
                         Toast.makeText(getActivity(), "This email address is already in use", Toast.LENGTH_SHORT).show();

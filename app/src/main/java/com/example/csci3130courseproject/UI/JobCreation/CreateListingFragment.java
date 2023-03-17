@@ -19,6 +19,9 @@ import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -64,8 +67,11 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
                 jobPostingObject.setPriority(getJobPriority());
 
-                FirebaseDatabase.getInstance().getReference("jobs").push().setValue(jobPostingObject);
+                DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
+                jobRef.setValue(jobPostingObject);
 
+                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+                usersRef.child(posterID).child("jobPostings").push().setValue(jobRef.getKey());
 
 
                 // Navigate back to dashboard fragment:
