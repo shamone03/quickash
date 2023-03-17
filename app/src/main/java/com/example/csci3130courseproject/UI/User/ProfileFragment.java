@@ -159,7 +159,7 @@ public class ProfileFragment extends Fragment {
                         setError("Could not find user data");
                         return;
                     } else {
-                        HashMap<String, Boolean> jobIdList;
+                        Map<String, Boolean> jobIdList;
 
                         if (taken) {
                             jobIdList = profileUser.getJobsTaken();
