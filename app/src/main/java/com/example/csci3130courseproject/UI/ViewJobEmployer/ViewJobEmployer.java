@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +39,7 @@ public class ViewJobEmployer extends Fragment {
     LinearLayout applicantsContainer;
 
     FirebaseDatabase database;
-    DatabaseReference databaseReference;
+    DatabaseReference userReference;
 
     // required empty constructor
     public ViewJobEmployer() { }
@@ -55,19 +56,17 @@ public class ViewJobEmployer extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         database = FirebaseDatabase.getInstance();
-        // TODO: Modify child reference to be that of the specific job selected.
-        databaseReference = database.getReference("Listing").child("-NOf8LrJF1mzs_9lWcau").child("employees");
-
         applicantsContainer = (LinearLayout) getView().findViewById(R.id.ViewJobEmployerJobApplicantsContainer);
+        // TODO: Get JobID from bundle
+        // TODO: Use JobID to get JobPostingObject
+
 
         // TODO: OrderByRating
-        Query applicants = databaseReference.orderByKey();
-        populateApplicantListView(getView(), applicants);
 
 
     }
 
-    private void createApplicantPreview(DataSnapshot applicantSnapshot){
+    private void createApplicantPreview(UserObject applicant){
         // currentApplicant = applicantSnapshot.getValue(UserObject.class);
         View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, true);
 
@@ -78,9 +77,15 @@ public class ViewJobEmployer extends Fragment {
         Button applicantButton = jobApplicantPreview.findViewById(R.id.jobApplicantButton);
 
         // Load information:
-        profilePicture.setImageURI(Uri.parse(""));
-        applicantName.setText("John Doe");
-        applicantRating.setText(String.format("Employee Rating: %.2f",2.5));
+        if (applicant == null) {
+            profilePicture.setImageURI(Uri.parse(""));
+            applicantName.setText("John Doe");
+            applicantRating.setText(String.format("Employee Rating: %.2f", 2.5));
+        }else{
+            profilePicture.setImageURI(Uri.parse(""));
+            applicantName.setText(applicant.getUsername());
+            applicantRating.setText(String.format("Employee Rating: %.2f", applicant.getEmployeeRating()));
+        }
 
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,14 +98,10 @@ public class ViewJobEmployer extends Fragment {
 
     }
 
-    private void createApplicant(DatabaseReference userReference){
-        Task<DataSnapshot> userTask = userReference.get();
-        userTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                createApplicantPreview(task.getResult());
-            }
-        });
+    private void createApplicant(String userID){
+        //TODO: Convert userID to UserObject
+        //TODO: pass UserObject to createApplicantPreview to populate applicant field.
+        return;
     }
 
     public void populateApplicantListView(@NonNull View view, Query applicants){
