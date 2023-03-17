@@ -162,9 +162,9 @@ public class ProfileFragment extends Fragment {
                         HashMap<String, Boolean> jobIdList;
 
                         if (taken) {
-                            jobIdList = profileUser.getJobsTaken();
+                            jobIdList = (HashMap<String, Boolean>) profileUser.getJobsTaken();
                         } else {
-                            jobIdList = profileUser.getJobPostings();
+                            jobIdList = (HashMap<String, Boolean>) profileUser.getJobPostings();
                         }
 
                         // Populate jobList with jobs
