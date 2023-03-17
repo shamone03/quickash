@@ -148,7 +148,7 @@ public class ListingSearchFragment extends Fragment {
 
     /**
      * Determines if the job posting was posted by the current user
-     * @param String representation of query used to filter
+     * @param employerID String representation of query used to filter
      * @return
      */
     public boolean filterMyPositings(String employerID){
