@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handles the creation of new job listings
@@ -69,7 +70,10 @@ public class CreateListingFragment extends Fragment {
                 jobRef.setValue(jobPostingObject);
 
                 DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-                usersRef.child(posterID).child("jobPostings").push().setValue(jobRef.getKey());
+                Map<String, Object> values = new HashMap<>();
+                values.put(jobRef.getKey(), false);
+                usersRef.child(posterID).child("jobPostings").updateChildren(values);
+
 
 
                 // Navigate back to dashboard fragment:
