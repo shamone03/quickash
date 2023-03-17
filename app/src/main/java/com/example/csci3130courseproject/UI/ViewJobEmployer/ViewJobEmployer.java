@@ -22,6 +22,7 @@ import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ViewJobEmployer extends Fragment {
     JobPostingObject currentJob;
@@ -69,6 +71,14 @@ public class ViewJobEmployer extends Fragment {
         // TODO: OrderByRating
         Query applicants = databaseReference.orderByKey();
         populateApplicantListView(getView(), applicants);
+
+        getJobs(FirebaseAuth.getInstance().getUid(), new JobsCallback() {
+            @Override
+            public List<JobPostingObject> onJobDetails(List<JobPostingObject> jobDetails) {
+                return null;
+            }
+        });
+
     }
 
     private void createApplicantPreview(DataSnapshot applicantSnapshot){
@@ -119,7 +129,7 @@ public class ViewJobEmployer extends Fragment {
 
                 assert user != null;
                 Toast.makeText(getContext(), user.toString(), Toast.LENGTH_SHORT).show();
-//                callback.onJobDetails(user.getJobsTaken());
+                callback.onJobDetails(user.getJobsTaken());
             }
         });
     }
