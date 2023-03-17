@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.DatabaseObject;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +38,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference userRef = database.getReference("users");
-    private DatabaseReference listingRef = database.getReference("Listing");
+    private DatabaseReference jobRef = database.getReference("jobs");
     private ArrayList<Object[]> jobsArray = new ArrayList<>();
     private Button editInformationButton;
     private Button jobsTakenButton;
@@ -171,7 +172,7 @@ public class ProfileFragment extends Fragment {
                         for (Map.Entry<String, Boolean> job : jobIdList.entrySet()) {
                             shownJobs = true;
                             Log.d("ProfileTesting",job.getKey());
-                            userRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            jobRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
                                     if (!listingTask.isSuccessful()) {
@@ -209,7 +210,8 @@ public class ProfileFragment extends Fragment {
 
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
-        Listing newListing = new Listing(listingSnapshot);
+        Log.w("Snapshot:", listingSnapshot.toString());
+        JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
         // Modifying placeholder text to match data from Listing object
@@ -219,17 +221,30 @@ public class ProfileFragment extends Fragment {
         TextView employer = listingPreview.findViewById(R.id.employerLabel);
 
         // Setting job card text
-        title.setText(String.valueOf(newListing.getValue("title")));
-        hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
-        salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
-        employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
+        if (jobPosting != null) {
+            title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
+            hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
+            salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+            employer.setText(String.format("Employer ID: %s", jobPosting.getJobPoster()));
+        } else {
+            title.setText("Title: NULL");
+            hours.setText("Hours: NULL");
+            salary.setText("Salary: NULL");
+            employer.setText("Employer ID: NULL");
 
+        }
         // Hiding apply button
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
-        applyButton.setVisibility(View.INVISIBLE);
+        applyButton.setText("View");
 
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: Pass intent to ViewJobEmployer
+            }
+        });
         // Adding Listing object and View to ArrayList to be referenced later
-        Object[] listing = {newListing, listingPreview};
+        Object[] listing = {jobPosting, listingPreview};
         jobsArray.add(listing);
         jobsList.addView((View)listingPreview);
     }

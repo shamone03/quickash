@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 public class ViewJobEmployer extends Fragment {
     JobPostingObject currentJob;
-
     ArrayList<Object[]> jobApplicants = new ArrayList<>();
 
     Button saveEdit, applicants;
