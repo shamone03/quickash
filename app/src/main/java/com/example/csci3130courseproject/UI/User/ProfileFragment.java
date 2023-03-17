@@ -35,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference userRef = database.getReference("users");
+    private DatabaseReference listingRef = database.getReference("Listing");
     private ArrayList<Object[]> jobsArray = new ArrayList<>();
     private Button editInformationButton;
     private Button jobsTakenButton;
@@ -152,25 +153,45 @@ public class ProfileFragment extends Fragment {
                 else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                     UserObject profileUser = task.getResult().getValue(UserObject.class);
-                    List<String> jobIdList;
-
-                    if (taken) {
-                        jobIdList = profileUser.getJobPostings();
+                    if (profileUser == null) {
+                        setError("Could not find user data");
+                        return;
                     } else {
-                        jobIdList = profileUser.getJobsTaken();
-                    }
+                        List<String> jobIdList;
 
-                    //TODO: Populate jobList with jobs
-                    for (String jobId : jobIdList) {
-                        Log.d("ProfileTesting",jobId);
-                    }
-
-                    // If there are no jobs, let the user know
-                    if (shownJobs == false) {
                         if (taken) {
-                            setError("You have not taken any jobs");
+                            jobIdList = profileUser.getJobsTaken();
                         } else {
-                            setError("You have not created any jobs");
+                            jobIdList = profileUser.getJobPostings();
+                        }
+
+                        // Populate jobList with jobs
+                        for (String jobId : jobIdList) {
+                            Log.d("ProfileTesting",jobId);
+                            userRef.child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
+                                    if (!listingTask.isSuccessful()) {
+                                        Log.e("firebase", "Error getting data", listingTask.getException());
+                                    }
+                                    else {
+                                        if (history) {
+                                            createListingPreview(listingTask.getResult());
+                                        } else {
+                                            //TODO: Requires a job completed tag to be added to listings
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        // If there are no jobs, let the user know
+                        if (shownJobs == false) {
+                            if (taken) {
+                                setError("You have not taken any jobs");
+                            } else {
+                                setError("You have not created any jobs");
+                            }
                         }
                     }
                 }
