@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,20 +55,23 @@ public class CreateListingFragment extends Fragment {
                 String posterID = FirebaseAuth.getInstance().getUid();
                 HashMap<String, Boolean> employees = new HashMap<>();
 
-                // Create job posting object and send to firebase
-//                Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
-//                        getJobSalary(), getJobPriority(), employees);
-//                newListing.setRecord();
+                // Create job posting object and submit to firebase
 
-                JobPostingObject jobPostingObject = new JobPostingObject(posterID, new HashMap<String, Boolean>(), getJobTitle(), getJobPriority(),
-                        getJobSalary(), getJobDuration(), new Location(""));
+                JobPostingObject jobPostingObject = new JobPostingObject();
+                jobPostingObject.setJobTitle(getJobTitle());
+                jobPostingObject.setJobDuration(getJobDuration());
+                jobPostingObject.setJobPoster(posterID);
+                jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
+                jobPostingObject.setPriority(getJobPriority());
 
                 FirebaseDatabase.getInstance().getReference("jobs").push().setValue(jobPostingObject);
 
 
 
                 // Navigate back to dashboard fragment:
-//                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                // TODO: Confirm job posted
+                // TODO: Notify user, then switch page.
+                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
             }
         });
     }
@@ -90,8 +94,8 @@ public class CreateListingFragment extends Fragment {
     /**
      * @return Integer value representing the salary of the job
      */
-    public int getJobSalary() {
-        return Integer.valueOf(salaryField.getText().toString());
+    public double getJobSalary(String jobSalary) {
+        return Double.parseDouble(jobSalary);
     }
 
     /**
