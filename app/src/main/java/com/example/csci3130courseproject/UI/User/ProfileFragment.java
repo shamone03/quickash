@@ -27,7 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
@@ -142,7 +144,6 @@ public class ProfileFragment extends Fragment {
     private void populateJobs(boolean history, boolean taken) {
         clearJobList();
         boolean shownJobs = false;
-
         userRef.child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -151,13 +152,14 @@ public class ProfileFragment extends Fragment {
                     setError("There was a problem retrieving your data");
                 }
                 else {
+                    boolean shownJobs = false;
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                     UserObject profileUser = task.getResult().getValue(UserObject.class);
                     if (profileUser == null) {
                         setError("Could not find user data");
                         return;
                     } else {
-                        List<String> jobIdList;
+                        HashMap<String, Boolean> jobIdList;
 
                         if (taken) {
                             jobIdList = profileUser.getJobsTaken();
@@ -166,9 +168,10 @@ public class ProfileFragment extends Fragment {
                         }
 
                         // Populate jobList with jobs
-                        for (String jobId : jobIdList) {
-                            Log.d("ProfileTesting",jobId);
-                            userRef.child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        for (Map.Entry<String, Boolean> job : jobIdList.entrySet()) {
+                            shownJobs = true;
+                            Log.d("ProfileTesting",job.getKey());
+                            userRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
                                     if (!listingTask.isSuccessful()) {
