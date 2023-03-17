@@ -10,29 +10,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.csci3130courseproject.Callbacks.JobsCallback;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
-import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ViewJobEmployer extends Fragment {
     JobPostingObject currentJob;
@@ -72,12 +64,6 @@ public class ViewJobEmployer extends Fragment {
         Query applicants = databaseReference.orderByKey();
         populateApplicantListView(getView(), applicants);
 
-        getJobs(FirebaseAuth.getInstance().getUid(), new JobsCallback() {
-            @Override
-            public List<JobPostingObject> onJobDetails(List<JobPostingObject> jobDetails) {
-                return null;
-            }
-        });
 
     }
 
@@ -119,19 +105,6 @@ public class ViewJobEmployer extends Fragment {
 
     public void populateApplicantListView(@NonNull View view, Query applicants){
         createApplicantPreview(null);
-    }
-
-    public void getJobs(String uid, JobsCallback callback) {
-        FirebaseDatabase.getInstance().getReference("users").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                UserObject user = task.getResult().getValue(UserObject.class);
-
-                assert user != null;
-                Toast.makeText(getContext(), user.toString(), Toast.LENGTH_SHORT).show();
-                callback.onJobDetails(user.getJobsTaken());
-            }
-        });
     }
 
     // returns string value representing applicant's name on profile

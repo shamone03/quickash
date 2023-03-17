@@ -134,14 +134,18 @@ public class ListingSearchFragment extends Fragment {
                 if (applyButton.getText().toString().equals("Apply")) {
                     applyButton.setText("Applied");
                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
-                    // adds the job id to current user doesn't currently check for duplicates
+                    // adds the job id to current user
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
-                    DatabaseReference jobsTaken = userRef.child(user.getUid()).child("jobsTaken");
-                    jobsTaken.push().setValue(listingSnapshot.getKey());
-                    DatabaseReference jobsRef = FirebaseDatabase.getInstance().getReference("jobs");
+                    DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
+                    Map<String, Object> takenJob = new HashMap<>();
+                    takenJob.put(listingSnapshot.getKey(), false);
+                    jobsTakenRef.updateChildren(takenJob);
 
-                    
-//                    Toast.makeText(getActivity(), newListing.getJobTitle(), Toast.LENGTH_SHORT).show();
+                    // add user to jobObject
+                    DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
+                    Map<String, Object> val = new HashMap<>();
+                    val.put(user.getUid(), false);
+                    jobRef.child("employees").updateChildren(val);
 
                 }
             }

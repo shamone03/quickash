@@ -1,8 +1,6 @@
 package com.example.csci3130courseproject.Utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,10 +9,10 @@ import java.util.Map;
 public class UserObject {
     private String username;
     /** Contains the jobId of all jobs created by the user.*/
-    private Map<String, String> jobPostings;
+    private Map<String, Boolean> jobPostings;
 
     /** Contains the jobId of all jobs taken by the user.*/
-    private Map<String, String> jobsTaken;
+    private Map<String, Boolean> jobsTaken;
 
     private double employerRating = 0;
 
@@ -22,12 +20,12 @@ public class UserObject {
 
     public UserObject() { }
 
-    public UserObject(HashMap<String, String> jobPostings, HashMap<String, String> jobsTaken) {
+    public UserObject(HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken) {
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
     }
 
-    public UserObject(String username, HashMap<String, String> jobPostings, HashMap<String, String> jobsTaken, double employerRating, double employeeRating){
+    public UserObject(String username, HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken, double employerRating, double employeeRating){
         this.username = username;
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
@@ -46,18 +44,20 @@ public class UserObject {
     /**
      * @return The list containing all job postings created by the user
      */
-    public Map<String, String> getJobPostings() {
+    public Map<String, Boolean> getJobPostings() {
         return jobPostings;
     }
 
     /**
      * @return The list containing all job postings taken by the user
      */
-    public Map<String, String> getJobsTaken() {
+    public Map<String, Boolean> getJobsTaken() {
         return jobsTaken;
     }
 
-//    public List<JobPostingObject> getJobsDetails(HashMap<String, String> jobs) {
+//    public List<JobPostingObject> getJobsDetails(JobsCallback callback) {
+//        ArrayList<JobPostingObject> ret = new ArrayList<>();
+//        FirebaseDatabase.getInstance().getReference("jobs");
 //
 //    }
 
