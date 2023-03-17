@@ -210,7 +210,6 @@ public class ProfileFragment extends Fragment {
 
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
-        Log.w("Snapshot:", listingSnapshot.toString());
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
@@ -241,6 +240,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // TODO: Pass intent to ViewJobEmployer
+                // TODO: Pass intent to ViewJobAsEmployee
+                // TODO: Determine if viewing "My Job Postings" or
             }
         });
         // Adding Listing object and View to ArrayList to be referenced later
