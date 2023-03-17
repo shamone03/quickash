@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -86,7 +87,7 @@ public class SignUpFragment extends Fragment {
                 if (task.isSuccessful()) {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users");
-                    UserObject newUser = new UserObject(new ArrayList<>(), new ArrayList<>());
+                    UserObject newUser = new UserObject(new HashMap<>(), new HashMap<>());
                     String uid = task.getResult().getUser().getUid();
                     userRef.child(uid).setValue(newUser);
                 } else {
