@@ -93,7 +93,7 @@ public class CreateListingFragment extends Fragment {
      * isEmptyJobTitle() checks if Job Title field is empty
      * @return true if Job Title field is empty
      */
-    protected static boolean isEmptyJobTitle(String jobTitle) {
+    public static boolean isEmptyJobTitle(String jobTitle) {
         return jobTitle.isEmpty();
     }
 
@@ -108,7 +108,7 @@ public class CreateListingFragment extends Fragment {
      * isEmptyJobSalary() checks if the Job Salary field is empty
      * @return true if field is empty
      */
-    protected static boolean isEmptyJobSalary(String jobSalary) {
+    public static boolean isEmptyJobSalary(String jobSalary) {
         return jobSalary.isEmpty();
     }
 
@@ -116,7 +116,7 @@ public class CreateListingFragment extends Fragment {
      * isJobSalaryValid() checks if the Job Salary field is valid
      * @return true if Job Salary > 0
      */
-    protected static boolean isJobSalaryValid(int jobSalary) {
+    public static boolean isJobSalaryValid(int jobSalary) {
         return jobSalary>0;
     }
 
@@ -131,7 +131,7 @@ public class CreateListingFragment extends Fragment {
      * isEmptyJobDuration() checks if the Job Description field is empty
      * @return true if field is empty
      */
-    protected static boolean isEmptyJobDuration(String hours){
+    public static boolean isEmptyJobDuration(String hours){
         return hours.isEmpty();
     }
 
@@ -139,7 +139,7 @@ public class CreateListingFragment extends Fragment {
      * isJobDurationValid() checks if the Job duration field is valid
      * @return true if hours > 0 and hours < 24
      */
-    protected static boolean isJobDurationValid(int hours){
+    public static boolean isJobDurationValid(int hours){
         return ((hours>0) && (hours<24));
     }
 

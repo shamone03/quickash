@@ -40,9 +40,6 @@
             android:id="@+id/action_listingSearchFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <action
-            android:id="@+id/action_listingSearchFragment_to_securityFragment"
-            app:destination="@id/securityFragment" />
-        <action
             android:id="@+id/action_listingSearchFragment_to_createListingFragment"
             app:destination="@id/createListingFragment" />
         <action
@@ -60,24 +57,20 @@
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.csci3130courseproject.UI.User.UserProfileFragment"
+        android:name="com.example.csci3130courseproject.UI.User.ProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" >
+        tools:layout="@layout/fragment_user_profile">
         <action
-            android:id="@+id/action_userProfileFragment_to_securityFragment"
-            app:destination="@id/securityFragment" />
-        <action
-            android:id="@+id/action_userProfileFragment_to_viewJobEmployer"
-            app:destination="@id/viewJobEmployer" />
+            android:id="@+id/action_userProfileFragment_to_editUserProfileFragment"
+            app:destination="@id/editUserProfileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/securityFragment"
-        android:name="com.example.csci3130courseproject.UI.User.SecurityFragment"
-        android:label="fragment_security"
-        tools:layout="@layout/fragment_security" />
-    <fragment
-        android:id="@+id/viewJobEmployer"
-        android:name="com.example.csci3130courseproject.UI.ViewJobEmployer.ViewJobEmployer"
-        android:label="ViewJobEmployer"
-        tools:layout="@layout/fragment_view_job_employer"/>
+        android:id="@+id/editUserProfileFragment"
+        android:name="com.example.csci3130courseproject.UI.User.EditUserProfileFragment"
+        android:label="fragment_edit_user_profile"
+        tools:layout="@layout/fragment_edit_user_profile">
+    <action
+        android:id="@+id/action_editUserProfile_to_userProfileFragment"
+        app:destination="@id/userProfileFragment" />
+    </fragment>
 </navigation>

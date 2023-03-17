@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context=".UI.User.EditUserProfileFragment">
+
+
+    <EditText
+        android:id="@+id/User_Email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Email"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/User_Password"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:text="Password"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/Name"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:text="Name"
+        android:textSize="14sp" />
+    <EditText
+        android:id="@+id/Phone_Num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="Phone Number" />
+    <EditText
+        android:id="@+id/Date_Of_Birth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="Date Of Birth" />
+    <EditText
+        android:id="@+id/Country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="Country" />
+    <EditText
+        android:id="@+id/Province"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="Province" />
+    <EditText
+        android:id="@+id/City"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="City" />
+    <EditText
+        android:id="@+id/Address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="Address" />
+    <EditText
+        android:id="@+id/Credit_Card_Num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="Credit Card" />
+    <EditText
+        android:id="@+id/Ccv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="14sp"
+        android:layout_weight="1"
+        android:text="CCV" />
+    <Button
+        android:id="@+id/submitChangesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="128dp"
+        android:text="Submit Changes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</LinearLayout>
