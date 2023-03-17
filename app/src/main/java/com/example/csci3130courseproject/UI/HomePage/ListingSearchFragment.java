@@ -147,6 +147,16 @@ public class ListingSearchFragment extends Fragment {
     }
 
     /**
+     * Determines if the job posting was posted by the current user
+     * @param String representation of query used to filter
+     * @return
+     */
+    public boolean filterMyPositings(String employerID){
+        String userid = user.getUid();
+        return (employerID.equals(userid.toLowerCase()));
+    }
+
+    /**
      * Compares the search bar query with a title to determine if the title should be included
      * @param title Title of the job listing
      * @param query String representing the query used to filter the titles of Listing objects
@@ -207,6 +217,11 @@ public class ListingSearchFragment extends Fragment {
                     }
                 } else if (getFilter().equals("Distance")) {
                     // Waiting on Kayleen's location implementation
+                }else if (getFilter().equals("My Postings")){
+                    if (filterMyPositings(listing.getValue("employer").toString()) == false){
+                        // Add modified cardPreview
+                        continue;
+                    }
                 }
             }
 
