@@ -34,7 +34,7 @@ public class ViewJobEmployer extends Fragment {
     JobPostingObject currentJob;
     ArrayList<Object[]> jobApplicants = new ArrayList<>();
 
-    Button saveEdit, applicants;
+    Button saveEdit;
     EditText jobDescription;
     TextView jobTitle, applicantName;
 
@@ -59,9 +59,22 @@ public class ViewJobEmployer extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         database = FirebaseDatabase.getInstance();
+
         applicantsContainer = (LinearLayout) getView().findViewById(R.id.ViewJobEmployerJobApplicantsContainer);
-        // TODO: Get JobID from bundle
-        // TODO: Use JobID to get JobPostingObject
+        jobTitle = (TextView) getView().findViewById(R.id.ViewJobEmployerJobTitle);
+        jobDescription = (EditText) getView().findViewById(R.id.ViewJobEmployerJobDescription);
+        saveEdit = (Button) getView().findViewById(R.id.ViewJobEmployerSaveButton);
+        saveEdit.setEnabled(false);
+        getJob(new IJobCallback() {
+            @Override
+            public void onGetJobSuccess(JobPostingObject job) {
+                currentJob = job;
+                // Setup View Job As Employer Page:
+                jobTitle.setText(job.getJobTitle());
+                jobDescription.setText(job.getJobDescription());
+                saveEdit.setEnabled(true);
+            }
+        });
 
 
         // TODO: OrderByRating
@@ -105,6 +118,33 @@ public class ViewJobEmployer extends Fragment {
         //TODO: Convert userID to UserObject
         //TODO: pass UserObject to createApplicantPreview to populate applicant field.
         return;
+    }
+
+    private void getJob(IJobCallback callback){
+        database.getReference("jobs").child(jobID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    JobPostingObject job = task.getResult().getValue(JobPostingObject.class);
+                    Log.w("GotJob", job.getJobTitle());
+                    callback.onGetJobSuccess(job);
+                }
+            }
+        });
+    }
+
+
+    public void getUser(IUserCallback callback, String userID){
+        database.getReference("user").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    UserObject user = task.getResult().getValue(UserObject.class);
+                    Log.w("GotUser", user.getUsername());
+                    callback.onGetUserSuccess(user);
+                }
+            }
+        });
     }
 
     public void populateApplicantListView(@NonNull View view, Query applicants){

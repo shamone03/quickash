@@ -9,6 +9,8 @@ public class JobPostingObject {
     private String jobPosterID;
     private HashMap<String, Boolean> userApplied;
     private String jobTitle;
+
+    private String jobDescription;
     private Priority.PRIORITY priority;
     private int jobDuration;
     private double jobSalary;
@@ -43,6 +45,8 @@ public class JobPostingObject {
         this.jobTitle = jobTitle;
     }
 
+    public void setJobDescription(String jobDescription){ this.jobDescription = jobDescription; }
+
     public void setPriority(Priority.PRIORITY priority) {
         this.priority = priority;
     }
@@ -58,6 +62,8 @@ public class JobPostingObject {
     public String getJobTitle() {
         return jobTitle;
     }
+
+    public String getJobDescription() { return jobDescription; }
 
     public Priority.PRIORITY getPriority() {
         return priority;
