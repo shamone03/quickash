@@ -6,6 +6,6 @@ public interface IRate {
 
     public double getUserRating();
 
-    public void updateUserRating(UserObject user, double contribution);
+    public void updateUserRating(UserObject user);
 
 }
