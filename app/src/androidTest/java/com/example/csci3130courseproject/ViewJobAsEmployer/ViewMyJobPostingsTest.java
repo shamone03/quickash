@@ -16,21 +16,12 @@ import androidx.test.espresso.contrib.DrawerActions;
 import com.example.csci3130courseproject.MainActivity;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.SignInTest;
+import com.example.csci3130courseproject.UserProfileEspressoTest;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ViewMyJobPostingsTest {
-
-    @Before
-    public void setup() throws InterruptedException{
-        ActivityScenario.launch(MainActivity.class);
-        SignInTest sign = new SignInTest();
-        sign.userSignedIn();
-
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.userProfileFragment)).perform(click());
-    }
+public class ViewMyJobPostingsTest extends UserProfileEspressoTest {
 
     public void pressShowMyJobsButton(){
         onView(withId(R.id.showJobsCreated)).perform(click());
