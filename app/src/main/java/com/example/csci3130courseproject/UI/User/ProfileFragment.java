@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,7 @@ public class ProfileFragment extends Fragment {
     private TextView username;
     private TextView emailAddress;
     private TextView errorText;
+    private TextView userRating;
     private LinearLayout jobsList;
     private LinearLayout buttonsLayout;
 
@@ -68,6 +70,7 @@ public class ProfileFragment extends Fragment {
         username = (TextView)requireView().findViewById(R.id.profileUsername);
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
+        userRating = (TextView)requireView().findViewById(R.id.rating);
 
         username.setText(currentUser.getDisplayName());
         emailAddress.setText(currentUser.getEmail());
@@ -161,6 +164,8 @@ public class ProfileFragment extends Fragment {
                     } else {
                         HashMap<String, Boolean> jobIdList;
 
+                        //calling getUserRating in here for now since it is stored on userObj. Can probably extract later.
+                        userRating.setText(String.valueOf(profileUser.getUserRating()));
                         if (taken) {
                             jobIdList = profileUser.getJobsTaken();
                         } else {
@@ -205,6 +210,10 @@ public class ProfileFragment extends Fragment {
     // TODO: Set up analytics page
     private void populateAnalytics() {
 
+    }
+
+    private double getUserRating(UserObject user) {
+        return user.getUserRating();
     }
 
     public void createListingPreview(DataSnapshot listingSnapshot) {
