@@ -169,6 +169,9 @@ public class ProfileFragment extends Fragment {
                         } else {
                             jobIdList = profileUser.getJobPostings();
                         }
+                        // Safe guard
+                        if (jobIdList == null)
+                            return;
 
                         // Populate jobList with jobs
                         for (Map.Entry<String, Boolean> job : jobIdList.entrySet()) {

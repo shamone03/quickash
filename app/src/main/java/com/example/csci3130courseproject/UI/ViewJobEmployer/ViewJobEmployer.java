@@ -28,17 +28,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ViewJobEmployer extends Fragment {
     String jobID;
     JobPostingObject currentJob;
-    ArrayList<Object[]> jobApplicants = new ArrayList<>();
+    HashMap<String, Boolean> applicants;
 
     Button saveEdit;
     EditText jobDescription;
     TextView jobTitle, applicantName;
-
     LinearLayout applicantsContainer;
+    // Contains reference to applicantButton [0] and user [1]
+    ArrayList<Object[]> jobApplicants = new ArrayList<>();
 
     FirebaseDatabase database;
     DatabaseReference userReference;
@@ -69,10 +71,13 @@ public class ViewJobEmployer extends Fragment {
             @Override
             public void onGetJobSuccess(JobPostingObject job) {
                 currentJob = job;
+                applicants = job.getEmployees();
                 // Setup View Job As Employer Page:
                 jobTitle.setText(job.getJobTitle());
                 jobDescription.setText(job.getJobDescription());
                 saveEdit.setEnabled(true);
+
+                populateApplicantListView();
             }
         });
 
@@ -110,7 +115,7 @@ public class ViewJobEmployer extends Fragment {
             }
         });
 
-        jobApplicants.add(new Object[]{jobApplicantPreview});
+        jobApplicants.add(new Object[]{applicant, jobApplicantPreview});
 
     }
 
@@ -134,21 +139,37 @@ public class ViewJobEmployer extends Fragment {
     }
 
 
-    public void getUser(IUserCallback callback, String userID){
-        database.getReference("user").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+    private void getUser(IUserCallback callback, String userID){
+        database.getReference("users").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){
+                    Log.w("FetchUser", userID);
                     UserObject user = task.getResult().getValue(UserObject.class);
-                    Log.w("GotUser", user.getUsername());
-                    callback.onGetUserSuccess(user);
+                    if(user != null) {
+                        Log.w("GotUser", "Username: " + String.valueOf(user.getEmployerRating()));
+                        callback.onGetUserSuccess(user);
+                    }else {
+                        Log.w("UserError",  "User is null");
+                    }
                 }
             }
         });
     }
 
-    public void populateApplicantListView(@NonNull View view, Query applicants){
-        createApplicantPreview(null);
+    public void populateApplicantListView(){
+        if (applicants == null){
+            Log.w("Applicants", "Failed to initialize (no applicants or error occurred)");
+            return;
+        }
+        for (String userid : applicants.keySet()){
+            getUser(new IUserCallback() {
+                @Override
+                public void onGetUserSuccess(UserObject user) {
+                    createApplicantPreview(user);
+                }
+            }, userid);
+        }
     }
 
     // returns string value representing applicant's name on profile

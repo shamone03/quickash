@@ -57,7 +57,6 @@ public class CreateListingFragment extends Fragment {
             public void onClick(View view) {
                 // Preparing listing values
                 String posterID = FirebaseAuth.getInstance().getUid();
-                HashMap<String, Boolean> employees = new HashMap<>();
 
                 // Create job posting object and submit to firebase
 
@@ -66,6 +65,7 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setJobDuration(getJobDuration());
                 jobPostingObject.setJobPoster(posterID);
                 jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
+                jobPostingObject.setEmployees(new HashMap<>());
                 jobPostingObject.setPriority(getJobPriority());
 
                 DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
@@ -81,7 +81,8 @@ public class CreateListingFragment extends Fragment {
                 // Navigate back to dashboard fragment:
                 // TODO: Confirm job posted
                 // TODO: Notify user, then switch page.
-                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                //Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                // Error note: Once Navigation is invoked, can no longer revisit page for some reason.
             }
         });
     }
