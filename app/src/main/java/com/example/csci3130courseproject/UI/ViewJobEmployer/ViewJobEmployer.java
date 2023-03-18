@@ -119,11 +119,6 @@ public class ViewJobEmployer extends Fragment {
 
     }
 
-    private void createApplicant(String userID){
-        //TODO: Convert userID to UserObject
-        //TODO: pass UserObject to createApplicantPreview to populate applicant field.
-        return;
-    }
 
     private void getJob(IJobCallback callback){
         database.getReference("jobs").child(jobID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
