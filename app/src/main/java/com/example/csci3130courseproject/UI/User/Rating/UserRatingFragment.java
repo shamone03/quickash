@@ -13,12 +13,22 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class UserRatingFragment extends Fragment {
     private RatingBar ratingBar;
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference userRef = database.getReference("users");
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+//    private FirebaseUser userToBeRated = mAuth.getUserByEmail(email);
+// TODO: Figure out how to get the user to be rated. Should be attached to completed job somehow.
 
 
     public UserRatingFragment() {
@@ -42,6 +52,10 @@ public class UserRatingFragment extends Fragment {
     }
 
     public void rate(View v){
+        Double rating = Double.valueOf(ratingBar.getRating());
+        //TODO: Right now this just lets the user rate themselves. Will have to figure out how to get the other user to rate.
+        UserObject profileUser = userRef.child(currentUser.getUid()).get().getResult().getValue(UserObject.class);
+        profileUser.rateUser(rating);
         TextView message = (TextView)getView().findViewById(R.id.message);
         message.setText("You Rated :" +String.valueOf(ratingBar.getRating()));
     }

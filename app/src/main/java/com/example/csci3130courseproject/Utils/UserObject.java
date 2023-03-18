@@ -14,11 +14,18 @@ public class UserObject {
     /** Contains the jobId of all jobs taken by the user.*/
     private HashMap<String, Boolean> jobsTaken;
 
+    /** adding user rating to userObject, as it won't seem to let me add it right on firebase **/
+    private double userRatingScore;
+    private int numberOfRatings;
+
     public UserObject() { }
 
     public UserObject(HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken) {
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
+        //Start users with 0 starts
+        this.userRatingScore = 0;
+        this.numberOfRatings = 0;
     }
 
     /**
@@ -49,6 +56,15 @@ public class UserObject {
      */
     public HashMap<String, Boolean> getJobsTaken() {
         return jobsTaken;
+    }
+
+    public double getUserRating(){
+        return userRatingScore/numberOfRatings;
+    }
+
+    public void rateUser(Double rating) {
+        numberOfRatings += 1;
+        userRatingScore += rating;
     }
 }
 
