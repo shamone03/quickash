@@ -1,6 +1,8 @@
 package com.example.csci3130courseproject.UI.User;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -239,11 +241,13 @@ public class ProfileFragment extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Pass intent to ViewJobEmployer
-                // TODO: Pass intent to ViewJobAsEmployee
-                // TODO: Determine if viewing "My Job Postings" by:
-                //  Determine current jobPosting EmployerID compare to current user ID
-
+                if (currentUser.getUid().equals(jobPosting.getJobPoster())){
+                    Bundle jobInfo = new Bundle();
+                    jobInfo.putString("JobID", listingSnapshot.getKey());
+                    Navigation.findNavController(view).navigate(R.id.fragment_view_job_employer, jobInfo);
+                }else{
+                    // TODO: Go to view job as employee
+                }
             }
         });
         // Adding Listing object and View to ArrayList to be referenced later
