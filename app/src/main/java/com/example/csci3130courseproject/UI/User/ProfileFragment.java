@@ -241,7 +241,9 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 // TODO: Pass intent to ViewJobEmployer
                 // TODO: Pass intent to ViewJobAsEmployee
-                // TODO: Determine if viewing "My Job Postings" or
+                // TODO: Determine if viewing "My Job Postings" by:
+                //  Determine current jobPosting EmployerID compare to current user ID
+
             }
         });
         // Adding Listing object and View to ArrayList to be referenced later
