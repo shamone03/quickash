@@ -53,6 +53,8 @@ public class JobPostingObject {
         this.priority = priority;
     }
 
+    public void addEmployee(String userid){ this.employees.put(userid, false); }
+
     // Get job attributes
 
     public double getJobDuration() { return jobDuration; }

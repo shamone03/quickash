@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
-import com.example.csci3130courseproject.Utils.Listing;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +28,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handles the sign-up process
@@ -57,7 +59,7 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference(Listing.class.getSimpleName());
+        databaseReference = database.getReference("jobs");
         filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
         filterInput = (EditText)getView().findViewById(R.id.filterInput);
 
@@ -107,7 +109,7 @@ public class ListingSearchFragment extends Fragment {
      */
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
-        Listing newListing = new Listing(listingSnapshot);
+        JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
         // Modifying placeholder text to match data from Listing object
@@ -116,11 +118,18 @@ public class ListingSearchFragment extends Fragment {
         TextView salary = listingPreview.findViewById(R.id.salaryLabel);
         TextView employer = listingPreview.findViewById(R.id.employerLabel);
 
-        title.setText(String.valueOf(newListing.getValue("title")));
-        hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
-        salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
-        employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
+        if (jobPosting != null) {
+            title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
+            hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
+            salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+            employer.setText(String.format("Employer ID: %s", jobPosting.getJobPoster()));
+        } else {
+            title.setText("Title: NULL");
+            hours.setText("Hours: NULL");
+            salary.setText("Salary: NULL");
+            employer.setText("Employer ID: NULL");
 
+        }
         // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
         applyButton.setOnClickListener(new View.OnClickListener() {
@@ -129,13 +138,27 @@ public class ListingSearchFragment extends Fragment {
                 if (applyButton.getText().toString().equals("Apply")) {
                     applyButton.setText("Applied");
                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
-                    newListing.addEmployee(user.getUid());
+
+                    HashMap<String, Boolean> employees;
+                    Map<String, Object> update = new HashMap<>();;
+
+                    if (jobPosting.getEmployees() == null || jobPosting.getEmployees().isEmpty()){
+                        employees = new HashMap<>();
+                        employees.put(user.getUid(), false);
+                        jobPosting.setEmployees(employees);
+                        update.put("employees", jobPosting.getEmployees());
+                        databaseReference.child(listingSnapshot.getKey()).updateChildren(update);
+                    }else{
+                        jobPosting.addEmployee(user.getUid());
+                        update.put("employees", jobPosting.getEmployees());
+                        databaseReference.child(listingSnapshot.getKey()).updateChildren(update);
+                    }
                 }
             }
         });
 
         // Adding Listing object and View to ArrayList to be referenced later
-        Object[] listing = {newListing, listingPreview};
+        Object[] listing = {jobPosting, listingPreview};
         pagedListings.add(listing);
     }
 
@@ -174,7 +197,7 @@ public class ListingSearchFragment extends Fragment {
      * @param lowerBounds Lowest value that will pass
      * @return Boolean true if the salary is above the lower bounds
      */
-    public static boolean filterSalary(int salary, int lowerBounds) {
+    public static boolean filterSalary(double salary, double lowerBounds) {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
@@ -199,17 +222,17 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList.removeAllViews();
 
         for (Object[] listingReference : pagedListings) {
-            Listing listing = (Listing)listingReference[0];
+            JobPostingObject listing = (JobPostingObject) listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
 
             // Filtering listings based on criteria provided by the user
-            if (filterTitle(String.valueOf(listing.getValue("title")), query) == false) {
+            if (filterTitle(String.valueOf(listing.getJobTitle()), query) == false) {
                 continue;
             } else { // Filtering based on current filter settings
                 if (getFilter().equals("Pay rate")) {
                     try {
-                        if (filterSalary(Integer.parseInt(listing.getValue("salary").toString()),
-                                Integer.parseInt(filterInput.getText().toString())) == false) {
+                        if (filterSalary(listing.getJobSalary(),
+                                Double.parseDouble(filterInput.getText().toString())) == false) {
                             continue;
                         }
                     } catch(NumberFormatException e) {
@@ -218,7 +241,7 @@ public class ListingSearchFragment extends Fragment {
                 } else if (getFilter().equals("Distance")) {
                     // Waiting on Kayleen's location implementation
                 }else if (getFilter().equals("My Postings")){
-                    if (filterMyPositings(listing.getValue("employer").toString()) == false){
+                    if (filterMyPositings(listing.getJobPoster()) == false){
                         // Add modified cardPreview
                         continue;
                     }
