@@ -244,7 +244,7 @@ public class ProfileFragment extends Fragment {
                 if (currentUser.getUid().equals(jobPosting.getJobPoster())){
                     Bundle jobInfo = new Bundle();
                     jobInfo.putString("JobID", listingSnapshot.getKey());
-                    Navigation.findNavController(view).navigate(R.id.fragment_view_job_employer, jobInfo);
+                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_viewJobEmployer, jobInfo);
                 }else{
                     // TODO: Go to view job as employee
                 }
