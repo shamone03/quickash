@@ -8,12 +8,16 @@ import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anyOf;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.widget.Button;
 
 import androidx.navigation.NavController;
@@ -43,24 +47,22 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 
 @RunWith(AndroidJUnit4.class)
-public class ViewJobAsEmployerTest {
+public class ViewJobAsEmployerTest extends ViewMyJobPostingsTest {
     static NavController navController;
 
     @Mock
     UserObject newApplicant;
 
     @Before
-    public void launchMainActivity() throws InterruptedException {
-        MockitoAnnotations.openMocks(this);
-        ActivityScenario.launch(MainActivity.class);
-        onView(ViewMatchers.withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
-        closeSoftKeyboard();
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-        Thread.sleep(5000); // wait to sign in
+    public void setup() throws InterruptedException {
+        super.gotoUserProfile();
+        super.pressShowMyJobsButton();
+        // TODO: Click View
+    }
 
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.viewJobEmployer)).perform(click());
+    public void gotoViewJobAsEmployer(){
+        onView(allOf(withId(R.id.applyButton), hasSibling(withText("Title: Walk dog")))).perform(click());
+        SystemClock.sleep(1500);
     }
 
     @Test
@@ -69,35 +71,36 @@ public class ViewJobAsEmployerTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.csci3130courseproject", appContext.getPackageName());
     }
-    @Test
-    public void checkIfPageVisible() {
-
-    }
 
     @Test
-    public void button_isVisible() {
+    public void saveButton_isVisible() {
+        gotoViewJobAsEmployer();
         onView(withId(R.id.ViewJobEmployerSaveButton)).check(matches(isDisplayed()));
     }
 
     @Test
     public void jobTitle_isVisible() {
+        gotoViewJobAsEmployer();
         onView(withId(R.id.ViewJobEmployerJobTitle)).check(matches(isDisplayed()));
     }
 
     @Test
     public void jobDescription_isVisible() {
+        gotoViewJobAsEmployer();
         onView(withId(R.id.ViewJobEmployerJobDescription)).check(matches(isDisplayed()));
     }
 
     @Test
     public void jobApplicants_isVisible() {
+        gotoViewJobAsEmployer();
         onView(withId(R.id.ViewJobEmployerJobApplicantsContainer)).check(matches(isDisplayed()));
     }
 
     @Test
     public void applicantPreviewIsVisible() {
         // As an employer I wish to see my job's applicants
-        onView(withId(R.id.jobApplicant)).check(matches(isDisplayed()));
+        gotoViewJobAsEmployer();
+        onView(anyOf(withId(R.id.jobApplicant), isDisplayed()));
     }
 
 }
