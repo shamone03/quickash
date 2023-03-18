@@ -2,6 +2,7 @@ package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
@@ -28,6 +30,7 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 
 public class ViewJobEmployer extends Fragment {
+    String jobID;
     JobPostingObject currentJob;
     ArrayList<Object[]> jobApplicants = new ArrayList<>();
 
@@ -48,6 +51,7 @@ public class ViewJobEmployer extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        this.jobID = getArguments().getString("JobID");
         return inflater.inflate(R.layout.fragment_view_job_employer, container, false);
     }
 
