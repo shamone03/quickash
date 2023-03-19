@@ -168,7 +168,7 @@ public class ProfileFragment extends Fragment {
                         Map<String, Boolean> jobIdList;
 
                         //calling getUserRating in here for now since it is stored on userObj. Can probably extract later.
-                        userRating.setText(String.valueOf(profileUser.getUserRating()));
+                        userRating.setText(String.valueOf(profileUser.getEmployeeRating()));
                         if (taken) {
                             jobIdList = (HashMap<String, Boolean>) profileUser.getJobsTaken();
                         } else {
@@ -219,7 +219,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private double getUserRating(UserObject user) {
-        return user.getUserRating();
+        return user.getEmployeeRating();
     }
 
     public void createListingPreview(DataSnapshot listingSnapshot) {

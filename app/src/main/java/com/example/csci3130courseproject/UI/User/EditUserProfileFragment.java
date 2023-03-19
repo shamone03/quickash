@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,22 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditUserProfileFragment extends Fragment {
 
     private FirebaseAuth mAuth;
+    FirebaseUser currentUser = getUser();
     private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
             locationField, preferredJobsField, creditCardField, creditCardCVVField, countryField,
             provinceField, cityField, addressField;
@@ -48,13 +58,6 @@ public class EditUserProfileFragment extends Fragment {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    /*
-        This function checks the validity of the entered name string i.e. its not null or empty.
-        Then based on that either updates the profile and returns true, or returns false.
-        This boolean is used to create toasts for the same.
-     */
-
-
     public boolean changeUserValues(FirebaseUser currentUser){
         if(nameField.getText().toString().trim().equals("")) {
             return false;
@@ -66,12 +69,6 @@ public class EditUserProfileFragment extends Fragment {
             return false;
         }
         if(dateOfBirthField.getText().toString().trim().equals("")) {
-            return false;
-        }
-        if(locationField.getText().toString().trim().equals("")) {
-            return false;
-        }
-        if(preferredJobsField.getText().toString().trim().equals("")) {
             return false;
         }
         if(creditCardField.getText().toString().trim().equals("")) {
@@ -92,25 +89,28 @@ public class EditUserProfileFragment extends Fragment {
         if(addressField.getText().toString().trim().equals("")) {
             return false;
         }
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(nameField.getText().toString().trim()
-                .updateEmail(emailField.getText().toString().trim())
-                ).build()
-        currentUser.updateProfile(profileUpdates);
+
+        FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    UserObject profileUser = task.getResult().getValue(UserObject.class);
+                    profileUser.updateUser(nameField.getText().toString().trim(), phoneNumberField.getText().toString().trim(),
+                            dateOfBirthField.getText().toString().trim(),
+                            creditCardField.getText().toString().trim(), creditCardCVVField.getText().toString().trim(),
+                            countryField.getText().toString().trim(), provinceField.getText().toString().trim(),
+                            cityField.getText().toString().trim(), addressField.getText().toString().trim());
+//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                .setDisplayName(nameField.getText().toString().trim()
+//                .updateEmail(emailField.getText().toString().trim())
+//                ).build()
+                }
+            }
+        });
         return true;
-
-
-//        UpdateRequest request = new UpdateRequest(uid)
-//                .setEmail("user@example.com")
-//                .setPhoneNumber("+11234567890")
-//                .setEmailVerified(true)
-//                .setPassword("newPassword")
-//                .setDisplayName("Jane Doe")
-//                .setPhotoUrl("http://www.example.com/12345678/photo.png")
-//                .setDisabled(true);
-//
-//        UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
-//        System.out.println("Successfully updated user: " + userRecord.getUid())
     }
 
     @Override
@@ -131,8 +131,8 @@ public class EditUserProfileFragment extends Fragment {
         provinceField = (EditText)getView().findViewById(R.id.Province);
         cityField = (EditText)getView().findViewById(R.id.City);
         addressField = (EditText)getView().findViewById(R.id.Address);
-        creditCardNumberField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
-        ccvField = (EditText)getView().findViewById(R.id.Ccv);
+        creditCardField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
+        creditCardCVVField = (EditText)getView().findViewById(R.id.Ccv);
         /*
             New On click listener which calls getUser() and changeUserValues.
             changeUserValues takes in the currentUser, and the nameField, and changes the user name.
@@ -142,13 +142,11 @@ public class EditUserProfileFragment extends Fragment {
         submitProfileInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseUser currentUser = getUser();
 
                 boolean changeResult = changeUserValues(currentUser);
 
                 //Toast for the result.
                 if(changeResult){
-
                     Toast.makeText(getActivity(),"Details Changes Successfully", Toast.LENGTH_SHORT).show();
                     editUserProfileToUserProfile(view);
                 }else{

@@ -9,6 +9,17 @@ import java.util.Map;
  */
 public class UserObject {
     private String username;
+    private String phoneNumber;
+    private String dateOfBirth;
+    private HashMap<String, Boolean> preferredJobsField;
+    private String creditCardNumber;
+    private String creditCardCVV;
+    private String country;
+    private String province;
+    private String city;
+    private String address;
+
+
     /** Contains the jobId of all jobs created by the user.*/
     private HashMap<String, Boolean> jobPostings;
 
@@ -27,17 +38,33 @@ public class UserObject {
 
     public UserObject() { }
 
+    public UserObject(String username) {
+        this.username = username;
+    }
+
     public UserObject(String username, HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken){
         this.username = username;
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
         //Start users with 0 rating
-        this.employerRating = 0;
-        this.employeeRating = 0;
         this.numberOfEmployerRatings = 0;
         this.numberOfEmployeeRatings = 0;
         this.employeeRating = 0;
         this.employerRating = 0;
+    }
+
+    public void updateUser(String username, String phoneNumber, String dateOfBirth,
+                           String creditCardNumber, String creditCardCVV,
+                           String country, String province, String city, String address) {
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.creditCardNumber = creditCardNumber;
+        this.creditCardCVV = creditCardCVV;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.address = address;
     }
 
     /**
@@ -88,14 +115,21 @@ public class UserObject {
         return username;
     }
 
-    public double getUserRating(){
-        return userRatingScore/numberOfRatings;
+    public void rateUser(Double dob) {
+        //TODO: Add conditional to choose employer or employee
+        rateEmployee(dob);
     }
 
-    public void rateUser(Double rating) {
-        numberOfRatings += 1;
-        userRatingScore += rating;
+    public void rateEmployer(Double rating) {
+        numberOfEmployerRatings += 1;
+        employerRatingScore += rating;
+        employeeRating = employerRatingScore/numberOfEmployerRatings;
     }
 
+    public void rateEmployee(Double rating) {
+        numberOfEmployeeRatings += 1;
+        employeeRatingScore += rating;
+        employerRating = employeeRatingScore/numberOfEmployeeRatings;
+    }
 }
 
