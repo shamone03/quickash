@@ -22,8 +22,8 @@ public class EditUserProfileFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
-            locationField, preferredJobsField, creditCardField,
-            creditCardCVVField, phoneField, countryField, provinceField, cityField, addressField, creditCardNumberField, ccvField;
+            locationField, preferredJobsField, creditCardField, creditCardCVVField, countryField,
+            provinceField, cityField, addressField;
 
     public EditUserProfileFragment() {
         // Required empty public constructor
@@ -55,12 +55,50 @@ public class EditUserProfileFragment extends Fragment {
      */
 
 
-    public boolean changeUserValues(FirebaseUser currentUser, EditText nameField){
-        if(nameField.getText().toString().trim() != null && !nameField.getText().toString().trim().equals("")) {
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(nameField.getText().toString().trim()).build();
-            currentUser.updateProfile(profileUpdates);
-            return true;
+    public boolean changeUserValues(FirebaseUser currentUser){
+        if(nameField.getText().toString().trim().equals("")) {
+            return false;
         }
+        if(passwordField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(phoneNumberField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(dateOfBirthField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(locationField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(preferredJobsField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(creditCardField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(creditCardCVVField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(countryField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(provinceField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(cityField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if(addressField.getText().toString().trim().equals("")) {
+            return false;
+        }
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(nameField.getText().toString().trim()
+                .updateEmail(emailField.getText().toString().trim())
+                ).build()
+        currentUser.updateProfile(profileUpdates);
+        return true;
+
 
 //        UpdateRequest request = new UpdateRequest(uid)
 //                .setEmail("user@example.com")
@@ -73,8 +111,6 @@ public class EditUserProfileFragment extends Fragment {
 //
 //        UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
 //        System.out.println("Successfully updated user: " + userRecord.getUid())
-
-        return false;
     }
 
     @Override
@@ -82,11 +118,14 @@ public class EditUserProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //Button to submit the display name.
         Button submitProfileInformation = (Button)getView().findViewById(R.id.submitChangesButton);
-
+        FirebaseUser user = getUser();
         emailField = (EditText)getView().findViewById(R.id.User_Email);
+        emailField.setText(user.getEmail());
         passwordField = (EditText)getView().findViewById(R.id.User_Password);
+        passwordField.setText("*************");
         nameField = (EditText)getView().findViewById(R.id.Name);
-        phoneField = (EditText)getView().findViewById(R.id.Phone_Num);
+        nameField.setText(user.getDisplayName());
+        phoneNumberField = (EditText)getView().findViewById(R.id.Phone_Num);
         dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
         countryField = (EditText)getView().findViewById(R.id.Country);
         provinceField = (EditText)getView().findViewById(R.id.Province);
@@ -104,9 +143,8 @@ public class EditUserProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseUser currentUser = getUser();
-                //Change this to update all user fields. Check in with Alex about
-                //database integration/firebase
-                boolean changeResult = changeUserValues(currentUser,nameField);
+
+                boolean changeResult = changeUserValues(currentUser);
 
                 //Toast for the result.
                 if(changeResult){
