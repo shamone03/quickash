@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_editUserProfileFragment"
             app:destination="@id/editUserProfileFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_viewJobEmployer"
+            app:destination="@id/viewJobEmployer" />
     </fragment>
     <fragment
         android:id="@+id/editUserProfileFragment"
@@ -73,4 +76,9 @@
         android:id="@+id/action_editUserProfile_to_userProfileFragment"
         app:destination="@id/userProfileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/viewJobEmployer"
+        android:name="com.example.csci3130courseproject.UI.ViewJobEmployer.ViewJobEmployer"
+        android:label="fragment_view_job_employer"
+        tools:layout="@layout/fragment_view_job_employer" />
 </navigation>
