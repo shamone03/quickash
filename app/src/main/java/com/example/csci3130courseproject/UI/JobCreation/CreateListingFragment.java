@@ -1,10 +1,12 @@
 package com.example.csci3130courseproject.UI.JobCreation;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handles the creation of new job listings
@@ -48,15 +57,32 @@ public class CreateListingFragment extends Fragment {
             public void onClick(View view) {
                 // Preparing listing values
                 String posterID = FirebaseAuth.getInstance().getUid();
-                HashMap<String, Boolean> employees = new HashMap<>();
 
-                // Create job posting object and send to firebase
-                Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
-                        getJobSalary(), getJobPriority(), employees);
-                newListing.setRecord();
+                // Create job posting object and submit to firebase
+
+                JobPostingObject jobPostingObject = new JobPostingObject();
+                jobPostingObject.setJobTitle(getJobTitle());
+                jobPostingObject.setJobDuration(getJobDuration());
+                jobPostingObject.setJobPoster(posterID);
+                jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
+                jobPostingObject.setEmployees(new HashMap<>());
+                jobPostingObject.setPriority(getJobPriority());
+
+                DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
+                jobRef.setValue(jobPostingObject);
+
+                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+                Map<String, Object> values = new HashMap<>();
+                values.put(jobRef.getKey(), false);
+                usersRef.child(posterID).child("jobPostings").updateChildren(values);
+
+
 
                 // Navigate back to dashboard fragment:
-//                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                // TODO: Confirm job posted
+                // TODO: Notify user, then switch page.
+                //Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                // Error note: Once Navigation is invoked, can no longer revisit page for some reason.
             }
         });
     }
@@ -79,8 +105,8 @@ public class CreateListingFragment extends Fragment {
     /**
      * @return Integer value representing the salary of the job
      */
-    public int getJobSalary() {
-        return Integer.valueOf(salaryField.getText().toString());
+    public double getJobSalary(String jobSalary) {
+        return Double.parseDouble(jobSalary);
     }
 
     /**

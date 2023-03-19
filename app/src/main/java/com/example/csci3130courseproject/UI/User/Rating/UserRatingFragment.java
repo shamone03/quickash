@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -50,17 +51,21 @@ public class UserRatingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_rating, container, false);
-    }
+        Button submitRating = (Button)getView().findViewById(R.id.submitRating);
 
-    public void rate(View v){
-        Double rating = Double.valueOf(ratingBar.getRating());
-        //TODO: Right now this just lets the user rate themselves. Will have to figure out how to get the other user to rate.
-        UserObject profileUser = userRef.child(currentUser.getUid()).get().getResult().getValue(UserObject.class);
-        profileUser.rateUser(rating);
-        TextView message = (TextView)getView().findViewById(R.id.message);
-        message.setText("You Rated :" +String.valueOf(ratingBar.getRating()));
+        submitRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Double rating = Double.valueOf(ratingBar.getRating());
+                //TODO: Right now this just lets the user rate themselves. Will have to figure out how to get the other user to rate.
+                UserObject profileUser = userRef.child(currentUser.getUid()).get().getResult().getValue(UserObject.class);
+                profileUser.rateUser(rating);
+                TextView message = (TextView) getView().findViewById(R.id.message);
+                message.setText("You Rated :" + String.valueOf(ratingBar.getRating()));
+            }
+            // Inflate the layout for this fragment
+        });
+        return inflater.inflate(R.layout.fragment_user_rating,container,false);
     }
 
     public void showConfirmationMessage(double rating){

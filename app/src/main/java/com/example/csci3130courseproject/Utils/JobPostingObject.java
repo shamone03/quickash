@@ -7,8 +7,10 @@ import java.util.HashMap;
 public class JobPostingObject {
 
     private String jobPosterID;
-    private HashMap<String, Boolean> userApplied;
+    private HashMap<String, Boolean> employees;
     private String jobTitle;
+
+    private String jobDescription;
     private Priority.PRIORITY priority;
     private int jobDuration;
     private double jobSalary;
@@ -16,12 +18,12 @@ public class JobPostingObject {
 
     public JobPostingObject(){}
 
-    public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, String priority, double jobSalary,
+    public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, Priority.PRIORITY priority, double jobSalary,
                             int jobDuration, Location location){
         this.jobPosterID = posterID;
-        this.userApplied = userApplied;
+        this.employees = userApplied;
         this.jobTitle = title;
-        this.priority = Priority.getPriorityFromString(priority);
+        this.priority = priority;
         this.jobSalary = jobSalary;
         this.jobDuration = jobDuration;
         this.jobLocation = location;
@@ -43,9 +45,15 @@ public class JobPostingObject {
         this.jobTitle = jobTitle;
     }
 
+    public void setJobDescription(String jobDescription){ this.jobDescription = jobDescription; }
+
+    public void setEmployees(HashMap<String, Boolean> employees){ this.employees = employees; }
+
     public void setPriority(Priority.PRIORITY priority) {
         this.priority = priority;
     }
+
+    public void addEmployee(String userid){ this.employees.put(userid, false); }
 
     // Get job attributes
 
@@ -59,6 +67,8 @@ public class JobPostingObject {
         return jobTitle;
     }
 
+    public String getJobDescription() { return jobDescription; }
+
     public Priority.PRIORITY getPriority() {
         return priority;
     }
@@ -67,7 +77,7 @@ public class JobPostingObject {
         return jobPosterID;
     }
 
-    public HashMap<String, Boolean> getUserApplied() { return userApplied; }
+    public HashMap<String, Boolean> getEmployees() { return employees; }
 
 
 }
