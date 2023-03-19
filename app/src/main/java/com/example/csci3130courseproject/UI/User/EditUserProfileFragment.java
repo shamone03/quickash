@@ -30,6 +30,7 @@ import java.util.Map;
 public class EditUserProfileFragment extends Fragment {
 
     private FirebaseAuth mAuth;
+    UserObject profileUser;
     FirebaseUser currentUser = getUser();
     private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
             locationField, preferredJobsField, creditCardField, creditCardCVVField, countryField,
@@ -97,7 +98,7 @@ public class EditUserProfileFragment extends Fragment {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    UserObject profileUser = task.getResult().getValue(UserObject.class);
+                    profileUser = task.getResult().getValue(UserObject.class);
                     profileUser.updateUser(nameField.getText().toString().trim(), phoneNumberField.getText().toString().trim(),
                             dateOfBirthField.getText().toString().trim(),
                             creditCardField.getText().toString().trim(), creditCardCVVField.getText().toString().trim(),
@@ -119,20 +120,61 @@ public class EditUserProfileFragment extends Fragment {
         //Button to submit the display name.
         Button submitProfileInformation = (Button)getView().findViewById(R.id.submitChangesButton);
         FirebaseUser user = getUser();
-        emailField = (EditText)getView().findViewById(R.id.User_Email);
-        emailField.setText(user.getEmail());
-        passwordField = (EditText)getView().findViewById(R.id.User_Password);
-        passwordField.setText("*************");
-        nameField = (EditText)getView().findViewById(R.id.Name);
-        nameField.setText(user.getDisplayName());
-        phoneNumberField = (EditText)getView().findViewById(R.id.Phone_Num);
-        dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
-        countryField = (EditText)getView().findViewById(R.id.Country);
-        provinceField = (EditText)getView().findViewById(R.id.Province);
-        cityField = (EditText)getView().findViewById(R.id.City);
-        addressField = (EditText)getView().findViewById(R.id.Address);
-        creditCardField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
-        creditCardCVVField = (EditText)getView().findViewById(R.id.Ccv);
+        FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    profileUser = task.getResult().getValue(UserObject.class);
+                    emailField = (EditText)getView().findViewById(R.id.User_Email);
+                    if(!user.getEmail().isEmpty()) {
+                        emailField.setText(user.getEmail());
+                    }
+                    passwordField = (EditText)getView().findViewById(R.id.User_Password);
+                    passwordField.setText("*************");
+                    nameField = (EditText)getView().findViewById(R.id.Name);
+                    if(!profileUser.getUsername().isEmpty()) {
+                        nameField.setText(profileUser.getUsername());
+                    }
+                    phoneNumberField = (EditText)getView().findViewById(R.id.Phone_Num);
+                    if(profileUser.getPhoneNumber() != null) {
+                        phoneNumberField.setText(profileUser.getPhoneNumber());
+                    }
+                    dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
+                    if(profileUser.getDateOfBirth() != null) {
+                        dateOfBirthField.setText(profileUser.getDateOfBirth());
+                    }
+                    countryField = (EditText)getView().findViewById(R.id.Country);
+                    if(profileUser.getCountry() != null) {
+                        countryField.setText(profileUser.getCountry());
+                    }
+                    provinceField = (EditText)getView().findViewById(R.id.Province);
+                    if(profileUser.getProvince() != null) {
+                        provinceField.setText(profileUser.getProvince());
+                    }
+                    cityField = (EditText)getView().findViewById(R.id.City);
+                    if(profileUser.getCity() != null) {
+                        cityField.setText(profileUser.getCity());
+                    }
+                    addressField = (EditText)getView().findViewById(R.id.Address);
+                    if(profileUser.getAddress() != null) {
+                        addressField.setText(profileUser.getAddress());
+                    }
+                    creditCardField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
+                    if(profileUser.getCreditCardNumber() != null) {
+                        creditCardField.setText(profileUser.getCreditCardNumber());
+                    }
+                    creditCardCVVField = (EditText)getView().findViewById(R.id.Ccv);
+                    if(profileUser.getCreditCardCVV() != null) {
+                        creditCardCVVField.setText(profileUser.getCreditCardCVV());
+                    }
+                }
+            }
+        });
+
+
         /*
             New On click listener which calls getUser() and changeUserValues.
             changeUserValues takes in the currentUser, and the nameField, and changes the user name.
@@ -144,6 +186,11 @@ public class EditUserProfileFragment extends Fragment {
             public void onClick(View view) {
 
                 boolean changeResult = changeUserValues(currentUser);
+                profileUser.updateUser(nameField.getText().toString(), phoneNumberField.getText().toString(),
+                        dateOfBirthField.getText().toString(), creditCardField.getText().toString(),
+                        creditCardCVVField.getText().toString(), countryField.getText().toString(),
+                        provinceField.getText().toString(), cityField.getText().toString(),
+                        addressField.getText().toString());
 
                 //Toast for the result.
                 if(changeResult){

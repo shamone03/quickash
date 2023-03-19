@@ -115,6 +115,43 @@ public class UserObject {
         return username;
     }
 
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public HashMap<String, Boolean> getPreferredJobsField() {
+        return preferredJobsField;
+    }
+
+    public String getCreditCardCVV() {
+        return creditCardCVV;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public void rateUser(Double dob) {
         //TODO: Add conditional to choose employer or employee
         rateEmployee(dob);
