@@ -141,10 +141,10 @@ public class ViewJobEmployer extends Fragment {
                 if (task.isSuccessful()){
                     Log.w("FetchUser", userID);
                     UserObject user = task.getResult().getValue(UserObject.class);
-                    if(user != null) {
-                        Log.w("GotUser", "Username: " + String.valueOf(user.getEmployerRating()));
+                    if (user != null) {
+                        Log.w("GotUser", "Username: " + user.getEmployerRating());
                         callback.onGetUserSuccess(user);
-                    }else {
+                    } else {
                         Log.w("UserError",  "User is null");
                     }
                 }

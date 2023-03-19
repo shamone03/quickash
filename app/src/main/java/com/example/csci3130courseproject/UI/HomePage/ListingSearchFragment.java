@@ -140,20 +140,19 @@ public class ListingSearchFragment extends Fragment {
                     applyButton.setText("Applied");
                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
 
-                    HashMap<String, Boolean> employees;
-                    Map<String, Object> update = new HashMap<>();;
 
-                    if (jobPosting.getEmployees() == null || jobPosting.getEmployees().isEmpty()){
-                        employees = new HashMap<>();
-                        employees.put(user.getUid(), false);
-                        jobPosting.setEmployees(employees);
-                        update.put("employees", jobPosting.getEmployees());
-                        databaseReference.child(listingSnapshot.getKey()).updateChildren(update);
-                    }else{
-                        jobPosting.addEmployee(user.getUid());
-                        update.put("employees", jobPosting.getEmployees());
-                        databaseReference.child(listingSnapshot.getKey()).updateChildren(update);
-                    }
+                    // adds the job id to current user
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+                    DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
+                    Map<String, Object> takenJob = new HashMap<>();
+                    takenJob.put(listingSnapshot.getKey(), false);
+                    jobsTakenRef.updateChildren(takenJob);
+                    // add user to jobObject
+                    DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
+                    Map<String, Object> val = new HashMap<>();
+                    val.put(user.getUid(), false);
+                    jobRef.child("employees").updateChildren(val);
+                    
                 }
             }
         });
