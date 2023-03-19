@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
@@ -22,6 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
+import com.example.csci3130courseproject.Utils.ObtainingLocation;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         });
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        if(navController.getCurrentDestination().getId() == R.id.nav_view) {
+            new ObtainingLocation(this);
+        }
+
     }
 
     //    @Override
