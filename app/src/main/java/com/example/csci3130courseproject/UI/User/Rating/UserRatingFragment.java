@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -43,9 +44,12 @@ public class UserRatingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+    }
+
+    public void onViewCreated(View view, Bundle savedInstanceState){
         ratingBar = (RatingBar)getView().findViewById(R.id.ratingBar);
         LayerDrawable stars=(LayerDrawable)ratingBar.getProgressDrawable();
-
     }
 
     @Override
@@ -60,6 +64,7 @@ public class UserRatingFragment extends Fragment {
                 //TODO: Right now this just lets the user rate themselves. Will have to figure out how to get the other user to rate.
                 UserObject profileUser = userRef.child(currentUser.getUid()).get().getResult().getValue(UserObject.class);
                 profileUser.rateUser(rating);
+                showConfirmationMessage(rating);
                 TextView message = (TextView) getView().findViewById(R.id.message);
                 message.setText("You Rated :" + String.valueOf(ratingBar.getRating()));
             }
@@ -75,7 +80,7 @@ public class UserRatingFragment extends Fragment {
         notif.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //TODO: Add rating to DB
+                saveUserRating(rating, currentUser.getUid());
                 dialog.dismiss();
             }
         });
@@ -88,5 +93,15 @@ public class UserRatingFragment extends Fragment {
         AlertDialog dialog;
         dialog = notif.create();
         dialog.show();
+    }
+    private void saveUserRating(double rating, String uID){
+        DatabaseReference userRating;
+        userRating = getUsers().child(uID).child("rating");
+        userRating.setValue(rating);
+    }
+
+    @NonNull
+    private DatabaseReference getUsers() {
+        return database.getReference("users");
     }
 }

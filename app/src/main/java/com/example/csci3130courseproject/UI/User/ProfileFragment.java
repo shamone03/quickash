@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.UI.User.Rating.UserRatingFragment;
 import com.example.csci3130courseproject.Utils.DatabaseObject;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
@@ -47,6 +48,8 @@ public class ProfileFragment extends Fragment {
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button analyticsButton;
+
+    private Button ratingButton;
     private TextView username;
     private TextView emailAddress;
     private TextView errorText;
@@ -74,6 +77,7 @@ public class ProfileFragment extends Fragment {
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
         userRating = (TextView)requireView().findViewById(R.id.rating);
+        ratingButton = requireView().findViewById(R.id.ratingButton);
 
         username.setText(currentUser.getDisplayName());
         emailAddress.setText(currentUser.getEmail());
@@ -108,6 +112,13 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     populateAnalytics();
+                }
+            });
+
+            ratingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
                 }
             });
         } else {
