@@ -1,5 +1,6 @@
 package com.example.csci3130courseproject.UI.HomePage;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -128,8 +129,8 @@ public class ListingSearchFragment extends Fragment {
             hours.setText("Hours: NULL");
             salary.setText("Salary: NULL");
             employer.setText("Employer ID: NULL");
-
         }
+
         // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
         applyButton.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +202,15 @@ public class ListingSearchFragment extends Fragment {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
+    public static boolean filterLocation(Location jobLocation, double distanceLimit) {
+        if (jobLocation == null) {
+            // The job has no location because it is a remote listing, and so cannot be filtered
+            return true;
+        } else {
+            return (jobLocation.distanceTo(jobLocation) < distanceLimit);
+        }
+    }
+
     /**
      * Calculates the distances between two positions in 3d space
      * @param x1 X coordinate for the first position
@@ -236,14 +246,16 @@ public class ListingSearchFragment extends Fragment {
                             continue;
                         }
                     } catch(NumberFormatException e) {
-                        // Do nothing. an invalid number is the same as a negative and so wont filter
+                        // Do nothing. An invalid number is treated the same as a negative/empty
                     }
                 } else if (getFilter().equals("Distance")) {
-                    // Waiting on Kayleen's location implementation
-                }else if (getFilter().equals("My Postings")){
-                    if (filterMyPositings(listing.getJobPoster()) == false){
-                        // Add modified cardPreview
-                        continue;
+                    try {
+                        if (filterLocation(listing.getJobLocation(),
+                                Double.parseDouble(filterInput.getText().toString())) == false) {
+                            continue;
+                        }
+                    } catch(NumberFormatException e) {
+                        // Do nothing. An invalid number is treated the same as a negative/empty
                     }
                 }
             }
