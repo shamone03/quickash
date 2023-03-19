@@ -249,7 +249,7 @@ public class ListingSearchFragment extends Fragment {
                     }
                 } else if (getFilter().equals("Distance")) {
                     try {
-                        if (filterLocation(listing.getJobLocation(),
+                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
                                 Double.parseDouble(filterInput.getText().toString())) == false) {
                             continue;
                         }

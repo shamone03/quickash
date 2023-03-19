@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
+import com.example.csci3130courseproject.Utils.ObtainingLocation;
+import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.UserObject;
@@ -67,6 +71,12 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
                 jobPostingObject.setEmployees(new HashMap<>());
                 jobPostingObject.setPriority(getJobPriority());
+                Permissions.requestPermission(getActivity());
+                if (Permissions.checkFineLocationPermission(getActivity())) {
+                    Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
+
+                    jobPostingObject.setJobLocation(new JobLocation(loc));
+                }
 
                 DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
                 jobRef.setValue(jobPostingObject);

@@ -16,16 +16,13 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -57,15 +54,12 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
 
         if(GPSstatus){
             location = null;
-            if(location == null){
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_FOR_UPDATES,MIN_DISTANCE_FOR_UPDATES,this);
-                if(mLocationManager!=null){
-                    location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    return location;
-                }
-            }
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_FOR_UPDATES,MIN_DISTANCE_FOR_UPDATES,this);
+            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Log.w("LOCATION", "location provided" + location.getLongitude() + "" + location.getLatitude());
+            return location;
         }else{
-            //Code if GPS is not enabled. Based on entered address.
+            Log.w("LOCATION", "location not provided");
         }
 
         return null;

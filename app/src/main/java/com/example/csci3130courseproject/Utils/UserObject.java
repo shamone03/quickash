@@ -1,6 +1,5 @@
 package com.example.csci3130courseproject.Utils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,19 +20,6 @@ public class UserObject {
     public UserObject() {  }
 
     public UserObject(String username) { this.username = username; }
-
-    public UserObject(HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken) {
-        this.jobsTaken = jobsTaken;
-        this.jobPostings = jobPostings;
-    }
-
-    public UserObject(String username, HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken, double employerRating, double employeeRating){
-        this.username = username;
-        this.jobsTaken = jobsTaken;
-        this.jobPostings = jobPostings;
-        this.employerRating = employerRating;
-        this.employeeRating = employeeRating;
-    }
 
     @Override
     public String toString() {
@@ -57,11 +43,6 @@ public class UserObject {
         return jobsTaken;
     }
 
-//    public List<JobPostingObject> getJobsDetails(JobsCallback callback) {
-//        ArrayList<JobPostingObject> ret = new ArrayList<>();
-//        FirebaseDatabase.getInstance().getReference("jobs");
-//
-//    }
 
     public double getEmployeeRating() {
         return employeeRating;
