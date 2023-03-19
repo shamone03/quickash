@@ -1,50 +1,31 @@
 package com.example.csci3130courseproject.Utils;
 
+import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.csci3130courseproject.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-
-// NEEDED TO COMMENT THIS OUT IN ORDER TO ELIMINATE THE ACCESS_FINE_LOCATION ERROR
-// import com.example.csci3130courseproject.Manifest;
-import android.Manifest;
-import android.util.Log;
-import android.widget.Toast;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationAccess {
+public class LocationAccess extends AppCompatActivity {
 
-    String APIKey = "AIzaSyAM6UrFYCGWK9hMeKlSUWdceou5zeD2dbs";
+    String APIKey = "AIzaSyCXMdClKMOSRbxYIHx3tW-cvYxzicmKzGs";
     private GoogleMap map;
     private static final String TAG = "MainActivity";
     int LOCATION_REQUEST_CODE = 101;
@@ -53,13 +34,23 @@ public class LocationAccess {
     Double latitude, longitude;
     String city="", country="";
 
+
     @Override
-    public void onMapReady(@NonNull GoogleMap googleMap, Activity activity) {
-        map = googleMap;
-        map.setOnMyLocationButtonClickListener(this);
-        map.setOnMyLocationClickListener(this);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        if((!Permissions.checkFineLocationPermission(this)) &&
+            !Permissions.checkCoarseLocationPermission(this)) {
+            Permissions.requestPermission(this);
+        }
     }
+
+
+//    public void onMapReady(@NonNull GoogleMap googleMap, Activity activity) {
+//        map = googleMap;
+//        map.setOnMyLocationButtonClickListener(GoogleMap.OnMyLocationButtonClickListener({}));
+//        map.setOnMyLocationClickListener(this);
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+//    }
 
     //@Override
     // along with onRequestPermissionsResult, this method requests for permission
@@ -79,7 +70,6 @@ public class LocationAccess {
         }
     }
 
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults, Activity activity){
         switch (requestCode){
@@ -130,8 +120,17 @@ public class LocationAccess {
 
     // ask user for permission
     private void askPermission(Activity activity) {
-       ActivityCompat.requestPermissions(activity,new String[] {
-               Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(activity.checkSelfPermission(LocationAccess.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission(activity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            }else{
+
+            }
+        }
+//       if(ActivityCompat.requestPermissions(activity,new String[] {
+//               Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE)){
+//
+//       }
     }
 
 
