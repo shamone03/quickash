@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -60,13 +62,15 @@ public class SignUpFragment extends Fragment {
             public void onClick(View view) {
                 EditText emailView = getView().findViewById(R.id.signupEmail);
                 String email = emailView.getText().toString().trim();
+                EditText usernameView = getView().findViewById(R.id.editTextUsername);
+                String username = usernameView.getText().toString().trim();
                 EditText passwordView = getView().findViewById(R.id.editTextTextPassword);
                 String password = passwordView.getText().toString().trim();
                 EditText rePasswordView = getView().findViewById(R.id.editTextTextPassword2);
                 String rePassword = rePasswordView.getText().toString().trim();
                 if (!validateEmail(email)) return;
                 if (!validatePasswords(password, rePassword)) return;
-                signUpUser(emailView.getText().toString(), passwordView.getText().toString(), new UserCallback() {
+                signUpUser(email, password, username, new UserCallback() {
                     @Override
                     public void isSuccessful(boolean successful) {
                         if (successful) {
@@ -79,17 +83,11 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    public void signUpUser(String email, String password, UserCallback callback) {
+    public void signUpUser(String email, String password, String username, UserCallback callback) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference userRef = database.getReference("users");
-                    UserObject newUser = new UserObject(new ArrayList<>(), new ArrayList<>());
-                    String uid = task.getResult().getUser().getUid();
-                    userRef.child(uid).setValue(newUser);
-                } else {
+                if (!task.isSuccessful()) {
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                     if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
                         Toast.makeText(getActivity(), "This email address is already in use", Toast.LENGTH_SHORT).show();
@@ -100,6 +98,19 @@ public class SignUpFragment extends Fragment {
                         Toast.makeText(getActivity(), "Sign Up Unsuccessful", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(username).build());
+                            FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).setValue(new UserObject(username));
+
+                        }
+
+                    }
+                });
                 callback.isSuccessful(task.isSuccessful());
             }
         });

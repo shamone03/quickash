@@ -16,16 +16,13 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,8 +68,12 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         }else{
             // if permission is denied, show a message
             Toast.makeText(this,"Location Permission Denied: Please enable location from Settings",Toast.LENGTH_SHORT).show();
+            location = null;
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_FOR_UPDATES,MIN_DISTANCE_FOR_UPDATES,this);
+            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Log.w("LOCATION", "location provided" + location.getLongitude() + "" + location.getLatitude());
+            return location;
         }
-
         return null;
     }
 

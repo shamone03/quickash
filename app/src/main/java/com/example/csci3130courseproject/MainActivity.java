@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         FirebaseAuth.getInstance().signOut();
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.createListingFragment, R.id.userProfileFragment, R.id.listingSearchFragment, R.id.signInFragment)
+                R.id.createListingFragment, R.id.userProfileFragment, R.id.listingSearchFragment, R.id.fragment_view_job_employer, R.id.signInFragment)
                 .setOpenableLayout(drawerLayout)
                 .build();
 

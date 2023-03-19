@@ -1,11 +1,14 @@
 package com.example.csci3130courseproject.UI.JobCreation;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.csci3130courseproject.Utils.JobLocation;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
+import com.example.csci3130courseproject.Utils.ObtainingLocation;
+import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handles the creation of new job listings
@@ -48,15 +61,38 @@ public class CreateListingFragment extends Fragment {
             public void onClick(View view) {
                 // Preparing listing values
                 String posterID = FirebaseAuth.getInstance().getUid();
-                HashMap<String, Boolean> employees = new HashMap<>();
 
-                // Create job posting object and send to firebase
-                Listing newListing = new Listing(posterID, getJobTitle(), getJobDuration(),
-                        getJobSalary(), getJobPriority(), employees);
-                newListing.setRecord();
+                // Create job posting object and submit to firebase
+
+                JobPostingObject jobPostingObject = new JobPostingObject();
+                jobPostingObject.setJobTitle(getJobTitle());
+                jobPostingObject.setJobDuration(getJobDuration());
+                jobPostingObject.setJobPoster(posterID);
+                jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
+                jobPostingObject.setEmployees(new HashMap<>());
+                jobPostingObject.setPriority(getJobPriority());
+                Permissions.requestPermission(getActivity());
+                if (Permissions.checkFineLocationPermission(getActivity())) {
+                    Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
+
+                    jobPostingObject.setJobLocation(new JobLocation(loc));
+                }
+
+                DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
+                jobRef.setValue(jobPostingObject);
+
+                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+                Map<String, Object> values = new HashMap<>();
+                values.put(jobRef.getKey(), false);
+                usersRef.child(posterID).child("jobPostings").updateChildren(values);
+
+
 
                 // Navigate back to dashboard fragment:
-//                Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                // TODO: Confirm job posted
+                // TODO: Notify user, then switch page.
+                //Navigation.findNavController(view).navigate(R.id.action_createListingFragment_to_listingSearchFragment);
+                // Error note: Once Navigation is invoked, can no longer revisit page for some reason.
             }
         });
     }
@@ -72,22 +108,22 @@ public class CreateListingFragment extends Fragment {
      * isEmptyJobTitle() checks if Job Title field is empty
      * @return true if Job Title field is empty
      */
-    protected static boolean isEmptyJobTitle(String jobTitle) {
+    public static boolean isEmptyJobTitle(String jobTitle) {
         return jobTitle.isEmpty();
     }
 
     /**
      * @return Integer value representing the salary of the job
      */
-    public int getJobSalary() {
-        return Integer.valueOf(salaryField.getText().toString());
+    public double getJobSalary(String jobSalary) {
+        return Double.parseDouble(jobSalary);
     }
 
     /**
      * isEmptyJobSalary() checks if the Job Salary field is empty
      * @return true if field is empty
      */
-    protected static boolean isEmptyJobSalary(String jobSalary) {
+    public static boolean isEmptyJobSalary(String jobSalary) {
         return jobSalary.isEmpty();
     }
 
@@ -95,7 +131,7 @@ public class CreateListingFragment extends Fragment {
      * isJobSalaryValid() checks if the Job Salary field is valid
      * @return true if Job Salary > 0
      */
-    protected static boolean isJobSalaryValid(int jobSalary) {
+    public static boolean isJobSalaryValid(int jobSalary) {
         return jobSalary>0;
     }
 
@@ -110,7 +146,7 @@ public class CreateListingFragment extends Fragment {
      * isEmptyJobDuration() checks if the Job Description field is empty
      * @return true if field is empty
      */
-    protected static boolean isEmptyJobDuration(String hours){
+    public static boolean isEmptyJobDuration(String hours){
         return hours.isEmpty();
     }
 
@@ -118,7 +154,7 @@ public class CreateListingFragment extends Fragment {
      * isJobDurationValid() checks if the Job duration field is valid
      * @return true if hours > 0 and hours < 24
      */
-    protected static boolean isJobDurationValid(int hours){
+    public static boolean isJobDurationValid(int hours){
         return ((hours>0) && (hours<24));
     }
 

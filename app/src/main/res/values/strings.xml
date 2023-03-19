@@ -12,6 +12,10 @@
         <item id="HIGPriority">High (1-2 Weeks)</item>
         <item id="MAXPriority">Urgent (Same day)</item>
     </string-array>
+    <string-array name="filterType">
+        <item id="distance">Distance</item>
+        <item id="payRate">Pay rate</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
