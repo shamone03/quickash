@@ -73,7 +73,7 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setPriority(getJobPriority());
                 Permissions.requestPermission(getActivity());
                 if (Permissions.checkFineLocationPermission(getActivity())) {
-                    Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
+                    Location loc = (new ObtainingLocation(getContext())).getLocation();
 
                     jobPostingObject.setJobLocation(new JobLocation(loc));
                 }

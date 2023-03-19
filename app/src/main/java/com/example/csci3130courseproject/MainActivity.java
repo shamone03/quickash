@@ -24,8 +24,11 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.example.csci3130courseproject.Utils.ObtainingLocation;
+import com.example.csci3130courseproject.Utils.Permissions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.security.Permission;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
         });
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        if(navController.getCurrentDestination().getId() == R.id.nav_view) {
-            new ObtainingLocation(this);
-        }
 
     }
 
