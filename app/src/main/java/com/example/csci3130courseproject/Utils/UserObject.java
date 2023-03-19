@@ -18,7 +18,9 @@ public class UserObject {
 
     private double employeeRating = 0;
 
-    public UserObject() { }
+    public UserObject() {  }
+
+    public UserObject(String username) { this.username = username; }
 
     public UserObject(HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken) {
         this.jobsTaken = jobsTaken;

@@ -105,7 +105,8 @@ public class SignUpFragment extends Fragment {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user != null) {
                             user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(username).build());
-                            
+                            FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).setValue(new UserObject(username));
+
                         }
 
                     }
