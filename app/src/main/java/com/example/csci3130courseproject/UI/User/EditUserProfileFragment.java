@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class UserProfileFragment extends Fragment {
+public class EditUserProfileFragment extends Fragment {
 
-    private EditText nameField;
+    private FirebaseAuth mAuth;
+    private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
+            locationField, preferredJobsField, creditCardField,
+            creditCardCVVField, phoneField, countryField, provinceField, cityField, addressField, creditCardNumberField, ccvField;
 
-    public UserProfileFragment() {
+    public EditUserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -31,7 +33,11 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        return inflater.inflate(R.layout.fragment_edit_user_profile, container, false);
     }
 
     /*
@@ -60,17 +66,20 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        nameField = (EditText)getView().findViewById(R.id.existingUserName);
-
-        /*
-            Buttons
-         */
-        //Navigation to go to the security fragment
-        Button securityNavigation = (Button)getView().findViewById(R.id.securityNavigationButton);
-
         //Button to submit the display name.
-        Button submitProfileInformation = (Button)getView().findViewById(R.id.submitProfileButton);
+        Button submitProfileInformation = (Button)getView().findViewById(R.id.submitChangesButton);
 
+        emailField = (EditText)getView().findViewById(R.id.User_Email);
+        passwordField = (EditText)getView().findViewById(R.id.User_Password);
+        nameField = (EditText)getView().findViewById(R.id.Name);
+        phoneField = (EditText)getView().findViewById(R.id.Phone_Num);
+        dateOfBirthField = (EditText)getView().findViewById(R.id.Date_Of_Birth);
+        countryField = (EditText)getView().findViewById(R.id.Country);
+        provinceField = (EditText)getView().findViewById(R.id.Province);
+        cityField = (EditText)getView().findViewById(R.id.City);
+        addressField = (EditText)getView().findViewById(R.id.Address);
+        creditCardNumberField = (EditText)getView().findViewById(R.id.Credit_Card_Num);
+        ccvField = (EditText)getView().findViewById(R.id.Ccv);
         /*
             New On click listener which calls getUser() and changeUserValues.
             changeUserValues takes in the currentUser, and the nameField, and changes the user name.
@@ -81,32 +90,23 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseUser currentUser = getUser();
+                //Change this to update all user fields. Check in with Alex about
+                //database integration/firebase
                 boolean changeResult = changeUserValues(currentUser,nameField);
 
                 //Toast for the result.
                 if(changeResult){
 
                     Toast.makeText(getActivity(),"Details Changes Successfully", Toast.LENGTH_SHORT).show();
+                    editUserProfileToUserProfile(view);
                 }else{
                     Toast.makeText(getActivity(),"Error Occurred. Try again!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        securityNavigation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userProfileToSecurity(view);
-            }
-        });
-
-
     }
-    /*
-        Action to navigate to the security features.
-        This action occurs when the button "Security" is pressed.
-        The onClickListener and function are implemented above.
-     */
-    public void userProfileToSecurity(View view){
-        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_securityFragment);
+
+    public void editUserProfileToUserProfile(View view){
+        Navigation.findNavController(view).navigate(R.id.action_editUserProfile_to_userProfileFragment);
     }
 }

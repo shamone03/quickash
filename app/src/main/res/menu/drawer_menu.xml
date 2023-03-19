@@ -5,20 +5,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/userProfileFragment"
-            android:title="Profile"
-            android:icon="@drawable/icon_profile"/>
+            android:icon="@drawable/icon_profile"
+            android:title="Profile" />
         <item
             android:id="@+id/listingSearchFragment"
-            android:title="View Listings"
-            android:icon="@drawable/icon_joblistings"/>
+            android:icon="@drawable/icon_joblistings"
+            android:title="View Listings" />
         <item
             android:id="@+id/createListingFragment"
-            android:title="Create Job Posting"
-            android:icon="@drawable/icon_jobs_taken"/>
-
+            android:icon="@drawable/icon_jobs_taken"
+            android:title="Create Job Posting" />
+        <item
+            android:id="@+id/viewJobEmployer"
+            android:title="view job employer"
+            android:icon="@drawable/icon_signout"/>
         <item
             android:id="@+id/signInFragment"
-            android:title="Sign Out"
-            android:icon="@drawable/icon_signout"/>
+            android:icon="@drawable/icon_signout"
+            android:title="Sign Out" />
     </group>
 </menu>
