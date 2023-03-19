@@ -41,6 +41,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference userRef = database.getReference("users");
     private DatabaseReference jobRef = database.getReference("jobs");
+    private UserObject targetUser;
+    private String userId;
     private ArrayList<Object[]> jobsArray = new ArrayList<>();
     private Button editInformationButton;
     private Button jobsTakenButton;
@@ -72,46 +74,62 @@ public class ProfileFragment extends Fragment {
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
 
-        username.setText(currentUser.getDisplayName());
-        emailAddress.setText(currentUser.getEmail());
-        errorText.setVisibility(View.GONE);
-
-        // Display and connect job buttons if the profile belongs to the user
-        if (isOwnProfile()) {
-            populateJobs(true,true);
-
-            editInformationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    editInformation(view);
-                }
-            });
-
-            jobsTakenButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateJobs(true,true);
-                }
-            });
-
-            jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateJobs(true,false);
-                }
-            });
-
-            analyticsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateAnalytics();
-                }
-            });
+        // If no UserID, assume we're viewing our own profile
+        if (getArguments() == null) {
+            userId = currentUser.getUid();
         } else {
-            editInformationButton.setVisibility(View.GONE);
-            buttonsLayout.setVisibility(View.GONE);
-            populateAnalytics();
+            userId = getArguments().getString("UserID");
         }
+
+        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    targetUser = task.getResult().getValue(UserObject.class);
+
+                    if (targetUser != null) {
+                        // Display and connect job buttons if the profile belongs to the user
+                        if (isOwnProfile()) {
+                            populateJobs(true,true);
+
+                            editInformationButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    editInformation(view);
+                                }
+                            });
+
+                            jobsTakenButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateJobs(true,true);
+                                }
+                            });
+
+                            jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateJobs(true,false);
+                                }
+                            });
+
+                            analyticsButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateAnalytics();
+                                }
+                            });
+                        } else {
+                            editInformationButton.setVisibility(View.GONE);
+                            buttonsLayout.setVisibility(View.GONE);
+                            populateAnalytics();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void editInformation(View view) {
@@ -119,11 +137,11 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * TODO: Pass target UserID when fragment is created
+     *
      * @return
      */
     private boolean isOwnProfile () {
-        return true;
+        return currentUser.getUid().equals(userId);
     }
 
     /**
@@ -147,7 +165,7 @@ public class ProfileFragment extends Fragment {
     private void populateJobs(boolean history, boolean taken) {
         clearJobList();
         boolean shownJobs = false;
-        userRef.child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
