@@ -27,7 +27,7 @@ public class Listing extends DatabaseObject {
         setValue("hours", jobPosting.getJobDuration());
         setValue("salary", jobPosting.getJobSalary());
         setValue("priority", jobPosting.getPriority().toString());
-        setValue("employees", jobPosting.getUserApplied());
+        setValue("employees", jobPosting.getEmployees());
     }
 
     /**
