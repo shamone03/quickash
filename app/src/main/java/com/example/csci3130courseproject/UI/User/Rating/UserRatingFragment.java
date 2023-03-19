@@ -1,9 +1,12 @@
 package com.example.csci3130courseproject.UI.User.Rating;
 
+import android.app.usage.NetworkStats;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -58,5 +61,27 @@ public class UserRatingFragment extends Fragment {
         profileUser.rateUser(rating);
         TextView message = (TextView)getView().findViewById(R.id.message);
         message.setText("You Rated :" +String.valueOf(ratingBar.getRating()));
+    }
+
+    public void showConfirmationMessage(double rating){
+        AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
+        notif.setTitle("Rating Confirmation");
+        notif.setMessage("Are you sure? Your rating is " + rating + "/5 stars");
+        notif.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO: Add rating to DB
+                dialog.dismiss();
+            }
+        });
+        notif.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog;
+        dialog = notif.create();
+        dialog.show();
     }
 }
