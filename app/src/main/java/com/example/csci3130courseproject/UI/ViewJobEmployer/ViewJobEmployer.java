@@ -89,6 +89,7 @@ public class ViewJobEmployer extends Fragment {
 
     private void createApplicantPreview(UserObject applicant){
         // currentApplicant = applicantSnapshot.getValue(UserObject.class);
+        Log.w("GotUser", "Username: " + applicant.getUsername());
         View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, true);
 
         // Job Posting Preview Modifiable attributes:
@@ -97,16 +98,11 @@ public class ViewJobEmployer extends Fragment {
         TextView applicantRating = jobApplicantPreview.findViewById(R.id.jopApplicantRating);
         Button applicantButton = jobApplicantPreview.findViewById(R.id.jobApplicantButton);
 
-        // Load information:
-        if (applicant == null) {
-            profilePicture.setImageURI(Uri.parse(""));
-            applicantName.setText("John Doe");
-            applicantRating.setText(String.format("Employee Rating: %.2f", 2.5));
-        }else{
-            profilePicture.setImageURI(Uri.parse(""));
-            applicantName.setText(applicant.getUsername());
-            applicantRating.setText(String.format("Employee Rating: %.2f", applicant.getEmployeeRating()));
-        }
+
+        profilePicture.setImageURI(Uri.parse(""));
+        applicantName.setText(applicant.getUsername());
+        applicantRating.setText(String.format("Employee Rating: %.2f", applicant.getEmployeeRating()));
+
 
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +130,7 @@ public class ViewJobEmployer extends Fragment {
     }
 
 
-    private void getUser(IUserCallback callback, String userID){
+    private void getUser(IUserCallback callback, String userID) {
         database.getReference("users").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -142,7 +138,6 @@ public class ViewJobEmployer extends Fragment {
                     Log.w("FetchUser", userID);
                     UserObject user = task.getResult().getValue(UserObject.class);
                     if (user != null) {
-                        Log.w("GotUser", "Username: " + user.getEmployerRating());
                         callback.onGetUserSuccess(user);
                     } else {
                         Log.w("UserError",  "User is null");
@@ -161,6 +156,7 @@ public class ViewJobEmployer extends Fragment {
             getUser(new IUserCallback() {
                 @Override
                 public void onGetUserSuccess(UserObject user) {
+
                     createApplicantPreview(user);
                 }
             }, userid);
