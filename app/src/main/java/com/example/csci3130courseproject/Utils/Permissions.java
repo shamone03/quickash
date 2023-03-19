@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,12 +26,12 @@ import java.util.Locale;
 public class Permissions {
 
     public static boolean checkFineLocationPermission(Activity activity){
-        int result = ContextCompat.checkSelfPermission(activity,Manifest.permission.ACCESS_FINE_LOCATION);
+        int result = ActivityCompat.checkSelfPermission(activity,Manifest.permission.ACCESS_FINE_LOCATION);
         return (result == PackageManager.PERMISSION_GRANTED);
     }
 
     public static boolean checkCoarseLocationPermission(Activity activity){
-        int result = ContextCompat.checkSelfPermission(activity,Manifest.permission.ACCESS_COARSE_LOCATION);
+        int result = ActivityCompat.checkSelfPermission(activity,Manifest.permission.ACCESS_COARSE_LOCATION);
         return (result == PackageManager.PERMISSION_GRANTED);
     }
 

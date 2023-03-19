@@ -1,10 +1,14 @@
 package com.example.csci3130courseproject.UI.JobCreation;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -30,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,17 +54,40 @@ public class CreateListingFragment extends Fragment {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.w("PERMISSION", "granted");
+            allowCreation();
+        }
+
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         createPosting = getView().findViewById(R.id.createJP_button);
         titleField = getView().findViewById(R.id.createJP_PostingTitle);
         salaryField = getView().findViewById(R.id.createJP_JobSalary);
         durationField = getView().findViewById(R.id.createJP_JobDurration);
         priorityField = getView().findViewById(R.id.createJP_priority);
+        if (Permissions.checkFineLocationPermission(getActivity())) {
+            Log.w("PERMISSION", "already there");
+            allowCreation();
+        } else {
+            Log.w("PERMISSION", "no");
+            Permissions.requestPermission(getActivity());
+        }
 
+    }
+
+    private void allowCreation() {
         createPosting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // Preparing listing values
+
+
                 String posterID = FirebaseAuth.getInstance().getUid();
 
                 // Create job posting object and submit to firebase
@@ -71,12 +99,9 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
                 jobPostingObject.setEmployees(new HashMap<>());
                 jobPostingObject.setPriority(getJobPriority());
-                Permissions.requestPermission(getActivity());
-                if (Permissions.checkFineLocationPermission(getActivity())) {
-                    Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
 
-                    jobPostingObject.setJobLocation(new JobLocation(loc));
-                }
+                Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
+                jobPostingObject.setJobLocation(new JobLocation(loc));
 
                 DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
                 jobRef.setValue(jobPostingObject);
@@ -85,8 +110,6 @@ public class CreateListingFragment extends Fragment {
                 Map<String, Object> values = new HashMap<>();
                 values.put(jobRef.getKey(), false);
                 usersRef.child(posterID).child("jobPostings").updateChildren(values);
-
-
 
                 // Navigate back to dashboard fragment:
                 // TODO: Confirm job posted
