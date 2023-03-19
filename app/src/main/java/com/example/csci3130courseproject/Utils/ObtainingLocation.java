@@ -1,6 +1,7 @@
 package com.example.csci3130courseproject.Utils;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -43,6 +44,9 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         getLocation(context);
     }
 
+    //Gets the context, checks if gps is enabled, if enabled, then uses the location and stores it.
+
+    @SuppressLint("MissingPermission")
     public Location getLocation(Context context){
         LocationManager mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
@@ -54,7 +58,11 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         if(GPSstatus){
             location = null;
             if(location == null){
-//                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,);
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_FOR_UPDATES,MIN_DISTANCE_FOR_UPDATES,this);
+                if(mLocationManager!=null){
+                    location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    return location;
+                }
             }
         }else{
             //Code if GPS is not enabled. Based on entered address.
@@ -69,6 +77,10 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
+    //Provides a dialog box to ask user to enable gps.
+    //2 buttons, one to go to settings, one to cancel.
+    //Either way, check if gps enabled
+    //And the result of the check is returned.
     public boolean turnOnGPS(Context context){
         AlertDialog.Builder newAlertDialog = new AlertDialog.Builder(context);
         newAlertDialog.setMessage("Do you want to enable GPS?");
@@ -85,6 +97,7 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         return checkIfGPSEnabled(context);
     }
 
+    //Longitude
     public double getLongitude() {
         if (location != null) {
             longitude = location.getLongitude();
@@ -94,6 +107,7 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         return longitude;
     }
 
+    //Latitude
     public double getLatitude() {
         if (location != null) {
             latitude = location.getLatitude();
@@ -104,15 +118,20 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
     }
 
 
+    //Called when location is changed.
     @Override
-    public void onLocationChanged(@NonNull Location location) {
-
+    public void onLocationChanged(@NonNull Location newLocation) {
+        this.location = newLocation;
+        this.latitude = newLocation.getLatitude();
+        this.longitude = newLocation.getLongitude();
     }
 
+    //Need to implement this.
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        this.location = mLocationManager.getCurrentLocation();
 
     }
 }

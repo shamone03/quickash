@@ -35,7 +35,18 @@ public class Permissions {
         return (result == PackageManager.PERMISSION_GRANTED);
     }
 
+    //
     public static void requestPermission(Activity activity){
         ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},101);
+    }
+
+    public static void permissionCheck(Activity activity){
+        if(checkFineLocationPermission(activity)){
+            //When permission has been received already.
+            return;
+            //?
+        }else{
+            requestPermission(activity);
+        }
     }
 }
