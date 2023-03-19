@@ -216,46 +216,61 @@ public class ProfileFragment extends Fragment {
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
-        View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
-        // Modifying placeholder text to match data from Listing object
-        TextView title = listingPreview.findViewById(R.id.titleLabel);
-        TextView hours = listingPreview.findViewById(R.id.hoursLabel);
-        TextView salary = listingPreview.findViewById(R.id.salaryLabel);
-        TextView employer = listingPreview.findViewById(R.id.employerLabel);
-
-        // Setting job card text
-        if (jobPosting != null) {
-            title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
-            hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
-            salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
-            employer.setText(String.format("Employer ID: %s", jobPosting.getJobPoster()));
-        } else {
-            title.setText("Title: NULL");
-            hours.setText("Hours: NULL");
-            salary.setText("Salary: NULL");
-            employer.setText("Employer ID: NULL");
-
-        }
-        // Hiding apply button
-        AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
-        applyButton.setText("View");
-
-        applyButton.setOnClickListener(new View.OnClickListener() {
+        userRef.child(jobPosting.getJobPoster()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onClick(View view) {
-                if (currentUser.getUid().equals(jobPosting.getJobPoster())){
-                    Bundle jobInfo = new Bundle();
-                    jobInfo.putString("JobID", listingSnapshot.getKey());
-                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_viewJobEmployer, jobInfo);
-                }else{
-                    // TODO: Go to view job as employee
+            public void onComplete(@NonNull Task<DataSnapshot> employerTask) {
+                if (!employerTask.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", employerTask.getException());
+                } else {
+                    UserObject employerObject = employerTask.getResult().getValue(UserObject.class);
+                    View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
+
+                    // Modifying placeholder text to match data from Listing object
+                    TextView title = listingPreview.findViewById(R.id.titleLabel);
+                    TextView hours = listingPreview.findViewById(R.id.hoursLabel);
+                    TextView salary = listingPreview.findViewById(R.id.salaryLabel);
+                    TextView employer = listingPreview.findViewById(R.id.employerLabel);
+
+                    // Setting job card text
+                    if (jobPosting != null) {
+                        title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
+                        hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
+                        salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+                        if (employerObject != null) {
+                            employer.setText(String.format("Employer: %s", employerObject.getUsername()));
+                        } else {
+                            employer.setText("Employer: NULL");
+                        }
+                    } else {
+                        title.setText("Title: NULL");
+                        hours.setText("Hours: NULL");
+                        salary.setText("Salary: NULL");
+                        employer.setText("Employer: NULL");
+
+                    }
+                    // Hiding apply button
+                    AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+                    applyButton.setText("View");
+
+                    applyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (currentUser.getUid().equals(jobPosting.getJobPoster())){
+                                Bundle jobInfo = new Bundle();
+                                jobInfo.putString("JobID", listingSnapshot.getKey());
+                                Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_viewJobEmployer, jobInfo);
+                            }else{
+                                // TODO: Go to view job as employee
+                            }
+                        }
+                    });
+                    // Adding Listing object and View to ArrayList to be referenced later
+                    Object[] listing = {jobPosting, listingPreview};
+                    jobsArray.add(listing);
+                    jobsList.addView((View)listingPreview);
                 }
             }
         });
-        // Adding Listing object and View to ArrayList to be referenced later
-        Object[] listing = {jobPosting, listingPreview};
-        jobsArray.add(listing);
-        jobsList.addView((View)listingPreview);
     }
 }
