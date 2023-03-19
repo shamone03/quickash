@@ -228,12 +228,18 @@ public class ProfileFragment extends Fragment {
 
     // TODO: Set up analytics page
     private void populateAnalytics() {
-
+        setError("Analytics TBD in iteration 3");
     }
 
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
+
+        if (jobPosting == null) {
+            Log.e("Firebase", "Job posting object is null.\n Related snapshot:\n"
+                    + listingSnapshot.toString());
+            return;
+        }
 
         userRef.child(jobPosting.getJobPoster()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
