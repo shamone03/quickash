@@ -2,10 +2,10 @@ package com.example.csci3130courseproject.Utils;
 
 import android.location.Location;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 
 public class JobPostingObject {
-
     private String jobPosterID;
     private HashMap<String, Boolean> employees;
     private String jobTitle;
@@ -79,6 +79,8 @@ public class JobPostingObject {
 
     public HashMap<String, Boolean> getEmployees() { return employees; }
 
-
+    public Location getJobLocation() {
+        return(jobLocation);
+    }
 }
 
