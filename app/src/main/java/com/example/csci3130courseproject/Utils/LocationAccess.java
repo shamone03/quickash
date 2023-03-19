@@ -38,11 +38,17 @@ public class LocationAccess extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         if((!Permissions.checkFineLocationPermission(this)) &&
             !Permissions.checkCoarseLocationPermission(this)) {
             Permissions.requestPermission(this);
         }
+
+        currentLocationManager =
+
     }
+
+    public void
 
 
 //    public void onMapReady(@NonNull GoogleMap googleMap, Activity activity) {
