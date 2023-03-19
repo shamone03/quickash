@@ -14,12 +14,12 @@ public class JobPostingObject {
     private Priority.PRIORITY priority;
     private int jobDuration;
     private double jobSalary;
-    private Location jobLocation;
+    private JobLocation jobLocation;
 
     public JobPostingObject(){}
 
     public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, Priority.PRIORITY priority, double jobSalary,
-                            int jobDuration, Location location){
+                            int jobDuration, JobLocation location){
         this.jobPosterID = posterID;
         this.employees = userApplied;
         this.jobTitle = title;
@@ -79,8 +79,12 @@ public class JobPostingObject {
 
     public HashMap<String, Boolean> getEmployees() { return employees; }
 
-    public Location getJobLocation() {
+    public JobLocation getJobLocation() {
         return(jobLocation);
+    }
+
+    public void setJobLocation(JobLocation jobLocation) {
+        this.jobLocation = jobLocation;
     }
 }
 

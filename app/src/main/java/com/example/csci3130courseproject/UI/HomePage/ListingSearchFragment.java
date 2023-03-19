@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.Permissions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +58,7 @@ public class ListingSearchFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        Permissions.requestPermission(getActivity());
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
@@ -249,7 +251,7 @@ public class ListingSearchFragment extends Fragment {
                     }
                 } else if (getFilter().equals("Distance")) {
                     try {
-                        if (filterLocation(listing.getJobLocation(),
+                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
                                 Double.parseDouble(filterInput.getText().toString())) == false) {
                             continue;
                         }
