@@ -20,6 +20,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class UserRatingTest {
 
     public UserObject currentUser;
+    UserObject userBeingRated;
+    String userBeingRatedID;
 
     @Mock
     static IRate rating;
