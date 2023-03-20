@@ -29,14 +29,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class UserRatingFragment extends Fragment {
+
+    private String userBeingRatedID;
     private RatingBar ratingBar;
     private UserObject userObject;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference userRef = database.getReference("users");
-    private FirebaseUser currentUser = mAuth.getCurrentUser();
-//    private FirebaseUser userToBeRated = mAuth.getUserByEmail(email);
-// TODO: Figure out how to get the user to be rated. Should be attached to completed job somehow.
+
+    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
     public UserRatingFragment() {
@@ -46,9 +46,9 @@ public class UserRatingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.userBeingRatedID = getArguments().getString("userID");
 
-
-        FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        FirebaseDatabase.getInstance().getReference("users").child(userBeingRatedID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -69,9 +69,6 @@ public class UserRatingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Double rating = Double.valueOf(ratingBar.getRating());
-                //TODO: Right now this just lets the user rate themselves. Will have to figure out how to get the other user to rate.
-//                userObject = userRef.child(currentUser.getUid()).get().getResult().getValue(UserObject.class);
-                userObject.rateUser(rating);
                 showConfirmationMessage(rating);
                 TextView message = (TextView) getView().findViewById(R.id.message);
                 message.setText("You Rated :" + String.valueOf(ratingBar.getRating()));
@@ -90,11 +87,16 @@ public class UserRatingFragment extends Fragment {
     public void showConfirmationMessage(double rating){
         AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
         notif.setTitle("Rating Confirmation");
-        notif.setMessage("Are you sure? Your rating is " + rating + "/5 stars");
+        notif.setMessage(String.format("Are you sure? Your rating is %.1f/5 stars", rating));
         notif.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                saveUserRating(rating, currentUser.getUid());
+                // Verify user isn't rating themselves:
+                if (userBeingRatedID == currentUser.getUid()) {
+                    return;
+                }
+                userObject.rateUser(rating);
+                saveUserRating(rating);
                 dialog.dismiss();
             }
         });
@@ -108,14 +110,8 @@ public class UserRatingFragment extends Fragment {
         dialog = notif.create();
         dialog.show();
     }
-    private void saveUserRating(double rating, String uID){
-        DatabaseReference userRating;
-        userRating = getUsers().child(uID).child("rating");
-        userRating.setValue(rating);
+    private void saveUserRating(double rating){
+        userRef.child(userBeingRatedID).child("rating").setValue(rating);
     }
 
-    @NonNull
-    private DatabaseReference getUsers() {
-        return database.getReference("users");
-    }
 }

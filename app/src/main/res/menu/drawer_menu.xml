@@ -16,10 +16,6 @@
             android:icon="@drawable/icon_jobs_taken"
             android:title="Create Job Posting" />
         <item
-            android:id="@+id/viewJobEmployer"
-            android:title="view job employer"
-            android:icon="@drawable/icon_signout"/>
-        <item
             android:id="@+id/signInFragment"
             android:icon="@drawable/icon_signout"
             android:title="Sign Out" />
