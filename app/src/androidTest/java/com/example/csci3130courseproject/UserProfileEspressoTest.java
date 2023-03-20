@@ -8,18 +8,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.contrib.DrawerActions;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class UserProfileEspressoTest {
     @Before
-    public void launchMainActivity() throws InterruptedException {
+    public void gotoUserProfile() throws InterruptedException {
         ActivityScenario.launch(MainActivity.class);
-        onView(withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-        Thread.sleep(5000); // wait to sign in
+        SignInTest sign = new SignInTest();
+        sign.userSignedIn();
+
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.userProfileFragment)).perform(click());
     }
 
 //    @Test
@@ -42,5 +44,18 @@ public class UserProfileEspressoTest {
 //        //Return to home page to avoid chain gang testing
 //        onView(withId(R.id.submitChangesButton)).perform(click());
 //        onView(withId(R.id.listingSearchFragment)).perform(click());
+//    }
+
+//    @Test
+//    public void editProfile() {
+//        //TODO: edit profile and check to see the profile page shows the change.
+//    }
+
+//    @Test
+//    public void rateUser(){
+//        onView(withId(R.id.drawer_layout)).perform(click());
+//        onView(withId(R.id.userProfileFragment)).perform(click());
+//
+//        TODO: implement a test to add a rating to a user and make sure the average rating value updates.
 //    }
 }
