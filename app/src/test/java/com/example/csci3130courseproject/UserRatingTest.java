@@ -28,7 +28,7 @@ public class UserRatingTest {
     static IUser user;
 
     @BeforeClass
-    public void setup() {
+    public static void setup() {
         MockitoAnnotations.openMocks(IRate.class);
     }
 
