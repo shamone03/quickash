@@ -1,12 +1,15 @@
 package com.example.csci3130courseproject.UI.User;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.UI.User.Rating.UserRatingFragment;
 import com.example.csci3130courseproject.Utils.DatabaseObject;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,15 +42,20 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference userRef = database.getReference("users");
-    private DatabaseReference listingRef = database.getReference("Listing");
+    private DatabaseReference jobRef = database.getReference("jobs");
+    private UserObject targetUser;
+    private String userId;
     private ArrayList<Object[]> jobsArray = new ArrayList<>();
     private Button editInformationButton;
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button analyticsButton;
+
+    private Button ratingButton;
     private TextView username;
     private TextView emailAddress;
     private TextView errorText;
+    private TextView userRating;
     private LinearLayout jobsList;
     private LinearLayout buttonsLayout;
 
@@ -68,7 +78,14 @@ public class ProfileFragment extends Fragment {
         username = (TextView)requireView().findViewById(R.id.profileUsername);
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
+        userRating = (TextView)requireView().findViewById(R.id.rating);
+        ratingButton = requireView().findViewById(R.id.ratingButton);
 
+
+        // If no UserID, assume we're viewing our own profile
+        if (getArguments() == null) {
+            userId = currentUser.getUid();
+        }
         username.setText(currentUser.getDisplayName());
         emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
@@ -104,11 +121,66 @@ public class ProfileFragment extends Fragment {
                     populateAnalytics();
                 }
             });
+
+            ratingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
+                }
+            });
         } else {
-            editInformationButton.setVisibility(View.GONE);
-            buttonsLayout.setVisibility(View.GONE);
-            populateAnalytics();
+            userId = getArguments().getString("UserID");
         }
+
+        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    targetUser = task.getResult().getValue(UserObject.class);
+
+                    if (targetUser != null) {
+                        // Display and connect job buttons if the profile belongs to the user
+                        if (isOwnProfile()) {
+                            populateJobs(true,true);
+
+                            editInformationButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    editInformation(view);
+                                }
+                            });
+
+                            jobsTakenButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateJobs(true,true);
+                                }
+                            });
+
+                            jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateJobs(true,false);
+                                }
+                            });
+
+                            analyticsButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateAnalytics();
+                                }
+                            });
+                        } else {
+                            editInformationButton.setVisibility(View.GONE);
+                            buttonsLayout.setVisibility(View.GONE);
+                            populateAnalytics();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void editInformation(View view) {
@@ -116,11 +188,11 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * TODO: Pass target UserID when fragment is created
+     *
      * @return
      */
     private boolean isOwnProfile () {
-        return true;
+        return currentUser.getUid().equals(userId);
     }
 
     /**
@@ -144,7 +216,7 @@ public class ProfileFragment extends Fragment {
     private void populateJobs(boolean history, boolean taken) {
         clearJobList();
         boolean shownJobs = false;
-        userRef.child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -159,19 +231,24 @@ public class ProfileFragment extends Fragment {
                         setError("Could not find user data");
                         return;
                     } else {
-                        HashMap<String, Boolean> jobIdList;
+                        Map<String, Boolean> jobIdList;
 
+                        //calling getUserRating in here for now since it is stored on userObj. Can probably extract later.
+                        userRating.setText(String.valueOf(profileUser.getEmployeeRating()));
                         if (taken) {
-                            jobIdList = profileUser.getJobsTaken();
+                            jobIdList = (HashMap<String, Boolean>) profileUser.getJobsTaken();
                         } else {
-                            jobIdList = profileUser.getJobPostings();
+                            jobIdList = (HashMap<String, Boolean>) profileUser.getJobPostings();
                         }
+                        // Safe guard
+                        if (jobIdList == null)
+                            return;
 
                         // Populate jobList with jobs
                         for (Map.Entry<String, Boolean> job : jobIdList.entrySet()) {
                             shownJobs = true;
                             Log.d("ProfileTesting",job.getKey());
-                            userRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            jobRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
                                     if (!listingTask.isSuccessful()) {
@@ -204,33 +281,77 @@ public class ProfileFragment extends Fragment {
 
     // TODO: Set up analytics page
     private void populateAnalytics() {
+        setError("Analytics TBD in iteration 3");
+    }
 
+    private double getUserRating(UserObject user) {
+        return user.getEmployeeRating();
     }
 
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
-        Listing newListing = new Listing(listingSnapshot);
-        View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
+        JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
 
-        // Modifying placeholder text to match data from Listing object
-        TextView title = listingPreview.findViewById(R.id.titleLabel);
-        TextView hours = listingPreview.findViewById(R.id.hoursLabel);
-        TextView salary = listingPreview.findViewById(R.id.salaryLabel);
-        TextView employer = listingPreview.findViewById(R.id.employerLabel);
+        if (jobPosting == null) {
+            Log.e("Firebase", "Job posting object is null.\n Related snapshot:\n"
+                    + listingSnapshot.toString());
+            return;
+        }
 
-        // Setting job card text
-        title.setText(String.valueOf(newListing.getValue("title")));
-        hours.setText("Hours: " + String.valueOf(newListing.getValue("hours")));
-        salary.setText("Salary: " + String.valueOf(newListing.getValue("salary")));
-        employer.setText("Employer: " + String.valueOf(newListing.getValue("employer")));
+        userRef.child(jobPosting.getJobPoster()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> employerTask) {
+                if (!employerTask.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", employerTask.getException());
+                } else {
+                    UserObject employerObject = employerTask.getResult().getValue(UserObject.class);
+                    View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
-        // Hiding apply button
-        AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
-        applyButton.setVisibility(View.INVISIBLE);
+                    // Modifying placeholder text to match data from Listing object
+                    TextView title = listingPreview.findViewById(R.id.titleLabel);
+                    TextView hours = listingPreview.findViewById(R.id.hoursLabel);
+                    TextView salary = listingPreview.findViewById(R.id.salaryLabel);
+                    TextView employer = listingPreview.findViewById(R.id.employerLabel);
 
-        // Adding Listing object and View to ArrayList to be referenced later
-        Object[] listing = {newListing, listingPreview};
-        jobsArray.add(listing);
-        jobsList.addView((View)listingPreview);
+                    // Setting job card text
+                    if (jobPosting != null) {
+                        title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
+                        hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
+                        salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+                        if (employerObject != null) {
+                            employer.setText(String.format("Employer: %s", employerObject.getUsername()));
+                        } else {
+                            employer.setText("Employer: NULL");
+                        }
+                    } else {
+                        title.setText("Title: NULL");
+                        hours.setText("Hours: NULL");
+                        salary.setText("Salary: NULL");
+                        employer.setText("Employer: NULL");
+
+                    }
+                    // Hiding apply button
+                    AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+                    applyButton.setText("View");
+
+                    applyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (currentUser.getUid().equals(jobPosting.getJobPoster())){
+                                Bundle jobInfo = new Bundle();
+                                jobInfo.putString("JobID", listingSnapshot.getKey());
+                                Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_viewJobEmployer, jobInfo);
+                            }else{
+                                // TODO: Go to view job as employee
+                            }
+                        }
+                    });
+                    // Adding Listing object and View to ArrayList to be referenced later
+                    Object[] listing = {jobPosting, listingPreview};
+                    jobsArray.add(listing);
+                    jobsList.addView((View)listingPreview);
+                }
+            }
+        });
     }
 }
