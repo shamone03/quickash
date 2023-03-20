@@ -1,15 +1,12 @@
 package com.example.csci3130courseproject.UI.User;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,10 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
-import com.example.csci3130courseproject.UI.User.Rating.UserRatingFragment;
-import com.example.csci3130courseproject.Utils.DatabaseObject;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
-import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,9 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();

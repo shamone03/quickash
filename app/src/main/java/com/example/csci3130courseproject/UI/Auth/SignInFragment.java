@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.csci3130courseproject.MainActivity;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Callbacks.UserCallback;
 import com.example.csci3130courseproject.UI.User.ProfileFragment;
@@ -28,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
 
 /**
  * Fragment that handles the sign-in process

@@ -1,8 +1,6 @@
 package com.example.csci3130courseproject.UI.User.Rating;
 
-import android.app.usage.NetworkStats;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 

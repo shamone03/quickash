@@ -1,19 +1,16 @@
 package com.example.csci3130courseproject;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.example.csci3130courseproject.UI.User.IUser;
 import com.example.csci3130courseproject.UI.User.Rating.IRate;
 import com.example.csci3130courseproject.Utils.UserObject;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -24,12 +21,12 @@ public class UserRatingTest {
     String userBeingRatedID;
 
     @Mock
-    static IRate rating;
-    static IUser user;
+    public static IRate rating;
+    public static IUser user;
 
     @BeforeClass
     public static void setup() {
-        MockitoAnnotations.openMocks(IRate.class);
+        //MockitoAnnotations.openMocks(IRate.class);
     }
 
     @Test

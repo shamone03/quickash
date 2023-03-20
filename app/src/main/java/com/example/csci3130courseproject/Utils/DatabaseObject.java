@@ -1,22 +1,16 @@
 package com.example.csci3130courseproject.Utils;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.compose.runtime.snapshots.Snapshot;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Superclass of objects that interact with the realtime database.

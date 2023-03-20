@@ -1,16 +1,12 @@
 package com.example.csci3130courseproject.UI.JobCreation;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,19 +18,14 @@ import android.widget.Spinner;
 
 import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
-import com.example.csci3130courseproject.Utils.Listing;
 import com.example.csci3130courseproject.Utils.ObtainingLocation;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.Priority;
 import com.example.csci3130courseproject.R;
-import com.example.csci3130courseproject.Utils.UserObject;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

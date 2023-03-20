@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
@@ -25,7 +24,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;

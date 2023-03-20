@@ -2,7 +2,6 @@ package com.example.csci3130courseproject;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment;
 
 
 public class UserProfileJUnitTest {

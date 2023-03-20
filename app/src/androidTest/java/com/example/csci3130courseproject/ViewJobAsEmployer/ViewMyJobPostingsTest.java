@@ -10,15 +10,11 @@ import static org.hamcrest.Matchers.not;
 
 import android.os.SystemClock;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.DrawerActions;
 
-import com.example.csci3130courseproject.MainActivity;
 import com.example.csci3130courseproject.R;
-import com.example.csci3130courseproject.SignInTest;
 import com.example.csci3130courseproject.UserProfileEspressoTest;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class ViewMyJobPostingsTest extends UserProfileEspressoTest {
