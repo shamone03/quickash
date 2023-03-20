@@ -69,7 +69,6 @@ public class UserRatingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Double rating = Double.valueOf(ratingBar.getRating());
-                userObject.rateUser(rating);
                 showConfirmationMessage(rating);
                 TextView message = (TextView) getView().findViewById(R.id.message);
                 message.setText("You Rated :" + String.valueOf(ratingBar.getRating()));
@@ -96,6 +95,7 @@ public class UserRatingFragment extends Fragment {
                 if (userBeingRatedID == currentUser.getUid()) {
                     return;
                 }
+                userObject.rateUser(rating);
                 saveUserRating(rating);
                 dialog.dismiss();
             }
