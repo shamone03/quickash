@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/jobApplicant"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    tools:context=".UI.ViewJobEmployer.ViewJobApplicantListElement">
+    android:layout_height="120dp">
 
     <Button
         android:id="@+id/jobApplicantButton"
