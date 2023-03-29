@@ -17,7 +17,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextTextMultiLine"
+                android:id="@+id/createJP_JobDescription"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -112,7 +112,7 @@
                 android:inputType="numberDecimal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+                app:layout_constraintTop_toBottomOf="@+id/createJP_JobDescription" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

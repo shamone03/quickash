@@ -33,7 +33,7 @@ import java.util.Map;
  * Handles the creation of new job listings
  */
 public class CreateListingFragment extends Fragment {
-    EditText titleField, salaryField, durationField;
+    EditText titleField, descriptionField, salaryField, durationField;
     Spinner priorityField;
     Button createPosting;
 
@@ -58,6 +58,7 @@ public class CreateListingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         createPosting = getView().findViewById(R.id.createJP_button);
         titleField = getView().findViewById(R.id.createJP_PostingTitle);
+        descriptionField = getView().findViewById(R.id.createJP_JobDescription);
         salaryField = getView().findViewById(R.id.createJP_JobSalary);
         durationField = getView().findViewById(R.id.createJP_JobDurration);
         priorityField = getView().findViewById(R.id.createJP_priority);
@@ -85,6 +86,7 @@ public class CreateListingFragment extends Fragment {
 
                 JobPostingObject jobPostingObject = new JobPostingObject();
                 jobPostingObject.setJobTitle(getJobTitle());
+                jobPostingObject.setJobDescription(getJobDescription());
                 jobPostingObject.setJobDuration(getJobDuration());
                 jobPostingObject.setJobPoster(posterID);
                 jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
@@ -117,6 +119,8 @@ public class CreateListingFragment extends Fragment {
     public String getJobTitle() {
         return titleField.getText().toString();
     }
+
+    public String getJobDescription(){ return descriptionField.getText().toString();}
 
     /**
      * isEmptyJobTitle() checks if Job Title field is empty
