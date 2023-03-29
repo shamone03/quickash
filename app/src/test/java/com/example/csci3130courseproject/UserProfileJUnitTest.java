@@ -3,7 +3,6 @@ package com.example.csci3130courseproject;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
 public class UserProfileJUnitTest {
 
     //Test test
