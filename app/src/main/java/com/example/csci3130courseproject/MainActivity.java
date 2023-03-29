@@ -14,8 +14,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
+import com.example.csci3130courseproject.Utils.ObtainingLocation;
+import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     Toolbar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        UserObject currentUserObject = new UserObject();
+//        ObtainingLocation obtainingLocation = new ObtainingLocation(getApplicationContext());
+//        currentUserObject.updateLocation(obtainingLocation);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         actionBar = (Toolbar) findViewById(R.id.toolbar);
