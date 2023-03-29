@@ -68,7 +68,7 @@ public class getJobNotifications extends FragmentActivity implements OnMapReadyC
                             // if within 30km of user location, send notification
                             if (distance < 30) {
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CSCI3130 Course Project");
-                                builder.setContentTitle("New Jop Posting");
+                                builder.setContentTitle("New Job Posting");
                                 builder.setContentText("There is a new job posting in your area!");
                                 builder.setAutoCancel(true);
 
