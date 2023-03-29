@@ -12,11 +12,12 @@ public class JobPostingObject {
     private int jobDuration;
     private double jobSalary;
     private JobLocation jobLocation;
+    private boolean completed;
 
     public JobPostingObject(){}
 
     public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, Priority.PRIORITY priority, double jobSalary,
-                            int jobDuration, JobLocation location){
+                            int jobDuration, JobLocation location, Boolean completed){
         this.jobPosterID = posterID;
         this.employees = userApplied;
         this.jobTitle = title;
@@ -24,6 +25,7 @@ public class JobPostingObject {
         this.jobSalary = jobSalary;
         this.jobDuration = jobDuration;
         this.jobLocation = location;
+        this.completed = completed;
     }
     // Set job attributes
     public void setJobDuration(int jobDuration) {
