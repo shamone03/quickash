@@ -7,6 +7,7 @@
     <string name="suAccountType">Employer Account</string>
     <!-- create job posting drop-down menu -->
     <string-array name="priorityList">
+        <item id="TITPriority">Job Priority</item>
         <item id="LOWPriority">Low (1+ Months)</item>
         <item id="MEDPriority">Medium (1 Month)</item>
         <item id="HIGPriority">High (1-2 Weeks)</item>
