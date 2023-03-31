@@ -1,5 +1,7 @@
 package com.example.csci3130courseproject.Utils;
 
+import static androidx.test.InstrumentationRegistry.getContext;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,21 +44,20 @@ public class getJobNotifications extends FragmentActivity implements OnMapReadyC
 
     private GoogleMap mMap;
     public static final String BASE_URL = "https://fcm.googleapis.com";
-    public static final String SERVER_KEY = "BF5zbJia7kbjFfEACZahrmZCWbFhny3zOrLV5mM-nntibtx0R175ZVvT_M4bv1M7kdlHivNeAIYn89I9iy133YY"
+    public static final String SERVER_KEY = "BF5zbJia7kbjFfEACZahrmZCWbFhny3zOrLV5mM-nntibtx0R175ZVvT_M4bv1M7kdlHivNeAIYn89I9iy133YY";
 
     public getJobNotifications() {
     }
-
     // send email when new job in the area (same city?) is posted
     public void notifyAllUsers(Context context, Location location) {
-        FirebaseDatabase getFirebaseDatabase = (FirebaseDatabase) FirebaseDatabase.getInstance().getReference().child("users").addChildEventListener(
+        FirebaseDatabase getFirebaseDatabase = (FirebaseDatabase) FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             // retrieve users' locations.
                             UserObject user = snapshot.getValue(UserObject.class);
-                            Location userLocation = user.getLocation();
+                            Location currLocation = (new ObtainingLocation(getApplicationContext())).getLocation(getApplicationContext());
 
                             // compare with job posting location
                             Location job = (Location) dataSnapshot.child("jobLocation").child("convertedLocation").getValue();
@@ -64,16 +65,16 @@ public class getJobNotifications extends FragmentActivity implements OnMapReadyC
                             //Double jobLongitude = (Double) dataSnapshot.child("jobLocation").child("convertedLocation").child("longitude").getValue();
                             //jobLocation.setLongitude(jobLongitude);
 
-                            float distance = userLocation.distanceTo(jobLocation.getConvertedLocation());
+                            float distance = currLocation.distanceTo(jobLocation.getConvertedLocation());
                             // if within 30km of user location, send notification
                             if (distance < 30) {
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CSCI3130 Course Project");
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "CSCI3130 Course Project");
                                 builder.setContentTitle("New Job Posting");
                                 builder.setContentText("There is a new job posting in your area!");
                                 builder.setAutoCancel(true);
 
-                                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
-                                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+                                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                                     // TODO: Consider calling
                                     //    ActivityCompat#requestPermissions
                                     // here to request the missing permissions, and then overriding
@@ -94,7 +95,7 @@ public class getJobNotifications extends FragmentActivity implements OnMapReadyC
 
                     }
                 }
-        )
+        );
 
 
     }
