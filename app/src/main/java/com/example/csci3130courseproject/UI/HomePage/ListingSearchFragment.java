@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
@@ -133,6 +134,9 @@ public class ListingSearchFragment extends Fragment {
             employer.setText("Employer ID: NULL");
         }
 
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+        DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
+
         // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
         applyButton.setOnClickListener(new View.OnClickListener() {
@@ -144,17 +148,34 @@ public class ListingSearchFragment extends Fragment {
 
 
                     // adds the job id to current user
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
-                    DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
+                    DatabaseReference jobsTakenRef = userRef.child("jobsTaken");
                     Map<String, Object> takenJob = new HashMap<>();
                     takenJob.put(listingSnapshot.getKey(), false);
                     jobsTakenRef.updateChildren(takenJob);
+
                     // add user to jobObject
-                    DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
                     Map<String, Object> val = new HashMap<>();
                     val.put(user.getUid(), false);
                     jobRef.child("employees").updateChildren(val);
                     
+                }
+            }
+        });
+
+        AppCompatButton saveButton = listingPreview.findViewById(R.id.saveButton);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (saveButton.getText().toString().equals("Save")) {
+                    saveButton.setText("Saved");
+                    saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+
+                    DatabaseReference jobsSavedRef = userRef.child("jobsSaved");
+                    Map<String, Object> savedJob = new HashMap<>();
+                    savedJob.put(listingSnapshot.getKey(), false);
+                    jobsSavedRef.updateChildren(savedJob);
+
                 }
             }
         });
