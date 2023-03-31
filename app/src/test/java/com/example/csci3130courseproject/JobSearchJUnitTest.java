@@ -1,13 +1,10 @@
 package com.example.csci3130courseproject;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
+import com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -23,13 +20,27 @@ public class JobSearchJUnitTest {
 
     @Test
     public void checkFilterTrue() {
-        assertTrue(ListingSearchFragment.filterTitles("", ""));
-        assertTrue(ListingSearchFragment.filterTitles("abc", "B"));
+        assertTrue(ListingSearchFragment.filterTitle("", ""));
+        assertTrue(ListingSearchFragment.filterTitle("abc", "B"));
     }
 
     @Test
     public void checkFilterFalse() {
-        assertFalse(ListingSearchFragment.filterTitles("B", "abc"));
+        assertFalse(ListingSearchFragment.filterTitle("B", "abc"));
     }
 
+    @Test
+    public void FilterSalaryTrue() {
+        assertTrue(ListingSearchFragment.filterSalary(11,10));
+    }
+
+    @Test
+    public void FilterSalaryFalse() {
+        assertFalse(ListingSearchFragment.filterSalary(9,10));
+    }
+
+    @Test
+    public void FilterSalaryEdgeTrue() {
+        assertTrue(ListingSearchFragment.filterSalary(10,10));
+    }
 }
