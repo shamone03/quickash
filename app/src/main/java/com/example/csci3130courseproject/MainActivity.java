@@ -1,26 +1,18 @@
 package com.example.csci3130courseproject;
 
-import static android.app.PendingIntent.getActivity;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         FirebaseAuth.getInstance().signOut();
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.createListingFragment, R.id.userProfileFragment, R.id.listingSearchFragment, R.id.signInFragment)
+                R.id.createListingFragment, R.id.userProfileFragment, R.id.listingSearchFragment, R.id.fragment_view_job_employer, R.id.signInFragment)
                 .setOpenableLayout(drawerLayout)
                 .build();
 
