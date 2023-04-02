@@ -5,14 +5,16 @@ import java.util.ArrayList;
 public class PaymentProcessor {
     private UserObject provider;
     private ArrayList<UserObject> receivers = new ArrayList<>();
-    private Double amountToPay;
+    private Double amountToPay = 0.0;
 
     public PaymentProcessor() {
 
     }
 
     public void setAmount(Double amountToPay) {
-
+        if (amountToPay > 0) {
+            this.amountToPay = amountToPay;
+        }
     }
 
     public double getAmount() {
@@ -24,7 +26,7 @@ public class PaymentProcessor {
     }
 
     public void setProvider(UserObject provider) {
-
+        this.provider = provider;
     }
 
     public ArrayList<UserObject> getReceivers() {
@@ -32,10 +34,22 @@ public class PaymentProcessor {
     }
 
     public void addReceiver(UserObject receiver) {
-
+        if (receiver != null) {
+            receivers.add(receiver);
+        }
     }
 
     public Boolean payReceivers() {
-        return false;
+        if (provider == null) {
+            return false;
+        } else if (receivers.isEmpty()) {
+            return false;
+        } else if (amountToPay == 0) {
+            return false;
+        }
+
+
+
+        return true;
     }
 }

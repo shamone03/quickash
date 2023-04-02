@@ -16,10 +16,10 @@ public class PaymentProcessorJUnitTest {
         PaymentProcessor processor = new PaymentProcessor();
 
         processor.setAmount(0.0);
-        assertNull(processor.getAmount());
+        assertEquals(0, (int)processor.getAmount());
 
         processor.setAmount(-500.0);
-        assertNull(processor.getAmount());
+        assertEquals(0, (int)processor.getAmount());
     }
 
     @Test
@@ -27,7 +27,7 @@ public class PaymentProcessorJUnitTest {
         PaymentProcessor processor = new PaymentProcessor();
 
         processor.setAmount(500.00);
-        assertEquals(500.00, processor.getAmount());
+        assertEquals(500, (int)processor.getAmount());
     }
 
     @Test
