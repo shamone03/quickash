@@ -271,7 +271,9 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // TODO: Set up analytics page
+    /**
+     * Shows the payment history of jobs that the user has completed as an employer
+     */
     private void populateAnalytics() {
         setError("Analytics TBD in iteration 3");
     }
