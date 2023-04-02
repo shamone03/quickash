@@ -85,5 +85,13 @@ public class JobPostingObject {
     public void setJobLocation(JobLocation jobLocation) {
         this.jobLocation = jobLocation;
     }
+
+    public Boolean getCompleted(){
+        return completed;
+    }
+
+    public void setCompleted(boolean value){
+        this.completed = value;
+    }
 }
 

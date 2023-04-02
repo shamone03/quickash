@@ -9,32 +9,15 @@
     android:orientation="vertical"
     tools:context=".UI.User.ProfileFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="5dp"
-        android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="left"
-        android:layout_marginLeft="5dp"
-        />
-
     <Button
         android:id="@+id/editProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:layout_marginLeft="200dp"
         android:layout_marginRight="5dp"
         android:text="Edit Profile"
-        android:layout_marginLeft="200dp"
         android:visibility="visible" />
-    </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,16 +44,15 @@
                 android:id="@+id/profileUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:hint="Username"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/profileEmail"
+                android:id="@+id/rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="email@address.com"/>
+                android:hint="0.0" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -114,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Analytics"
+            android:text="Payments"
             android:autoSizeTextType="uniform"
             android:visibility="visible" />
     </LinearLayout>
