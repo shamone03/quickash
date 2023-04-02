@@ -1,19 +1,23 @@
 package com.example.csci3130courseproject.Utils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 public class ObtainingLocation extends AppCompatActivity implements LocationListener {
 
@@ -24,7 +28,7 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
     private static final int MIN_DISTANCE_FOR_UPDATES = 500;
     private static final int MIN_TIME_FOR_UPDATES = 10000;
 
-    public ObtainingLocation(Context context){
+    public ObtainingLocation(Context context) {
         getLocation(context);
     }
 
@@ -40,9 +44,11 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
         }
 
         if(GPSstatus){
-            location = null;
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_FOR_UPDATES,MIN_DISTANCE_FOR_UPDATES,this);
             location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null) {
+                Log.e("LOCATION", "location is null");
+            }
             Log.w("LOCATION", "location provided" + location.getLongitude() + "" + location.getLatitude());
             return location;
         }else{
