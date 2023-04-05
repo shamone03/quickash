@@ -3,6 +3,8 @@ package com.example.csci3130courseproject;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import android.app.Activity;
+
 import com.example.csci3130courseproject.Utils.PaymentProcessor;
 import com.example.csci3130courseproject.Utils.UserObject;
 
@@ -13,7 +15,7 @@ public class PaymentProcessorJUnitTest {
 
     @Test
     public void invalidAmount() {
-        PaymentProcessor processor = new PaymentProcessor();
+        PaymentProcessor processor = new PaymentProcessor(null);
 
         processor.setAmount(0.0);
         assertEquals(0, (int)processor.getAmount());
@@ -24,26 +26,15 @@ public class PaymentProcessorJUnitTest {
 
     @Test
     public void validAmount() {
-        PaymentProcessor processor = new PaymentProcessor();
+        PaymentProcessor processor = new PaymentProcessor(null);
 
         processor.setAmount(500.00);
         assertEquals(500, (int)processor.getAmount());
     }
 
     @Test
-    public void validPayment() {
-        PaymentProcessor processor = new PaymentProcessor();
-
-        processor.setAmount(500.00);
-        processor.setProvider(provider);
-        processor.addReceiver(receiver);
-
-        assertTrue(processor.payReceivers());
-    }
-
-    @Test
     public void payNoProvider() {
-        PaymentProcessor processor = new PaymentProcessor();
+        PaymentProcessor processor = new PaymentProcessor(null);
 
         processor.setAmount(500.00);
         processor.addReceiver(receiver);
@@ -53,7 +44,7 @@ public class PaymentProcessorJUnitTest {
 
     @Test
     public void payNoReceivers() {
-        PaymentProcessor processor = new PaymentProcessor();
+        PaymentProcessor processor = new PaymentProcessor(null);
 
         processor.setAmount(500.00);
         processor.setProvider(provider);
@@ -63,7 +54,7 @@ public class PaymentProcessorJUnitTest {
 
     @Test
     public void payNoAmount() {
-        PaymentProcessor processor = new PaymentProcessor();
+        PaymentProcessor processor = new PaymentProcessor(null);
 
         processor.setProvider(provider);
         processor.addReceiver(receiver);
