@@ -1,5 +1,7 @@
 package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +30,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,4 +186,32 @@ public class ViewJobEmployer extends Fragment {
         return jobDescription.getText().toString();
     }
 
+    private void initializeActivityLauncher() {
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == -1) {
+                    PaymentConfirmation confirmation = result.getData().getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                    if (confirmation != null) {
+                        try {
+                            // Getting the payment details
+                            String paymentDetails = confirmation.toJSONObject().toString(4);
+                            // on below line we are extracting json response and displaying it in a text view.
+                            JSONObject payObj = new JSONObject(paymentDetails);
+                            String payID = payObj.getJSONObject("response").getString("id");
+                            String state = payObj.getJSONObject("response").getString("state");
+                        } catch (JSONException e) {
+                            // handling json exception on below line
+                            Log.e("Error", "an extremely unlikely failure occurred: ", e);
+                        }
+                    }
+                    //Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
+                } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID){
+                    Log.d("PayPal","Launcher Result Invalid");
+                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    Log.d("PayPal", "Launcher Result Cancelled");
+                }
+            }
+        });
+    }
 }

@@ -23,9 +23,8 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class PaymentProcessor extends AppCompatActivity {
-    private static final String clientId = "";
-    private ActivityResultLauncher<Intent> activityResultLauncher;
+public class PaymentProcessor {
+    private static final String clientId = "AU9R_njJM40MRDc860_k_wte3x0Qlav8eEbQhizkFMjNYJcWnUfCs3edGMuANzE_9imOX8P4EZwsv9FN";
     private PayPalConfiguration paypalConfig;
     private UserObject provider;
     private ArrayList<UserObject> receivers = new ArrayList<>();
@@ -38,8 +37,6 @@ public class PaymentProcessor extends AppCompatActivity {
         paypalConfig = new PayPalConfiguration()
                 .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(clientId);
-
-        initializeActivityLauncher();
     }
 
     public void setAmount(Double amountToPay) {
@@ -70,7 +67,7 @@ public class PaymentProcessor extends AppCompatActivity {
         }
     }
 
-    public Boolean payReceivers() {
+    public Boolean payReceivers(ActivityResultLauncher<Intent> activityResultLauncher) {
         if (provider == null) {
             return false;
         } else if (receivers.isEmpty()) {
@@ -94,36 +91,5 @@ public class PaymentProcessor extends AppCompatActivity {
         activityResultLauncher.launch(intent);
 
         return true;
-    }
-
-    private void initializeActivityLauncher() {
-        // Initialize result launcher
-        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == RESULT_OK) {
-                    PaymentConfirmation confirmation = result.getData().getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                    if (confirmation != null) {
-                        try {
-                            // Getting the payment details
-                            String paymentDetails = confirmation.toJSONObject().toString(4);
-                            // on below line we are extracting json response and displaying it in a text view.
-                            JSONObject payObj = new JSONObject(paymentDetails);
-                            String payID = payObj.getJSONObject("response").getString("id");
-                            String state = payObj.getJSONObject("response").getString("state");
-                        } catch (JSONException e) {
-                            // handling json exception on below line
-                            Log.e("Error", "an extremely unlikely failure occurred: ", e);
-                        }
-                    }
-
-                    //Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
-                } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID){
-                    Log.d("PayPal","Launcher Result Invalid");
-                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                    Log.d("PayPal", "Launcher Result Cancelled");
-                }
-            }
-        });
     }
 }

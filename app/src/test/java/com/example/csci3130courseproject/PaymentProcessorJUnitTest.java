@@ -39,7 +39,7 @@ public class PaymentProcessorJUnitTest {
         processor.setAmount(500.00);
         processor.addReceiver(receiver);
 
-        assertFalse(processor.payReceivers());
+        assertFalse(processor.payReceivers(null));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class PaymentProcessorJUnitTest {
         processor.setAmount(500.00);
         processor.setProvider(provider);
 
-        assertFalse(processor.payReceivers());
+        assertFalse(processor.payReceivers(null));
     }
 
     @Test
@@ -59,6 +59,6 @@ public class PaymentProcessorJUnitTest {
         processor.setProvider(provider);
         processor.addReceiver(receiver);
 
-        assertFalse(processor.payReceivers());
+        assertFalse(processor.payReceivers(null));
     }
 }
