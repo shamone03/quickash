@@ -9,12 +9,13 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class UserProfileEspressoTest {
-    @Before
-    public void gotoUserProfile() throws InterruptedException {
+    @BeforeClass
+    public static void gotoUserProfile() throws InterruptedException {
         ActivityScenario.launch(MainActivity.class);
         SignInTest.grantPermission();
         SignInTest.signInUser();

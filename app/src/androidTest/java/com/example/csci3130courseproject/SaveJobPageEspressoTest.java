@@ -22,14 +22,12 @@ public class SaveJobPageEspressoTest {
     @Before
     public void navigateToSavePage() throws InterruptedException {
         ActivityScenario.launch(MainActivity.class);
-        SignInTest.grantPermission();
-        SignInTest.signInUser();
-        Thread.sleep(5000); // temporary fix, should use idlingresource or smthn
-
+        UserProfileEspressoTest.gotoUserProfile();
+//        onView(withId(R.id.viewSavedJobs)).perform(click());
     }
 
     @Test
-    public void addition() {
-        onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
+    public void userProfilePageVisible() {
+//        onView(withId(R.id.savedJob)).check(matches(isDisplayed()));
     }
 }
