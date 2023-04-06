@@ -24,6 +24,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,8 +39,15 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class SignInTest {
-    @Before
-    public void grantPermission() {
+    public static void signInUser() throws InterruptedException {
+        onView(withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
+        onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
+        closeSoftKeyboard();
+        onView(withId(R.id.Sign_In_Request)).perform(click());
+        Thread.sleep(5000);
+    }
+    @BeforeClass
+    public static void grantPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // grant the location permissions so we won't have to deal with the dialog when signed in
             getInstrumentation().getUiAutomation().executeShellCommand("pm grant " + getTargetContext().getPackageName() + " android.permission.ACCESS_FINE_LOCATION");
@@ -66,11 +74,7 @@ public class SignInTest {
 
     @Test
     public void userSignedIn() throws InterruptedException {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText("test@email.com"));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText("password"));
-        closeSoftKeyboard();
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-        Thread.sleep(5000); // temporary fix, should use idlingresource or smthn
+        signInUser();
         onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
     }
 
