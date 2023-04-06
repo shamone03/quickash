@@ -45,17 +45,16 @@ public class ObtainingLocation extends AppCompatActivity implements LocationList
 
         if(GPSstatus){
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_FOR_UPDATES,MIN_DISTANCE_FOR_UPDATES,this);
-            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location == null) {
-                Log.e("LOCATION", "location is null");
+            if (mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                return location;
+            } else {
+                location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
-            Log.w("LOCATION", "location provided" + location.getLongitude() + "" + location.getLatitude());
-            return location;
         }else{
             Log.w("LOCATION", "location not provided");
         }
 
-        return null;
+        return location;
     }
 
     public boolean checkIfGPSEnabled(Context context){
