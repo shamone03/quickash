@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
@@ -43,8 +44,8 @@ public class ViewJobEmployer extends Fragment {
     String jobID;
     JobPostingObject currentJob;
     HashMap<String, Boolean> applicants;
-
     Button saveEdit;
+    Button completeJobButton;
     EditText jobDescription;
     TextView jobTitle, applicantName;
     LinearLayout applicantsContainer;
@@ -75,6 +76,14 @@ public class ViewJobEmployer extends Fragment {
         jobTitle = (TextView) getView().findViewById(R.id.ViewJobEmployerJobTitle);
         jobDescription = (EditText) getView().findViewById(R.id.ViewJobEmployerJobDescription);
         saveEdit = (Button) getView().findViewById(R.id.ViewJobEmployerSaveButton);
+        completeJobButton = (Button) getView().findViewById(R.id.ViewJobEmployerCompleteButton);
+        completeJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentJob.completedJob();
+                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userRatingFragment);
+            }
+        });
         saveEdit.setEnabled(false);
         getJob(new IJobCallback() {
             @Override
@@ -89,11 +98,7 @@ public class ViewJobEmployer extends Fragment {
                 populateApplicantListView();
             }
         });
-
-
         // TODO: OrderByRating
-
-
     }
 
     private void createApplicantPreview(UserObject applicant){
@@ -107,21 +112,25 @@ public class ViewJobEmployer extends Fragment {
         TextView applicantRating = jobApplicantPreview.findViewById(R.id.jopApplicantRating);
         Button applicantButton = jobApplicantPreview.findViewById(R.id.jobApplicantButton);
 
-
         profilePicture.setImageURI(Uri.parse(""));
         applicantName.setText(applicant.getUsername());
         applicantRating.setText(String.format("Employee Rating: %.2f", applicant.getEmployeeRating()));
 
 
+
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Move to user profile & acceptance button
+                String userId = applicant.getUserId();
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", userId);
+                Fragment fragment = new Fragment();
+                fragment.setArguments(bundle);
+                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userProfileFragment);
             }
         });
 
         jobApplicants.add(new Object[]{applicant, jobApplicantPreview});
-
     }
 
 
@@ -138,7 +147,6 @@ public class ViewJobEmployer extends Fragment {
         });
     }
 
-
     private void getUser(IUserCallback callback, String userID) {
         database.getReference("users").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -146,6 +154,7 @@ public class ViewJobEmployer extends Fragment {
                 if (task.isSuccessful()){
                     Log.w("FetchUser", userID);
                     UserObject user = task.getResult().getValue(UserObject.class);
+                    user.setUserId(userID);
                     if (user != null) {
                         callback.onGetUserSuccess(user);
                     } else {

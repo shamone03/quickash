@@ -150,9 +150,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/ratingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="rating button" />
 </LinearLayout>

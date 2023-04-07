@@ -70,12 +70,16 @@ public class ProfileFragment extends Fragment {
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
         userRating = (TextView)requireView().findViewById(R.id.rating);
-        ratingButton = requireView().findViewById(R.id.ratingButton);
 
+        super.onCreate(savedInstanceState);
 
         // If no UserID, assume we're viewing our own profile
         if (getArguments() == null) {
+            System.out.println("No UserID");
             userId = currentUser.getUid();
+        } else {
+            userId = getArguments().getString(userId);
+            Log.w("Argue", getArguments().toString());
         }
         emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
@@ -112,12 +116,6 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
-            ratingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
-                }
-            });
         } else {
             userId = getArguments().getString("UserID");
         }
@@ -173,6 +171,8 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
+
     }
 
     public void editInformation(View view) {

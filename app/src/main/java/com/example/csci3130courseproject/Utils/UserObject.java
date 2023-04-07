@@ -16,6 +16,7 @@ public class UserObject {
     private String province;
     private String city;
     private String address;
+    private String userId;
 
 
     /** Contains the jobId of all jobs created by the user.*/
@@ -143,6 +144,12 @@ public class UserObject {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String UserID) {
+        this.userId = UserID;
     }
 
     public void rateUser(Double dob) {
