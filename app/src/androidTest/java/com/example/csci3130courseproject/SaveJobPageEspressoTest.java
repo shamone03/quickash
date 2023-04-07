@@ -3,6 +3,7 @@ package com.example.csci3130courseproject;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
@@ -45,5 +46,11 @@ public class SaveJobPageEspressoTest {
     public void saveJob() {
         signIn("test@email.com", "password");
         // TODO: Save a job
+        onView(
+                allOf(
+                        withId(R.id.saveButton), hasSibling(withText("Title: Save me! Part 2"))
+                )
+
+                ).perform(scrollTo(), click()).check(matches(withText("Saved")));
     }
 }
