@@ -42,7 +42,6 @@ public class ProfileFragment extends Fragment {
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button analyticsButton;
-
     private Button ratingButton;
     private TextView username;
     private TextView emailAddress;
@@ -78,7 +77,7 @@ public class ProfileFragment extends Fragment {
         if (getArguments() == null) {
             userId = currentUser.getUid();
         }
-        username.setText(currentUser.getDisplayName());
+        username.setText(targetUser.getUsername());
         emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
 
@@ -131,6 +130,8 @@ public class ProfileFragment extends Fragment {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     targetUser = task.getResult().getValue(UserObject.class);
+                    username.setText(targetUser.getUsername());
+
 
                     if (targetUser != null) {
                         // Display and connect job buttons if the profile belongs to the user
