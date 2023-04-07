@@ -6,12 +6,12 @@ public class JobPostingObject {
     private String jobPosterID;
     private HashMap<String, Boolean> employees;
     private String jobTitle;
-
     private String jobDescription;
     private Priority.PRIORITY priority;
     private int jobDuration;
     private double jobSalary;
     private JobLocation jobLocation;
+    private boolean jobComplete;
 
     public JobPostingObject(){}
 
@@ -24,6 +24,7 @@ public class JobPostingObject {
         this.jobSalary = jobSalary;
         this.jobDuration = jobDuration;
         this.jobLocation = location;
+        this.jobComplete = false;
     }
     // Set job attributes
     public void setJobDuration(int jobDuration) {
@@ -82,6 +83,10 @@ public class JobPostingObject {
 
     public void setJobLocation(JobLocation jobLocation) {
         this.jobLocation = jobLocation;
+    }
+
+    public void completedJob(){
+        this.jobComplete = true;
     }
 }
 

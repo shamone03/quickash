@@ -77,7 +77,6 @@ public class ProfileFragment extends Fragment {
         if (getArguments() == null) {
             userId = currentUser.getUid();
         }
-        username.setText(targetUser.getUsername());
         emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
 
