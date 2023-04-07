@@ -21,6 +21,9 @@ import android.widget.TextView;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Permissions;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -139,6 +142,24 @@ public class ListingSearchFragment extends Fragment {
 
         // Connecting button event listener to apply the user to a job listing
         AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+        AppCompatButton saveButton = listingPreview.findViewById(R.id.saveButton);
+
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                UserObject currentUser = task.getResult().getValue(UserObject.class);
+                if (currentUser != null) {
+                    if (currentUser.getJobsTaken().containsKey(listingSnapshot.getKey())) {
+                        applyButton.setText("Applied");
+                    }
+                    if (currentUser.getJobsSaved().containsKey(listingSnapshot.getKey())) {
+                        saveButton.setText("Saved");
+                    }
+                }
+            }
+        });
+
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,7 +183,6 @@ public class ListingSearchFragment extends Fragment {
             }
         });
 
-        AppCompatButton saveButton = listingPreview.findViewById(R.id.saveButton);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
