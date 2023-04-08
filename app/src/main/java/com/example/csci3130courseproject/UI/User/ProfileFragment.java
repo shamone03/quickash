@@ -93,6 +93,7 @@ public class ProfileFragment extends Fragment {
                 } else {
                     targetUser = task.getResult().getValue(UserObject.class);
                     username.setText(targetUser.getUsername());
+                    userRating.setText(String.valueOf(targetUser.getEmployeeRating()));
 
                     if (targetUser != null) {
                         // Display and connect job buttons if the profile belongs to the user
