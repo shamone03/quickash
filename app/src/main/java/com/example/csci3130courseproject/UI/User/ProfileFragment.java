@@ -37,19 +37,23 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference jobRef = database.getReference("jobs");
     private UserObject targetUser;
     private String userId;
+
+    //For when employer views employee profile considering hiring them.
+    private String jobId;
+    private JobPostingObject jobAppliedFor;
     private ArrayList<Object[]> jobsArray = new ArrayList<>();
     private Button editInformationButton;
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button analyticsButton;
-
-    private Button ratingButton;
+    private Button acceptApplicantButton;
     private TextView username;
     private TextView emailAddress;
     private TextView errorText;
     private TextView userRating;
     private LinearLayout jobsList;
     private LinearLayout buttonsLayout;
+    private LinearLayout acceptApplicantLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,66 +67,29 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         jobsList = (LinearLayout) requireView().findViewById(R.id.jobsList);
         buttonsLayout = (LinearLayout) requireView().findViewById(R.id.profileButtonLayout);
+        acceptApplicantLayout = (LinearLayout) requireView().findViewById(R.id.applicantButtonLayout);
         editInformationButton = (Button)requireView().findViewById(R.id.editProfile);
         jobsTakenButton = (Button)requireView().findViewById(R.id.showJobsTaken);
         jobsCreatedButton = (Button)requireView().findViewById(R.id.showJobsCreated);
         analyticsButton = (Button)requireView().findViewById(R.id.showAnalytics);
+        acceptApplicantButton = (Button)requireView().findViewById(R.id.acceptApplicantButton);
         username = (TextView)requireView().findViewById(R.id.profileUsername);
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
         userRating = (TextView)requireView().findViewById(R.id.rating);
-        ratingButton = requireView().findViewById(R.id.ratingButton);
 
+        super.onCreate(savedInstanceState);
 
         // If no UserID, assume we're viewing our own profile
-        if (getArguments() == null) {
+        if (getArguments().getString("userId") == null) {
             userId = currentUser.getUid();
-        }
-        username.setText(currentUser.getDisplayName());
-        emailAddress.setText(currentUser.getEmail());
-        errorText.setVisibility(View.GONE);
-
-        // Display and connect job buttons if the profile belongs to the user
-        if (isOwnProfile()) {
-            populateJobs(true,true);
-
-            editInformationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    editInformation(view);
-                }
-            });
-
-            jobsTakenButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateJobs(true,true);
-                }
-            });
-
-            jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateJobs(true,false);
-                }
-            });
-
-            analyticsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateAnalytics();
-                }
-            });
-
-            ratingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
-                }
-            });
+            emailAddress.setText(currentUser.getEmail());
         } else {
-            userId = getArguments().getString("UserID");
+            userId = getArguments().getString("userId");
+            //The id of the job the employer is looking to hire this user for.
+            jobId = getArguments().getString("jobId");
         }
+        errorText.setVisibility(View.GONE);
 
         userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -131,10 +98,14 @@ public class ProfileFragment extends Fragment {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     targetUser = task.getResult().getValue(UserObject.class);
+                    username.setText(targetUser.getUsername());
+                    userRating.setText(String.valueOf(targetUser.getEmployeeRating()));
 
                     if (targetUser != null) {
                         // Display and connect job buttons if the profile belongs to the user
                         if (isOwnProfile()) {
+                            emailAddress.setText(currentUser.getEmail());
+                            acceptApplicantLayout.setVisibility(View.GONE);
                             populateJobs(true,true);
 
                             editInformationButton.setOnClickListener(new View.OnClickListener() {
@@ -165,18 +136,48 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                         } else {
+                            emailAddress.setText(" ");
                             editInformationButton.setVisibility(View.GONE);
                             buttonsLayout.setVisibility(View.GONE);
                             populateAnalytics();
+                            acceptApplicantButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    acceptApplicant(view);
+                                }
+                            });
                         }
                     }
                 }
             }
         });
+
+
     }
 
     public void editInformation(View view) {
         Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_editUserProfileFragment);
+    }
+
+    public void acceptApplicant(View view) {
+        jobRef.child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> jobTask) {
+                if (!jobTask.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", jobTask.getException());
+                }
+                else {
+                    jobAppliedFor = jobTask.getResult().getValue(JobPostingObject.class);
+                    jobAppliedFor.applicantAccepted(userId, jobId);
+                    DatabaseReference jobIDRef = jobRef.child(jobId);
+                    jobIDRef.setValue(jobAppliedFor);
+                }
+            }
+        });
+        String userId = currentUser.getUid();
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", userId);
+        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_self);
     }
 
     /**
@@ -331,7 +332,7 @@ public class ProfileFragment extends Fragment {
                         public void onClick(View view) {
                             if (currentUser.getUid().equals(jobPosting.getJobPoster())){
                                 Bundle jobInfo = new Bundle();
-                                jobInfo.putString("JobID", listingSnapshot.getKey());
+                                jobInfo.putString("JobId", listingSnapshot.getKey());
                                 Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_viewJobEmployer, jobInfo);
                             }else{
                                 // TODO: Go to view job as employee

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class UserRatingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.userBeingRatedID = getArguments().getString("userID");
+        this.userBeingRatedID = getArguments().getString("userId");
 
         FirebaseDatabase.getInstance().getReference("users").child(userBeingRatedID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -53,10 +54,14 @@ public class UserRatingFragment extends Fragment {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     userObject = task.getResult().getValue(UserObject.class);
+                    String messageContent = String.format("Rate %s for this job!", userObject.getUsername());
+                    TextView message = (TextView)requireView().findViewById(R.id.message);
+                    message.setText(messageContent);
                     return;
                 }
             }
         });
+
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState){
@@ -67,7 +72,7 @@ public class UserRatingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Double rating = Double.valueOf(ratingBar.getRating());
-                showConfirmationMessage(rating);
+                showConfirmationMessage(rating, view);
                 TextView message = (TextView) getView().findViewById(R.id.message);
                 message.setText("You Rated :" + String.valueOf(ratingBar.getRating()));
             }
@@ -82,7 +87,7 @@ public class UserRatingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_user_rating,container,false);
     }
 
-    public void showConfirmationMessage(double rating){
+    public void showConfirmationMessage(double rating, View view){
         AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
         notif.setTitle("Rating Confirmation");
         notif.setMessage(String.format("Are you sure? Your rating is %.1f/5 stars", rating));
@@ -94,8 +99,9 @@ public class UserRatingFragment extends Fragment {
                     return;
                 }
                 userObject.rateUser(rating);
-                saveUserRating(rating);
+                saveUserRating(userObject.getEmployeeRating());
                 dialog.dismiss();
+                Navigation.findNavController(view).navigate(R.id.action_userRatingFragment_to_userProfileFragment);
             }
         });
         notif.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -109,7 +115,7 @@ public class UserRatingFragment extends Fragment {
         dialog.show();
     }
     private void saveUserRating(double rating){
-        userRef.child(userBeingRatedID).child("rating").setValue(rating);
+        userRef.child(userBeingRatedID).child("employeeRating").setValue(rating);
     }
 
 }

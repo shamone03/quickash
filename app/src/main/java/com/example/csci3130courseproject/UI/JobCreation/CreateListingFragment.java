@@ -90,6 +90,9 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setJobSalary(getJobSalary(salaryField.getText().toString()));
                 jobPostingObject.setEmployees(new HashMap<>());
                 jobPostingObject.setPriority(getJobPriority());
+                jobPostingObject.setJobComplete(false);
+                jobPostingObject.setJobEmployeeID("");
+                jobPostingObject.setEmployeeSelected(false);
 
                 Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
                 jobPostingObject.setJobLocation(new JobLocation(loc));

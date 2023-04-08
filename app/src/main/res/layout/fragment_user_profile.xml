@@ -19,9 +19,14 @@
     <TextView
         android:id="@+id/rating"
         android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_height="40dp"
         android:layout_gravity="left"
         android:layout_marginLeft="5dp"
+        android:typeface="sans"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textColor="#00ccff"
+        android:text="5.0"
         />
 
     <Button
@@ -117,6 +122,25 @@
             android:text="Analytics"
             android:autoSizeTextType="uniform"
             android:visibility="visible" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/applicantButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/acceptApplicantButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:autoSizeTextType="uniform"
+        android:text="Accept Applicant"
+        android:visibility="visible" />
+
     </LinearLayout>
 
     <TextView
@@ -150,9 +174,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/ratingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="rating button" />
 </LinearLayout>
