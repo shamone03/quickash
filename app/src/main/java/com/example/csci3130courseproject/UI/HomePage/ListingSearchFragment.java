@@ -151,10 +151,12 @@ public class ListingSearchFragment extends Fragment {
                 UserObject currentUser = task.getResult().getValue(UserObject.class);
                 if (currentUser != null) {
                     if (currentUser.getJobsTaken().containsKey(listingSnapshot.getKey())) {
-                        applyButton.setText("Applied");
+                        applyButton.setText("Unapply");
+                        applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
                     }
                     if (currentUser.getJobsSaved().containsKey(listingSnapshot.getKey())) {
-                        saveButton.setText("Saved");
+                        saveButton.setText("Unsave");
+                        saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
                     }
                 }
             }
@@ -164,7 +166,7 @@ public class ListingSearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (applyButton.getText().toString().equals("Apply")) {
-                    applyButton.setText("Applied");
+                    applyButton.setText("Unapply");
                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
 
 
@@ -188,7 +190,7 @@ public class ListingSearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (saveButton.getText().toString().equals("Save")) {
-                    saveButton.setText("Saved");
+                    saveButton.setText("Unsave");
                     saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
 
                     DatabaseReference jobsSavedRef = userRef.child("jobsSaved");
