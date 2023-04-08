@@ -87,6 +87,9 @@
         android:label="fragment_user_rating"
         tools:layout="@layout/fragment_user_rating" >
         <argument android:name="userId" />
+        <action
+            android:id="@+id/action_userRatingFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_userRatingFragment"

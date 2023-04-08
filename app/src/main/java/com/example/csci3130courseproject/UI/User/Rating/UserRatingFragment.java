@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,7 +68,7 @@ public class UserRatingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Double rating = Double.valueOf(ratingBar.getRating());
-                showConfirmationMessage(rating);
+                showConfirmationMessage(rating, view);
                 TextView message = (TextView) getView().findViewById(R.id.message);
                 message.setText("You Rated :" + String.valueOf(ratingBar.getRating()));
             }
@@ -82,7 +83,7 @@ public class UserRatingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_user_rating,container,false);
     }
 
-    public void showConfirmationMessage(double rating){
+    public void showConfirmationMessage(double rating, View view){
         AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
         notif.setTitle("Rating Confirmation");
         notif.setMessage(String.format("Are you sure? Your rating is %.1f/5 stars", rating));
@@ -96,6 +97,7 @@ public class UserRatingFragment extends Fragment {
                 userObject.rateUser(rating);
                 saveUserRating(userObject.getEmployeeRating());
                 dialog.dismiss();
+                Navigation.findNavController(view).navigate(R.id.action_userRatingFragment_to_userProfileFragment);
             }
         });
         notif.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

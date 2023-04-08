@@ -1,6 +1,7 @@
 package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,11 +82,7 @@ public class ViewJobEmployer extends Fragment {
         completeJobButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentJob.completedJob(jobId);
-                String userIdToRate = currentJob.getJobEmployeeID();
-                Bundle bundle = new Bundle();
-                bundle.putString("userId", userIdToRate);
-                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userRatingFragment, bundle);
+                showConfirmationMessage(view);
             }
         });
         saveEdit.setEnabled(false);
@@ -195,6 +193,34 @@ public class ViewJobEmployer extends Fragment {
 
     public String getJobDescription() {
         return jobDescription.getText().toString();
+    }
+
+    public void showConfirmationMessage(View view){
+        AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
+        notif.setTitle("Complete Job and Pay Employee");
+        //Add employees name here
+        notif.setMessage(String.format("Are you sure you want to complete this job and pay the employee?"));
+        notif.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Verify user isn't rating themselves:
+                currentJob.completedJob(jobId);
+                String userIdToRate = currentJob.getJobEmployeeID();
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", userIdToRate);
+                dialog.dismiss();
+                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userRatingFragment, bundle);
+            }
+        });
+        notif.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog;
+        dialog = notif.create();
+        dialog.show();
     }
 
     private void initializeActivityLauncher() {
