@@ -124,9 +124,7 @@ public class ViewJobEmployer extends Fragment {
                 String userId = applicant.getUserId();
                 Bundle bundle = new Bundle();
                 bundle.putString("userId", userId);
-                Fragment fragment = new Fragment();
-                fragment.setArguments(bundle);
-                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userProfileFragment);
+                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userProfileFragment, bundle);
             }
         });
 

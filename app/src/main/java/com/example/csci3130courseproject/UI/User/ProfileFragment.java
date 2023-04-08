@@ -42,7 +42,6 @@ public class ProfileFragment extends Fragment {
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button analyticsButton;
-    private Button ratingButton;
     private TextView username;
     private TextView emailAddress;
     private TextView errorText;
@@ -74,12 +73,12 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // If no UserID, assume we're viewing our own profile
-        if (getArguments() == null) {
+        if (getArguments().getString("userId") == null) {
             System.out.println("No UserID");
             userId = currentUser.getUid();
         } else {
-            userId = getArguments().getString(userId);
-            Log.w("Argue", getArguments().toString());
+            userId = getArguments().getString("userId");
+            System.out.println(userId);
         }
         emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
@@ -117,7 +116,7 @@ public class ProfileFragment extends Fragment {
             });
 
         } else {
-            userId = getArguments().getString("UserID");
+            userId = getArguments().getString("userId");
         }
 
         userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
