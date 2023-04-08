@@ -67,6 +67,9 @@
             android:id="@+id/action_userProfileFragment_to_viewJobEmployer"
             app:destination="@id/viewJobEmployer" />
         <argument android:name="userId" />
+        <action
+            android:id="@+id/action_userProfileFragment_self"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/editUserProfileFragment"

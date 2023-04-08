@@ -42,12 +42,14 @@ public class ProfileFragment extends Fragment {
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button analyticsButton;
+    private Button acceptApplicantButton;
     private TextView username;
     private TextView emailAddress;
     private TextView errorText;
     private TextView userRating;
     private LinearLayout jobsList;
     private LinearLayout buttonsLayout;
+    private LinearLayout acceptApplicantLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,10 +63,12 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         jobsList = (LinearLayout) requireView().findViewById(R.id.jobsList);
         buttonsLayout = (LinearLayout) requireView().findViewById(R.id.profileButtonLayout);
+        acceptApplicantLayout = (LinearLayout) requireView().findViewById(R.id.applicantButtonLayout);
         editInformationButton = (Button)requireView().findViewById(R.id.editProfile);
         jobsTakenButton = (Button)requireView().findViewById(R.id.showJobsTaken);
         jobsCreatedButton = (Button)requireView().findViewById(R.id.showJobsCreated);
         analyticsButton = (Button)requireView().findViewById(R.id.showAnalytics);
+        acceptApplicantButton = (Button)requireView().findViewById(R.id.acceptApplicantButton);
         username = (TextView)requireView().findViewById(R.id.profileUsername);
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
@@ -74,50 +78,12 @@ public class ProfileFragment extends Fragment {
 
         // If no UserID, assume we're viewing our own profile
         if (getArguments().getString("userId") == null) {
-            System.out.println("No UserID");
             userId = currentUser.getUid();
+            emailAddress.setText(currentUser.getEmail());
         } else {
             userId = getArguments().getString("userId");
-            System.out.println(userId);
         }
-        emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
-
-        // Display and connect job buttons if the profile belongs to the user
-        if (isOwnProfile()) {
-            populateJobs(true,true);
-
-            editInformationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    editInformation(view);
-                }
-            });
-
-            jobsTakenButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateJobs(true,true);
-                }
-            });
-
-            jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateJobs(true,false);
-                }
-            });
-
-            analyticsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateAnalytics();
-                }
-            });
-
-        } else {
-            userId = getArguments().getString("userId");
-        }
 
         userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -128,10 +94,11 @@ public class ProfileFragment extends Fragment {
                     targetUser = task.getResult().getValue(UserObject.class);
                     username.setText(targetUser.getUsername());
 
-
                     if (targetUser != null) {
                         // Display and connect job buttons if the profile belongs to the user
                         if (isOwnProfile()) {
+                            emailAddress.setText(currentUser.getEmail());
+                            acceptApplicantLayout.setVisibility(View.GONE);
                             populateJobs(true,true);
 
                             editInformationButton.setOnClickListener(new View.OnClickListener() {
@@ -162,9 +129,14 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                         } else {
+                            emailAddress.setText(" ");
                             editInformationButton.setVisibility(View.GONE);
                             buttonsLayout.setVisibility(View.GONE);
                             populateAnalytics();
+                            acceptApplicantButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) { acceptApplicant(view); }
+                            });
                         }
                     }
                 }
@@ -176,6 +148,13 @@ public class ProfileFragment extends Fragment {
 
     public void editInformation(View view) {
         Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_editUserProfileFragment);
+    }
+
+    public void acceptApplicant(View view) {
+        String userId = currentUser.getUid();
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", userId);
+        Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_self);
     }
 
     /**
