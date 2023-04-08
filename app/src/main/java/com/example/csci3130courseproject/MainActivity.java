@@ -77,27 +77,34 @@ public class MainActivity extends AppCompatActivity {
         });
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        listenForJobs();
+//        listenForJobs();
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
+        FirebaseMessaging instance = FirebaseMessaging.getInstance();
+        instance.subscribeToTopic("newJobs").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                instance.getToken()
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                                    return;
+                                }
 
-                        // Get new FCM registration token
-                        String token = task.getResult();
+                                // Get new FCM registration token
+                                String token = task.getResult();
 
-                        // Log and toast
-                        //String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, token);
-                        //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-                        System.out.println("token: " + token);
-                    }
-                });
+                                // Log and toast
+                                //String msg = getString(R.string.msg_token_fmt, token);
+                                Log.d(TAG, token);
+                                //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                                System.out.println("token: " + token);
+                            }
+                        });
+            }
+        });
+
     }
 
     //    @Override
