@@ -30,9 +30,9 @@ public class NotificationService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "j")
                     .setContentText(message.getNotification().getBody())
+                    .setContentTitle(message.getNotification().getTitle())
                     .setSmallIcon(R.drawable.icon_jobs_taken)
-                    .setAutoCancel(true)
-                    .setContentText("New job name");
+                    .setAutoCancel(true);
 
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
