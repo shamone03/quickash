@@ -32,8 +32,8 @@ public class EditUserProfileFragment extends Fragment {
     DatabaseReference userIDRef = FirebaseDatabase.getInstance().getReference()
         .child("users").child(currentUser.getUid());
     private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
-            locationField, preferredJobsField, creditCardField, creditCardCVVField, countryField,
-            provinceField, cityField, addressField;
+            locationField, preferredJobsField, creditCardField, creditCardCVVField, credCardExpireField,
+            countryField, provinceField, cityField, addressField;
 
     public EditUserProfileFragment() {
         // Required empty public constructor
@@ -77,6 +77,9 @@ public class EditUserProfileFragment extends Fragment {
         if(creditCardCVVField.getText().toString().trim().equals("")) {
             return false;
         }
+        if(credCardExpireField.getText().toString().trim().equals("")) {
+            return false;
+        }
         if(countryField.getText().toString().trim().equals("")) {
             return false;
         }
@@ -101,6 +104,7 @@ public class EditUserProfileFragment extends Fragment {
                     profileUser.updateUser(nameField.getText().toString().trim(), phoneNumberField.getText().toString().trim(),
                             dateOfBirthField.getText().toString().trim(),
                             creditCardField.getText().toString().trim(), creditCardCVVField.getText().toString().trim(),
+                            credCardExpireField.getText().toString().trim(),
                             countryField.getText().toString().trim(), provinceField.getText().toString().trim(),
                             cityField.getText().toString().trim(), addressField.getText().toString().trim());
 
@@ -166,6 +170,10 @@ public class EditUserProfileFragment extends Fragment {
                     creditCardCVVField = (EditText)getView().findViewById(R.id.Ccv);
                     if(profileUser.getCreditCardCVV() != null) {
                         creditCardCVVField.setText(profileUser.getCreditCardCVV());
+                    }
+                    credCardExpireField = (EditText)getView().findViewById(R.id.Expire);
+                    if(profileUser.getCreditCardExpire() != null) {
+                        credCardExpireField.setText(profileUser.getCreditCardExpire());
                     }
                 }
             }

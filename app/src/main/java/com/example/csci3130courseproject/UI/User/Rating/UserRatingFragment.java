@@ -54,10 +54,14 @@ public class UserRatingFragment extends Fragment {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     userObject = task.getResult().getValue(UserObject.class);
+                    String messageContent = String.format("Rate %s for this job!", userObject.getUsername());
+                    TextView message = (TextView)requireView().findViewById(R.id.message);
+                    message.setText(messageContent);
                     return;
                 }
             }
         });
+
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState){

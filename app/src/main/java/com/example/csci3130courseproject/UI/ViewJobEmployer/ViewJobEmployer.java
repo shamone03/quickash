@@ -45,6 +45,7 @@ import java.util.HashMap;
 public class ViewJobEmployer extends Fragment {
     String jobId;
     JobPostingObject currentJob;
+    UserObject employeeObject;
     HashMap<String, Boolean> applicants;
     Button saveEdit;
     Button completeJobButton;
@@ -95,6 +96,16 @@ public class ViewJobEmployer extends Fragment {
                 jobTitle.setText(job.getJobTitle());
                 jobDescription.setText(job.getJobDescription());
                 saveEdit.setEnabled(true);
+                if(currentJob.getJobEmployeeID() != "") {
+                    database.getReference("users").child(currentJob.getJobEmployeeID()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                employeeObject = task.getResult().getValue(UserObject.class);
+                            }
+                        }
+                    });
+                }
 
                 populateApplicantListView();
             }
@@ -116,8 +127,6 @@ public class ViewJobEmployer extends Fragment {
         profilePicture.setImageURI(Uri.parse(""));
         applicantName.setText(applicant.getUsername());
         applicantRating.setText(String.format("Employee Rating: %.2f", applicant.getEmployeeRating()));
-
-
 
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,16 +207,18 @@ public class ViewJobEmployer extends Fragment {
     public void showConfirmationMessage(View view){
         AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
         notif.setTitle("Complete Job and Pay Employee");
-        //Add employees name here
-        notif.setMessage(String.format("Are you sure you want to complete this job and pay the employee?"));
+        double amountToPay = currentJob.getJobSalary();
+        String employeeId = currentJob.getJobEmployeeID();
+        String employeeName = employeeObject.getUsername();
+
+        notif.setMessage(String.format("Are you sure you want to complete this job and pay $%.2f to the %s?", amountToPay, employeeName));
         notif.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Verify user isn't rating themselves:
                 currentJob.completedJob(jobId);
-                String userIdToRate = currentJob.getJobEmployeeID();
                 Bundle bundle = new Bundle();
-                bundle.putString("userId", userIdToRate);
+                bundle.putString("userId", employeeId);
                 dialog.dismiss();
                 Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userRatingFragment, bundle);
             }

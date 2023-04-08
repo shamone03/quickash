@@ -12,6 +12,7 @@ public class UserObject {
     private HashMap<String, Boolean> preferredJobsField;
     private String creditCardNumber;
     private String creditCardCVV;
+    private String creditCardExpire;
     private String country;
     private String province;
     private String city;
@@ -53,13 +54,14 @@ public class UserObject {
     }
 
     public void updateUser(String username, String phoneNumber, String dateOfBirth,
-                           String creditCardNumber, String creditCardCVV,
+                           String creditCardNumber, String creditCardCVV, String creditCardExpire,
                            String country, String province, String city, String address) {
         this.username = username;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
         this.creditCardNumber = creditCardNumber;
         this.creditCardCVV = creditCardCVV;
+        this.creditCardExpire = creditCardExpire;
         this.country = country;
         this.province = province;
         this.city = city;
@@ -121,6 +123,8 @@ public class UserObject {
         return creditCardCVV;
     }
 
+    public String getCreditCardExpire() { return creditCardExpire; }
+
     public String getCountry() {
         return country;
     }
@@ -151,6 +155,8 @@ public class UserObject {
     public void setUserId(String UserID) {
         this.userId = UserID;
     }
+
+    public void setCreditCardExpire(String creditCardExpire) { this.creditCardExpire = creditCardExpire; }
 
     public void rateUser(Double dob) {
         //TODO: Add conditional to choose employer or employee
