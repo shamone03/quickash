@@ -37,6 +37,10 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference jobRef = database.getReference("jobs");
     private UserObject targetUser;
     private String userId;
+
+    //For when employer views employee profile considering hiring them.
+    private String jobId;
+    private JobPostingObject jobAppliedFor;
     private ArrayList<Object[]> jobsArray = new ArrayList<>();
     private Button editInformationButton;
     private Button jobsTakenButton;
@@ -82,6 +86,8 @@ public class ProfileFragment extends Fragment {
             emailAddress.setText(currentUser.getEmail());
         } else {
             userId = getArguments().getString("userId");
+            //The id of the job the employer is looking to hire this user for.
+            jobId = getArguments().getString("jobId");
         }
         errorText.setVisibility(View.GONE);
 
@@ -136,7 +142,9 @@ public class ProfileFragment extends Fragment {
                             populateAnalytics();
                             acceptApplicantButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onClick(View view) { acceptApplicant(view); }
+                                public void onClick(View view) {
+                                    acceptApplicant(view);
+                                }
                             });
                         }
                     }
@@ -152,6 +160,20 @@ public class ProfileFragment extends Fragment {
     }
 
     public void acceptApplicant(View view) {
+        jobRef.child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> jobTask) {
+                if (!jobTask.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", jobTask.getException());
+                }
+                else {
+                    jobAppliedFor = jobTask.getResult().getValue(JobPostingObject.class);
+                    jobAppliedFor.applicantAccepted(userId, jobId);
+                    DatabaseReference jobIDRef = jobRef.child(jobId);
+                    jobIDRef.setValue(jobAppliedFor);
+                }
+            }
+        });
         String userId = currentUser.getUid();
         Bundle bundle = new Bundle();
         bundle.putString("userId", userId);
@@ -310,7 +332,7 @@ public class ProfileFragment extends Fragment {
                         public void onClick(View view) {
                             if (currentUser.getUid().equals(jobPosting.getJobPoster())){
                                 Bundle jobInfo = new Bundle();
-                                jobInfo.putString("JobID", listingSnapshot.getKey());
+                                jobInfo.putString("JobId", listingSnapshot.getKey());
                                 Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_viewJobEmployer, jobInfo);
                             }else{
                                 // TODO: Go to view job as employee

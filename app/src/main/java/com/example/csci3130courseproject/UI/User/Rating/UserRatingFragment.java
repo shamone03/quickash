@@ -44,7 +44,7 @@ public class UserRatingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.userBeingRatedID = getArguments().getString("userID");
+        this.userBeingRatedID = getArguments().getString("userId");
 
         FirebaseDatabase.getInstance().getReference("users").child(userBeingRatedID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -94,7 +94,7 @@ public class UserRatingFragment extends Fragment {
                     return;
                 }
                 userObject.rateUser(rating);
-                saveUserRating(rating);
+                saveUserRating(userObject.getEmployeeRating());
                 dialog.dismiss();
             }
         });
@@ -109,7 +109,7 @@ public class UserRatingFragment extends Fragment {
         dialog.show();
     }
     private void saveUserRating(double rating){
-        userRef.child(userBeingRatedID).child("rating").setValue(rating);
+        userRef.child(userBeingRatedID).child("employeeRating").setValue(rating);
     }
 
 }

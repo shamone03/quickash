@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ViewJobEmployer extends Fragment {
-    String jobID;
+    String jobId;
     JobPostingObject currentJob;
     HashMap<String, Boolean> applicants;
     Button saveEdit;
@@ -63,7 +63,7 @@ public class ViewJobEmployer extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        this.jobID = getArguments().getString("JobID");
+        this.jobId = getArguments().getString("JobId");
         return inflater.inflate(R.layout.fragment_view_job_employer, container, false);
     }
 
@@ -80,8 +80,11 @@ public class ViewJobEmployer extends Fragment {
         completeJobButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentJob.completedJob();
-                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userRatingFragment);
+                currentJob.completedJob(jobId);
+                String userIdToRate = currentJob.getJobEmployeeID();
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", userIdToRate);
+                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userRatingFragment, bundle);
             }
         });
         saveEdit.setEnabled(false);
@@ -124,6 +127,7 @@ public class ViewJobEmployer extends Fragment {
                 String userId = applicant.getUserId();
                 Bundle bundle = new Bundle();
                 bundle.putString("userId", userId);
+                bundle.putString("jobId", jobId);
                 Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userProfileFragment, bundle);
             }
         });
@@ -133,7 +137,7 @@ public class ViewJobEmployer extends Fragment {
 
 
     private void getJob(IJobCallback callback){
-        database.getReference("jobs").child(jobID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        database.getReference("jobs").child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){

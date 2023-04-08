@@ -166,7 +166,7 @@ public class UserObject {
     public void rateEmployee(Double rating) {
         numberOfEmployeeRatings += 1;
         employeeRatingScore += rating;
-        employerRating = employeeRatingScore/numberOfEmployeeRatings;
+        employeeRating = employeeRatingScore/numberOfEmployeeRatings;
     }
 }
 

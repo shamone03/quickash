@@ -70,6 +70,7 @@
         <action
             android:id="@+id/action_userProfileFragment_self"
             app:destination="@id/userProfileFragment" />
+        <argument android:name="jobId" />
     </fragment>
     <fragment
         android:id="@+id/editUserProfileFragment"
@@ -84,7 +85,9 @@
         android:id="@+id/userRatingFragment"
         android:name="com.example.csci3130courseproject.UI.User.Rating.UserRatingFragment"
         android:label="fragment_user_rating"
-        tools:layout="@layout/fragment_user_rating" />
+        tools:layout="@layout/fragment_user_rating" >
+        <argument android:name="userId" />
+    </fragment>
     <action
         android:id="@+id/action_global_userRatingFragment"
         app:destination="@id/userRatingFragment" />
