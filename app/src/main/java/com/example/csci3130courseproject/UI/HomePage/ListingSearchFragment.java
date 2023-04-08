@@ -16,9 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.JobRecommendation;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kotlinx.coroutines.Job;
+
 /**
  * Handles the sign-up process
  */
@@ -45,6 +49,8 @@ public class ListingSearchFragment extends Fragment {
     private SearchView searchBar;
     private Spinner filterSpinner;
     private EditText filterInput;
+    private JobRecommendation jobRecommendation();
+    private boolean hasBeenNotified;
 
     public ListingSearchFragment() {
 
@@ -54,6 +60,7 @@ public class ListingSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_listing_search, container, false);
     }
 
@@ -65,6 +72,8 @@ public class ListingSearchFragment extends Fragment {
         databaseReference = database.getReference("jobs");
         filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
         filterInput = (EditText)getView().findViewById(R.id.filterInput);
+
+
 
         // TODO: Replace hardcoded query with a spinner read
         Query query = databaseReference.orderByChild("salary");
@@ -169,6 +178,10 @@ public class ListingSearchFragment extends Fragment {
      */
     private String getFilter() {
         return(filterSpinner.getSelectedItem().toString());
+    }
+
+    private void setHasBeenNotified(Boolean b) {
+        this.hasBeenNotified = b;
     }
 
     /**

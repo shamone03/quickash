@@ -59,6 +59,7 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void isSuccessful(boolean successful) {
                         if (successful) {
+                            //When this boolean is true, shows user toast on listing fragment with jobs similar to the ones they have taken
                             Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_listingSearchFragment);
                         } else {
                             Toast.makeText(getActivity(), "Invalid email or password", Toast.LENGTH_SHORT).show();
