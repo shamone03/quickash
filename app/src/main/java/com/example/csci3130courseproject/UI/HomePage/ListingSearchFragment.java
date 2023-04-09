@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.ObtainingLocation;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -240,12 +241,13 @@ public class ListingSearchFragment extends Fragment {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
-    public static boolean filterLocation(Location jobLocation, double distanceLimit) {
+    public boolean filterLocation(Location jobLocation, double distanceLimit) {
         if (jobLocation == null) {
             // The job has no location because it is a remote listing, and so cannot be filtered
             return true;
         } else {
-            return (jobLocation.distanceTo(jobLocation) < distanceLimit);
+            Location userLocation = (new ObtainingLocation(getContext())).getLocation(getContext());
+            return (userLocation.distanceTo(jobLocation) < distanceLimit);
         }
     }
 
@@ -292,14 +294,18 @@ public class ListingSearchFragment extends Fragment {
                         // Do nothing. An invalid number is treated the same as a negative/empty
                     }
                 } else if (getFilter().equals("Distance")) {
-//                    try {
-//                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
-//                                Double.parseDouble(filterInput.getText().toString())) == false) {
-//                            continue;
-//                        }
-//                    } catch(NumberFormatException e) {
-//                        // Do nothing. An invalid number is treated the same as a negative/empty
-//                    }
+                    try {
+                        Location jobLocation = new Location("");
+                        jobLocation.setAccuracy(listing.getJobLocation().getAccuracy());
+                        jobLocation.setLongitude(listing.getJobLocation().getLon());
+                        jobLocation.setLatitude(listing.getJobLocation().getLat());
+                        if (filterLocation(jobLocation,
+                                Double.parseDouble(filterInput.getText().toString())) == false) {
+                            continue;
+                        }
+                    } catch(NumberFormatException e) {
+                        // Do nothing. An invalid number is treated the same as a negative/empty
+                    }
                 }
             }
 
