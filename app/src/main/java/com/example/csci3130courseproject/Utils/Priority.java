@@ -1,9 +1,9 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.Utils;
 
 import android.widget.Spinner;
 
 public class Priority {
-     enum PRIORITY {
+     public enum PRIORITY {
         LOW,
         MEDIUM,
         HIGH,
@@ -44,12 +44,13 @@ public class Priority {
     public static PRIORITY getPriorityFromSpinner(Spinner menu){
          switch (menu.getSelectedItemPosition()){
              case 0:
-                 return setLowPriority();
              case 1:
-                 return setMedPriority();
+                 return setLowPriority();
              case 2:
-                 return setHighPriority();
+                 return setMedPriority();
              case 3:
+                 return setHighPriority();
+             case 4:
                  return setUrgentPriority();
          }
          return setLowPriority();
