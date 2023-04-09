@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -304,12 +305,16 @@ public class ProfileFragment extends Fragment {
                     TextView hours = listingPreview.findViewById(R.id.hoursLabel);
                     TextView salary = listingPreview.findViewById(R.id.salaryLabel);
                     TextView employer = listingPreview.findViewById(R.id.employerLabel);
+                    TextView locationName = listingPreview.findViewById(R.id.locationLabel);
 
                     // Setting job card text
                     if (jobPosting != null) {
                         title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
                         hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
                         salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+                        if (jobPosting.getJobLocation() != null) {
+                            locationName.setText(String.format("Location: %s", JobLocation.getLocationName(getContext(), jobPosting.getJobLocation())));
+                        }
                         if (employerObject != null) {
                             employer.setText(String.format("Employer: %s", employerObject.getUsername()));
                         } else {
