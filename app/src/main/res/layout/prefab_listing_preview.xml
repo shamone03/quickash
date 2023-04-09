@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Title"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="10pt"/>
 
@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Hours: 0"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
     <TextView
@@ -37,8 +37,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Salary: 0"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
     <TextView
@@ -47,32 +47,43 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Employer:"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/applyButton"
-        android:layout_width="150dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/background_rounded_button_active"
-        android:text="Apply"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/saveButton"
-        android:layout_width="333dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/background_rounded_button_active"
-        android:text="Save"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/applyButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_rounded_button_active"
+            android:text="Apply"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/background_rounded_button_active"
+            android:text="Save"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 </LinearLayout>
