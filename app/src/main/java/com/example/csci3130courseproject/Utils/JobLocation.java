@@ -1,6 +1,13 @@
 package com.example.csci3130courseproject.Utils;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.widget.Toast;
+
+import java.util.List;
+import java.util.Locale;
 
 public class JobLocation {
     private double lat;
@@ -8,6 +15,17 @@ public class JobLocation {
     private float accuracy;
 
     public JobLocation() {};
+
+    public static String getLocationName(Context context, JobLocation location) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLat(), location.getLon(), 1);
+            return addresses.get(0).getCountryName() + " " + addresses.get(0).getLocality() + " " + addresses.get(0).getPostalCode();
+        } catch (Exception e) {
+            Toast.makeText(context, "Error getting location name", Toast.LENGTH_LONG).show();
+        }
+        return "Location unavailable";
+    }
 
     public JobLocation(Location location) {
         this.lat = location.getLatitude();

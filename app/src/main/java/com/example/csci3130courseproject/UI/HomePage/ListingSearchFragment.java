@@ -176,7 +176,7 @@ public class ListingSearchFragment extends Fragment {
                         salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
                         employer.setText(String.format("Employer ID: %s", employerObject.getUsername()));
                         if (jobPosting.getJobLocation() != null) {
-                            locationName.setText(String.format("Location: %s", getLocation(jobPosting.getJobLocation())));
+                            locationName.setText(String.format("Location: %s", JobLocation.getLocationName(getContext(), jobPosting.getJobLocation())));
                         }
                     } else {
                         title.setText("Title: NULL");
