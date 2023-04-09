@@ -1,5 +1,7 @@
 package com.example.csci3130courseproject.UI.HomePage;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -16,8 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.UserObject;
@@ -34,6 +38,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -142,17 +148,22 @@ public class ListingSearchFragment extends Fragment {
                     TextView hours = listingPreview.findViewById(R.id.hoursLabel);
                     TextView salary = listingPreview.findViewById(R.id.salaryLabel);
                     TextView employer = listingPreview.findViewById(R.id.employerLabel);
+                    TextView locationName = listingPreview.findViewById(R.id.locationLabel);
 
                     if (jobPosting != null) {
                         title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
                         hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
                         salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
                         employer.setText(String.format("Employer ID: %s", employerObject.getUsername()));
+                        if (jobPosting.getJobLocation() != null) {
+                            locationName.setText(String.format("Location: %s", getLocation(jobPosting.getJobLocation())));
+                        }
                     } else {
                         title.setText("Title: NULL");
                         hours.setText("Hours: NULL");
                         salary.setText("Salary: NULL");
                         employer.setText("Employer: NULL");
+                        Log.d("LOCATION", jobPosting.getJobTitle() + " is null");
                     }
 
                     // Connecting button event listener to apply the user to a job listing
@@ -281,19 +292,30 @@ public class ListingSearchFragment extends Fragment {
                         // Do nothing. An invalid number is treated the same as a negative/empty
                     }
                 } else if (getFilter().equals("Distance")) {
-                    try {
-                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
-                                Double.parseDouble(filterInput.getText().toString())) == false) {
-                            continue;
-                        }
-                    } catch(NumberFormatException e) {
-                        // Do nothing. An invalid number is treated the same as a negative/empty
-                    }
+//                    try {
+//                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
+//                                Double.parseDouble(filterInput.getText().toString())) == false) {
+//                            continue;
+//                        }
+//                    } catch(NumberFormatException e) {
+//                        // Do nothing. An invalid number is treated the same as a negative/empty
+//                    }
                 }
             }
 
             // Adding view to list layout
             cardPreviewList.addView((View)listingReference[1]);
         }
+    }
+
+    private String getLocation(JobLocation location) {
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLat(), location.getLon(), 1);
+            return addresses.get(0).getCountryName() + " " + addresses.get(0).getLocality() + " " + addresses.get(0).getPostalCode();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error getting location name", Toast.LENGTH_LONG).show();
+        }
+        return "Location unavailable";
     }
 }
