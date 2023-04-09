@@ -1,16 +1,10 @@
 package com.example.csci3130courseproject.UI.HomePage;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -22,15 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
-import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Permissions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.csci3130courseproject.Utils.UserObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,11 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -53,6 +42,7 @@ import java.util.Map;
 public class ListingSearchFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private DatabaseReference userRef;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
     private LinearLayout cardPreviewList;
@@ -76,6 +66,7 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
+        userRef = database.getReference("users");
         databaseReference = database.getReference("jobs");
         filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
         filterInput = (EditText)getView().findViewById(R.id.filterInput);
@@ -127,59 +118,76 @@ public class ListingSearchFragment extends Fragment {
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
-        View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
-        // Modifying placeholder text to match data from Listing object
-        TextView title = listingPreview.findViewById(R.id.titleLabel);
-        TextView hours = listingPreview.findViewById(R.id.hoursLabel);
-        TextView salary = listingPreview.findViewById(R.id.salaryLabel);
-        TextView employer = listingPreview.findViewById(R.id.employerLabel);
-        TextView locationName = listingPreview.findViewById(R.id.locationLabel);
-
-        if (jobPosting != null) {
-            title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
-            hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
-            salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
-            employer.setText(String.format("Employer ID: %s", jobPosting.getJobPoster()));
-            if (jobPosting.getJobLocation() != null) {
-                locationName.setText(String.format("Location: %s", getLocation(jobPosting.getJobLocation())));
-            }
-        } else {
-            title.setText("Title: NULL");
-            hours.setText("Hours: NULL");
-            salary.setText("Salary: NULL");
-            employer.setText("Employer ID: NULL");
+        if (jobPosting.getJobPoster() == null) {
+            return;
         }
 
-        // Connecting button event listener to apply the user to a job listing
-        AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
-        applyButton.setOnClickListener(new View.OnClickListener() {
+        userRef.child(jobPosting.getJobPoster()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onClick(View view) {
-                if (applyButton.getText().toString().equals("Apply")) {
-                    applyButton.setText("Applied");
-                    applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+            public void onComplete(@NonNull Task<DataSnapshot> employerTask) {
+                if (!employerTask.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", employerTask.getException());
+                } else {
+                    UserObject employerObject = employerTask.getResult().getValue(UserObject.class);
+
+                    if (employerObject == null) {
+                        return;
+                    }
+
+                    View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
+
+                    // Modifying placeholder text to match data from Listing object
+                    TextView title = listingPreview.findViewById(R.id.titleLabel);
+                    TextView hours = listingPreview.findViewById(R.id.hoursLabel);
+                    TextView salary = listingPreview.findViewById(R.id.salaryLabel);
+                    TextView employer = listingPreview.findViewById(R.id.employerLabel);
+
+                    if (jobPosting != null) {
+                        title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
+                        hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
+                        salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+                        employer.setText(String.format("Employer ID: %s", employerObject.getUsername()));
+                    } else {
+                        title.setText("Title: NULL");
+                        hours.setText("Hours: NULL");
+                        salary.setText("Salary: NULL");
+                        employer.setText("Employer: NULL");
+                    }
+
+                    // Connecting button event listener to apply the user to a job listing
+                    AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+                    applyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (applyButton.getText().toString().equals("Apply")) {
+                                applyButton.setText("Applied");
+                                applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
 
 
-                    // adds the job id to current user
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
-                    DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
-                    Map<String, Object> takenJob = new HashMap<>();
-                    takenJob.put(listingSnapshot.getKey(), false);
-                    jobsTakenRef.updateChildren(takenJob);
-                    // add user to jobObject
-                    DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
-                    Map<String, Object> val = new HashMap<>();
-                    val.put(user.getUid(), false);
-                    jobRef.child("employees").updateChildren(val);
-                    
+                                // adds the job id to current user
+                                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+                                DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
+                                Map<String, Object> takenJob = new HashMap<>();
+                                takenJob.put(listingSnapshot.getKey(), false);
+                                jobsTakenRef.updateChildren(takenJob);
+                                // add user to jobObject
+                                DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
+                                Map<String, Object> val = new HashMap<>();
+                                val.put(user.getUid(), false);
+                                jobRef.child("employees").updateChildren(val);
+
+                            }
+                        }
+                    });
+
+                    // Adding Listing object and View to ArrayList to be referenced later
+                    Object[] listing = {jobPosting, listingPreview};
+                    pagedListings.add(listing);
+                    updateList();
                 }
             }
         });
-
-        // Adding Listing object and View to ArrayList to be referenced later
-        Object[] listing = {jobPosting, listingPreview};
-        pagedListings.add(listing);
     }
 
     /**
@@ -254,6 +262,11 @@ public class ListingSearchFragment extends Fragment {
             JobPostingObject listing = (JobPostingObject) listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
 
+            // Removing entries where the employer is the user
+            if (listing.getJobPoster() == null || listing.getJobPoster().equals(user.getUid()) == true) {
+                continue;
+            }
+
             // Filtering listings based on criteria provided by the user
             if (filterTitle(String.valueOf(listing.getJobTitle()), query) == false) {
                 continue;
@@ -268,30 +281,19 @@ public class ListingSearchFragment extends Fragment {
                         // Do nothing. An invalid number is treated the same as a negative/empty
                     }
                 } else if (getFilter().equals("Distance")) {
-//                    try {
-//                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
-//                                Double.parseDouble(filterInput.getText().toString())) == false) {
-//                            continue;
-//                        }
-//                    } catch(NumberFormatException e) {
-//                        // Do nothing. An invalid number is treated the same as a negative/empty
-//                    }
+                    try {
+                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
+                                Double.parseDouble(filterInput.getText().toString())) == false) {
+                            continue;
+                        }
+                    } catch(NumberFormatException e) {
+                        // Do nothing. An invalid number is treated the same as a negative/empty
+                    }
                 }
             }
 
             // Adding view to list layout
             cardPreviewList.addView((View)listingReference[1]);
         }
-    }
-
-    private String getLocation(JobLocation location) {
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLat(), location.getLon(), 1);
-            return addresses.get(0).getCountryName() + " " + addresses.get(0).getLocality() + " " + addresses.get(0).getPostalCode();
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Error getting location name", Toast.LENGTH_LONG).show();
-        }
-        return "Location unavailable";
     }
 }
