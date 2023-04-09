@@ -236,6 +236,11 @@ public class ListingSearchFragment extends Fragment {
             JobPostingObject listing = (JobPostingObject) listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
 
+            // Removing entries where the employer is the user
+            if (listing.getJobPoster() == null || listing.getJobPoster().equals(user.getUid()) == true) {
+                continue;
+            }
+
             // Filtering listings based on criteria provided by the user
             if (filterTitle(String.valueOf(listing.getJobTitle()), query) == false) {
                 continue;
