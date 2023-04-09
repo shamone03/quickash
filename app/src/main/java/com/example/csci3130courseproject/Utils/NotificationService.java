@@ -1,4 +1,4 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.Utils;
 
 import android.Manifest;
 import android.app.NotificationChannel;
@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.csci3130courseproject.R;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
