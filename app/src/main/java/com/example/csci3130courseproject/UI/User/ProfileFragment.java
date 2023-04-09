@@ -89,6 +89,7 @@ public class ProfileFragment extends Fragment {
             //The id of the job the employer is looking to hire this user for.
             jobId = getArguments().getString("jobId");
         }
+        username.setText(currentUser.getDisplayName());
         errorText.setVisibility(View.GONE);
 
         userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -272,9 +273,65 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // TODO: Set up analytics page
+    /**
+     * Shows the payment history of jobs that the user has completed as an employer
+     */
     private void populateAnalytics() {
-        setError("Analytics TBD in iteration 3");
+        clearJobList();
+        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            boolean shownJobs = false;
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    setError("There was a problem retrieving your data");
+                }
+                else {
+                    boolean shownJobs = false;
+                    UserObject profileUser = task.getResult().getValue(UserObject.class);
+                    if (profileUser == null) {
+                        setError("Could not find user data");
+                        return;
+                    } else {
+                        //calling getUserRating in here for now since it is stored on userObj. Can probably extract later.
+                        userRating.setText(String.valueOf(profileUser.getEmployeeRating()));
+                        Map<String, Boolean> jobIdList = profileUser.getJobsTaken();
+
+                        // Safe guard
+                        if (jobIdList == null)
+                            return;
+
+                        // Populate jobList with jobs
+                        for (Map.Entry<String, Boolean> job : jobIdList.entrySet()) {
+                            shownJobs = true;
+                            Log.d("ProfileTesting",job.getKey());
+                            jobRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
+                                    if (!listingTask.isSuccessful()) {
+                                        Log.e("firebase", "Error getting data", listingTask.getException());
+                                    }
+                                    else {
+                                        JobPostingObject jobPosting = listingTask.getResult().getValue(JobPostingObject.class);
+
+                                        if (jobPosting == null) {
+                                            return;
+                                        } else if (jobPosting.getCompleted() == true) {
+                                            createPaymentCard(jobPosting);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        // If there are no jobs, let the user know
+                        if (shownJobs == false) {
+                            setError("You have not paid any employees");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private double getUserRating(UserObject user) {
@@ -286,8 +343,6 @@ public class ProfileFragment extends Fragment {
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
 
         if (jobPosting == null) {
-            Log.e("Firebase", "Job posting object is null.\n Related snapshot:\n"
-                    + listingSnapshot.toString());
             return;
         }
 
@@ -346,5 +401,31 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void createPaymentCard(JobPostingObject job) {
+        View paymentPreview = getLayoutInflater().inflate(R.layout.prefab_payment_preview,null,false);
+        TextView title = paymentPreview.findViewById(R.id.titleLabel);
+        TextView hours = paymentPreview.findViewById(R.id.hoursLabel);
+        TextView salary = paymentPreview.findViewById(R.id.salaryLabel);
+        TextView employees = paymentPreview.findViewById(R.id.employeesLabel);
+        TextView total = paymentPreview.findViewById(R.id.paymentLabel);
+        int employeesPaid = 0;
+
+        // Setting card text
+        title.setText(String.format("Title: %s", job.getJobTitle()));
+        hours.setText(String.format("Hours: %s", job.getJobDuration()));
+        salary.setText(String.format("Salary: %.2f", job.getJobSalary()));
+
+        for (Map.Entry<String, Boolean> employee : job.getEmployees().entrySet()) {
+            if (employee.getValue() == true) {
+                employeesPaid++;
+            }
+        }
+
+        employees.setText("Employees: " + employeesPaid);
+        total.setText("Paid: " + (job.getJobSalary() * employeesPaid));
+
+        jobsList.addView(paymentPreview);
     }
 }
