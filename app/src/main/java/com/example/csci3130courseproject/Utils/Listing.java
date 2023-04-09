@@ -1,7 +1,8 @@
-package com.example.csci3130courseproject;
+package com.example.csci3130courseproject.Utils;
 
-import android.util.Log;
-
+import com.example.csci3130courseproject.Utils.Priority;
+import com.example.csci3130courseproject.Utils.DatabaseObject;
+import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class Listing extends DatabaseObject {
         setValue("hours", jobPosting.getJobDuration());
         setValue("salary", jobPosting.getJobSalary());
         setValue("priority", jobPosting.getPriority().toString());
-        setValue("employees", jobPosting.getUserApplied());
+        setValue("employees", jobPosting.getEmployees());
     }
 
     /**

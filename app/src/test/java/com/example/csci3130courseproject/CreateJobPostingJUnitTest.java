@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.csci3130courseproject.UI.JobCreation.CreateListingFragment;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
