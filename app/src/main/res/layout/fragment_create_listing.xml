@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme"
     tools:context=".UI.JobCreation.CreateListingFragment">
 
     <ScrollView
@@ -18,14 +19,15 @@
 
             <EditText
                 android:id="@+id/createJP_JobDescription"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="50dp"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Job Description"
+                android:background="@android:drawable/editbox_background"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,13 +35,14 @@
 
             <EditText
                 android:id="@+id/createJP_JobSalary"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="50dp"
                 android:ems="13"
                 android:hint="Job Salary"
+                android:background="@android:drawable/editbox_background"
                 android:inputType="numberDecimal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,18 +50,20 @@
 
             <Button
                 android:id="@+id/createJP_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="232dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="150dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="150dp"
                 android:layout_marginBottom="50dp"
+                android:backgroundTint="#1C085D"
                 android:text="Post Job"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/createJP_priority" />
+                app:layout_constraintTop_toBottomOf="@+id/createJP_priority"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/pageTitle"
@@ -68,19 +73,25 @@
                 android:layout_marginTop="100dp"
                 android:layout_marginEnd="103dp"
                 android:text="Create a Job Posting"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.577"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/createJP_priority"
-                android:layout_width="270dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:backgroundTintMode="screen"
                 android:entries="@array/priorityList"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,11 +99,12 @@
 
             <EditText
                 android:id="@+id/createJP_PostingTitle"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="50dp"
+                android:background="@android:drawable/editbox_background"
                 android:ems="13"
                 android:hint="Job Title"
                 android:inputType="textPersonName"
@@ -102,12 +114,13 @@
 
             <EditText
                 android:id="@+id/createJP_JobDurration"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="50dp"
-                android:ems="11"
+                android:background="@android:drawable/editbox_background"
+                android:ems="13"
                 android:hint="Expected Duration (Hours)"
                 android:inputType="numberDecimal"
                 app:layout_constraintEnd_toEndOf="parent"
