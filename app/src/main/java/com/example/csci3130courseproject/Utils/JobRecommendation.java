@@ -25,55 +25,63 @@ public class JobRecommendation {
     private DatabaseReference jobRef = database.getReference("jobs");
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private String userId;
-    private UserObject userObject;
+    private UserObject userO;
     private String jobTitle;
     private HashMap<String, Boolean> jobsTakenIds;
     private ArrayList<String[]> jobsTakenTitles;
     private ArrayList<String[]> allJobTitles;
 
     public JobRecommendation() {
-        
+
     }
 
-    public void populateJobs() {
-        userId = currentUser.getUid();
-        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+    public JobRecommendation(String userId) {
+        this.userId = userId;
+    }
+
+    public void setUserObject() {
+        FirebaseDatabase.getInstance().getReference("users").child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    userObject = task.getResult().getValue(UserObject.class);
-                    if (userObject == null) {
-                        return;
-                    } else {
-                        jobsTakenIds = (HashMap<String, Boolean>) userObject.getJobsTaken();
-                        if (jobsTakenIds == null) {
-                            System.out.println("jobsTakenIds was null");
-                            return;
-                        }
-                        for (Map.Entry<String, Boolean> job : jobsTakenIds.entrySet()) {
-                            jobRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
-                                    if (!listingTask.isSuccessful()) {
-                                        Log.e("firebase", "Error getting data", listingTask.getException());
-                                    }
-                                    else {
-                                        JobPostingObject jobPosting = listingTask.getResult().getValue(JobPostingObject.class);
-                                        String jobTitle = jobPosting.getJobTitle();
-                                        //split separates the first word of the string from the first
-                                        //call [0] to get it
-                                        jobsTakenTitles.add(jobTitle.split(" ", 2));
-                                    }
-                                }
-                            });
-                        }
-                    }
+                    userO = task.getResult().getValue(UserObject.class);
+                    setUserObject(userO);
                 }
             }
         });
+    }
+
+    public void populateJobs() {
+        if (userO == null) {
+            System.out.println("User object is null");
+            return;
+        } else {
+            jobsTakenIds = (HashMap<String, Boolean>) userO.getJobsTaken();
+            if (jobsTakenIds == null) {
+                System.out.println("jobsTakenIds was null");
+                return;
+            }
+            for (Map.Entry<String, Boolean> job : jobsTakenIds.entrySet()) {
+                jobRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
+                        if (!listingTask.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", listingTask.getException());
+                        }
+                        else {
+                            JobPostingObject jobPosting = listingTask.getResult().getValue(JobPostingObject.class);
+                            String jobTitle = jobPosting.getJobTitle();
+                            //split separates the first word of the string from the first
+                            //call [0] to get it
+                            jobsTakenTitles.add(jobTitle.split(" ", 2));
+                        }
+                    }
+                });
+            }
+        }
         jobRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -87,11 +95,15 @@ public class JobRecommendation {
         });
     }
 
-    public String recommendJob(ArrayList<String[]> taken, ArrayList<String[]> all) {
+    public String recommendJob() {
         String recommendation;
-        for (String[] title: taken) {
+        if(jobsTakenTitles == null || allJobTitles == null) {
+            System.out.println("Arrays are empty");
+            return "";
+        }
+        for (String[] title: jobsTakenTitles) {
             String firstWord = title[0];
-            for (String[] titleCompare: all) {
+            for (String[] titleCompare: allJobTitles) {
                 String firstWordToCompare = titleCompare[0];
                 if(firstWord.equals(firstWordToCompare)){
                     recommendation = String.format("%s %s", firstWord, title[2]);
@@ -101,5 +113,9 @@ public class JobRecommendation {
         }
         recommendation = "None";
         return recommendation;
+    }
+
+    public void setUserObject(UserObject u) {
+        this.userO = u;
     }
 }
