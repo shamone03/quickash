@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.NoMatchingViewException;
@@ -25,6 +26,7 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.csci3130courseproject.CustomExceptions.AlreadySavedException;
+import com.example.csci3130courseproject.CustomExceptions.MismatchingText;
 import com.example.csci3130courseproject.CustomExceptions.UnsavedException;
 
 import junit.framework.AssertionFailedError;
@@ -49,28 +51,51 @@ public class SaveJobPageEspressoTest {
         SystemClock.sleep(3000);
         onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
     }
+
+    private void navigateToSavedJobsOnProfile(){
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.userProfileFragment)).perform(click());
+        SystemClock.sleep(3000);
+        onView(withId(R.id.profileUsername)).check(matches(isDisplayed()));
+        onView(withId(R.id.showJobsSaved)).perform(click());
+        SystemClock.sleep(3000);
+    }
     private void saveJob() throws AlreadySavedException {
         ViewInteraction job = onView(allOf(withId(R.id.saveButton), hasSibling(withText("Title: Save me! Part 2"))));
         try {
             job.check(matches(withText("SAVE")));
-            job.check(matches(isClickable()));
-            job.perform(click());
-            job.check(matches(withText("UNSAVE")));
         } catch (AssertionError e){
             throw new AlreadySavedException();
         }
+        job.check(matches(isClickable()));
+        job.perform(click());
+        job.check(matches(withText("UNSAVE")));
     }
 
-    private void unsaveJob() throws UnsavedException {
+    private void unsaveJobFromListing() throws UnsavedException {
         ViewInteraction job = onView(allOf(withId(R.id.saveButton), hasSibling(withText("Title: Save me! Part 2"))));
         try {
+            job.perform(scrollTo());
             job.check(matches(withText("UNSAVE")));
-            job.check(matches(isClickable()));
-            job.perform(click());
-            job.check(matches(withText("SAVE")));
         } catch (AssertionError e){
             throw new UnsavedException();
         }
+        job.check(matches(isClickable()));
+        job.perform(click());
+        job.check(matches(withText("SAVE")));
+    }
+
+    private void unsaveJobFromProfile() throws MismatchingText {
+        ViewInteraction job = onView(allOf(withId(R.id.saveButton), hasSibling(withText("Title: Save me! Part 2"))));
+        try {
+            job.perform(scrollTo());
+            job.check(matches(withText("UNSAVE")));
+        } catch (AssertionError e) {
+            throw new MismatchingText();
+        }
+        job.check(matches(isClickable()));
+        job.perform(click());
+        job.check(matches(withText("SAVE")));
     }
 
     @Test
@@ -80,18 +105,34 @@ public class SaveJobPageEspressoTest {
         } catch (AlreadySavedException e){
             // Ignore and continue.
         }
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.userProfileFragment)).perform(click());
-        SystemClock.sleep(3000);
-        onView(withId(R.id.profileUsername)).check(matches(isDisplayed()));
-        onView(withId(R.id.showJobsSaved)).perform(click());
-        SystemClock.sleep(3000);
+        navigateToSavedJobsOnProfile();
         onView(allOf(withText("Title: Save me! Part 2"))).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void unsaveJobFromListingView(){
+    public void unsaveJobFromListingView() throws UnsavedException {
+        try {
+            saveJob();
+            unsaveJobFromListing();
+        } catch (AlreadySavedException e) {
+            // Ignore and continue:
+            unsaveJobFromListing();
+        } catch (UnsavedException e) {
+            Log.w("Exception", "Unexpected error occurred!");
+            throw new RuntimeException(e);
+        }
 
+    }
+
+    @Test
+    public void unsaveJobFromProfileView() throws MismatchingText {
+        try {
+            saveJob();
+            navigateToSavedJobsOnProfile();
+        } catch (AlreadySavedException e) {
+            navigateToSavedJobsOnProfile();
+        }
+        unsaveJobFromProfile();
     }
 
 }
