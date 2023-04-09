@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -45,12 +46,24 @@ public class SaveJobPageEspressoTest {
     @Test
     public void saveJob() {
         signIn("test@email.com", "password");
-        // TODO: Save a job
         onView(
                 allOf(
                         withId(R.id.saveButton), hasSibling(withText("Title: Save me! Part 2"))
                 )
 
-                ).perform(scrollTo(), click()).check(matches(withText("Saved")));
+                ).perform(scrollTo(), click());
+        SystemClock.sleep(2000);
+    }
+
+    @Test
+    public void saveJobIsVisibleInProfile(){
+        saveJob();
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.userProfileFragment)).perform(click());
+        SystemClock.sleep(3000);
+        onView(withId(R.id.profileUsername)).check(matches(isDisplayed()));
+        onView(withId(R.id.showJobsSaved)).perform(click());
+        SystemClock.sleep(3000);
+        onView(allOf(withText("Title: Save me! Part 2"))).perform(scrollTo()).check(matches(isDisplayed()));
     }
 }
