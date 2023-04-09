@@ -316,7 +316,7 @@ public class ProfileFragment extends Fragment {
 
                                         if (jobPosting == null) {
                                             return;
-                                        } else if (jobPosting.getCompleted() == true) {
+                                        } else if (jobPosting.getJobComplete() == true) {
                                             createPaymentCard(jobPosting);
                                         }
                                     }
