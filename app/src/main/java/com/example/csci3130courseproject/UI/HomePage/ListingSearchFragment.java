@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -126,17 +127,6 @@ public class ListingSearchFragment extends Fragment {
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
-        if (jobPosting.getJobLocation() != null) {
-            Location jobLocation = new Location("");
-            jobLocation.setLatitude(jobPosting.getJobLocation().getLat());
-            jobLocation.setLongitude(jobPosting.getJobLocation().getLon());
-            jobLocation.setAccuracy(jobPosting.getJobLocation().getAccuracy());
-            Log.d("LOCATION", jobPosting.getJobTitle());
-            getLocation(jobLocation);
-//            Log.d("LOCATION", String.valueOf(jobPosting.getJobLocation().getLat()));
-        } else {
-            Log.d("LOCATION", "job location null");
-        }
         View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
         // Modifying placeholder text to match data from Listing object
@@ -144,12 +134,16 @@ public class ListingSearchFragment extends Fragment {
         TextView hours = listingPreview.findViewById(R.id.hoursLabel);
         TextView salary = listingPreview.findViewById(R.id.salaryLabel);
         TextView employer = listingPreview.findViewById(R.id.employerLabel);
+        TextView locationName = listingPreview.findViewById(R.id.locationLabel);
 
         if (jobPosting != null) {
             title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
             hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
             salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
             employer.setText(String.format("Employer ID: %s", jobPosting.getJobPoster()));
+            if (jobPosting.getJobLocation() != null) {
+                locationName.setText(String.format("Location: %s", getLocation(jobPosting.getJobLocation())));
+            }
         } else {
             title.setText("Title: NULL");
             hours.setText("Hours: NULL");
@@ -290,10 +284,10 @@ public class ListingSearchFragment extends Fragment {
         }
     }
 
-    private String getLocation(Location location) {
+    private String getLocation(JobLocation location) {
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            List<Address> addresses = geocoder.getFromLocation(location.getLat(), location.getLon(), 1);
             return addresses.get(0).getCountryName() + " " + addresses.get(0).getLocality() + " " + addresses.get(0).getPostalCode();
         } catch (Exception e) {
             Toast.makeText(getContext(), "Error getting location name", Toast.LENGTH_LONG).show();
