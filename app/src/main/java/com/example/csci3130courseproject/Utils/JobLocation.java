@@ -15,11 +15,27 @@ public class JobLocation {
         this.accuracy = location.getAccuracy();
     }
 
-    public Location getConvertedLocation() {
-        Location ret = new Location("");
-        ret.setAccuracy(accuracy);
-        ret.setLongitude(lon);
-        ret.setLatitude(lat);
-        return ret;
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public float getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(float accuracy) {
+        this.accuracy = accuracy;
     }
 }
