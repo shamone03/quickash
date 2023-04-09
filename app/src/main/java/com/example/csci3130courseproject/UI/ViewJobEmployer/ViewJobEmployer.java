@@ -105,6 +105,8 @@ public class ViewJobEmployer extends Fragment {
                             }
                         }
                     });
+                } else {
+                    completeJobButton.setVisibility(View.GONE);
                 }
 
                 populateApplicantListView();
