@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CSCI3130 Course Project</string>
+    <string name="app_name">CSCI3130 Course Project - Quick Cash</string>
     <string name="signupTitle">Create an account</string>
     <string name="emailPlaceHolder">example@email.com</string>
     <string name="passwordPlaceHolder">Enter Password</string>
