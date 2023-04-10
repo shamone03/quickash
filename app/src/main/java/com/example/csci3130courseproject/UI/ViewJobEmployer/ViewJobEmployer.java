@@ -27,6 +27,7 @@ import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.PaymentProcessor;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +47,7 @@ public class ViewJobEmployer extends Fragment {
     String jobId;
     JobPostingObject currentJob;
     UserObject employeeObject;
+    UserObject employerObject;
     HashMap<String, Boolean> applicants;
     Button saveEdit;
     Button completeJobButton;
@@ -54,12 +56,20 @@ public class ViewJobEmployer extends Fragment {
     LinearLayout applicantsContainer;
     // Contains reference to applicantButton [0] and user [1]
     ArrayList<Object[]> jobApplicants = new ArrayList<>();
+    ActivityResultLauncher<Intent> activityIntentLauncher;
 
     FirebaseDatabase database;
     DatabaseReference userReference;
+    PaymentProcessor paymentProcessor;
 
     // required empty constructor
     public ViewJobEmployer() { }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        activityIntentLauncher = initializeActivityLauncher();
+    }
 
     @Nullable
     @Override
@@ -96,7 +106,8 @@ public class ViewJobEmployer extends Fragment {
                 jobTitle.setText(job.getJobTitle());
                 jobDescription.setText(job.getJobDescription());
                 saveEdit.setEnabled(true);
-                if(currentJob.getJobEmployeeID() != "") {
+                String employeeId = currentJob.getJobEmployeeID();
+                if(!employeeId.equals("")) {
                     database.getReference("users").child(currentJob.getJobEmployeeID()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -105,8 +116,9 @@ public class ViewJobEmployer extends Fragment {
                             }
                         }
                     });
+                } else {
+                    completeJobButton.setVisibility(View.GONE);
                 }
-
                 populateApplicantListView();
             }
         });
@@ -205,18 +217,31 @@ public class ViewJobEmployer extends Fragment {
     }
 
     public void showConfirmationMessage(View view){
+        getUser(new IUserCallback() {
+            @Override
+            public void onGetUserSuccess(UserObject user) {
+                employerObject = user;
+
+            }
+        }, currentJob.getJobPoster());
         AlertDialog.Builder notif = new AlertDialog.Builder(getContext());
         notif.setTitle("Complete Job and Pay Employee");
         double amountToPay = currentJob.getJobSalary();
         String employeeId = currentJob.getJobEmployeeID();
         String employeeName = employeeObject.getUsername();
 
-        notif.setMessage(String.format("Are you sure you want to complete this job and pay $%.2f to the %s?", amountToPay, employeeName));
+        notif.setMessage(String.format("Are you sure you want to complete this job and pay $%.2f to %s?", amountToPay, employeeName));
         notif.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Verify user isn't rating themselves:
                 currentJob.completedJob(jobId);
+                //Call methods to pay employee
+                paymentProcessor = new PaymentProcessor(getActivity());
+                paymentProcessor.setAmount(amountToPay);
+                paymentProcessor.addReceiver(employeeObject);
+                paymentProcessor.setProvider(employerObject);
+                paymentProcessor.payReceivers(activityIntentLauncher);
                 Bundle bundle = new Bundle();
                 bundle.putString("userId", employeeId);
                 dialog.dismiss();
@@ -234,7 +259,9 @@ public class ViewJobEmployer extends Fragment {
         dialog.show();
     }
 
-    private void initializeActivityLauncher() {
+
+
+    private ActivityResultLauncher<Intent> initializeActivityLauncher() {
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -261,5 +288,6 @@ public class ViewJobEmployer extends Fragment {
                 }
             }
         });
+        return activityResultLauncher;
     }
 }

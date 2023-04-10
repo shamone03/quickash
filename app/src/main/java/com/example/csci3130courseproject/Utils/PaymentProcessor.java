@@ -3,6 +3,9 @@ package com.example.csci3130courseproject.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -11,6 +14,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.csci3130courseproject.MainActivity;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -31,12 +35,31 @@ public class PaymentProcessor {
     private Double amountToPay = 0.0;
     private Activity activity;
 
+    //for using Paypal related methods
+    private PayPalConfiguration payPalConfig;
+
+    //UI Elements
+    private EditText enterAmtET;
+    private Button payNowBtn;
+    private TextView paymentStatusTV;
+
+
     public PaymentProcessor(Activity activity) {
         this.activity = activity;
 
         paypalConfig = new PayPalConfiguration()
                 .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(clientId);
+    }
+
+
+    private void processPayment() {
+        //getting the amount from the user
+        final String amount = enterAmtET.getText().toString();
+
+        //setting the parameters for payment i.e the amount, the currency, intent of the sale
+        final PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(
+                amount), "CAD", "Purchase Goods", PayPalPayment.PAYMENT_INTENT_SALE);
     }
 
     public void setAmount(Double amountToPay) {

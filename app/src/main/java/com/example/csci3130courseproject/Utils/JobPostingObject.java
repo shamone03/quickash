@@ -27,7 +27,7 @@ public class JobPostingObject {
     }
 
     public JobPostingObject(String posterID, HashMap<String, Boolean> userApplied, String title, Priority.PRIORITY priority, double jobSalary,
-                            int jobDuration, JobLocation location){
+                            int jobDuration, JobLocation location, Boolean completed){
         this.jobPosterID = posterID;
         this.employees = userApplied;
         this.jobTitle = title;
