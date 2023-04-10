@@ -181,6 +181,10 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                         } else {
+                            username.setText(targetUser.getUsername());
+                            emailAddress.setText("Email: Is hidden");
+                            userRating.setText(String.valueOf(targetUser.getEmployeeRating()));
+
                             editInformationButton.setVisibility(View.GONE);
                             buttonsLayout.setVisibility(View.GONE);
                             populateAnalytics();
