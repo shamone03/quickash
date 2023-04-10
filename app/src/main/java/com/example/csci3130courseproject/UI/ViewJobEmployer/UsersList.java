@@ -1,7 +1,8 @@
-package com.example.csci3130courseproject.Utils;
+package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
 import androidx.annotation.NonNull;
 
+import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;

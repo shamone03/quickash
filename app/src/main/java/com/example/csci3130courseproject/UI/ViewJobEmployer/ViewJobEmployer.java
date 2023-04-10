@@ -12,15 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
-import com.example.csci3130courseproject.Utils.UserListListener;
 import com.example.csci3130courseproject.Utils.UserObject;
-import com.example.csci3130courseproject.Utils.UsersList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
