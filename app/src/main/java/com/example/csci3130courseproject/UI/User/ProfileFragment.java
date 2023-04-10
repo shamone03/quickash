@@ -87,9 +87,11 @@ public class ProfileFragment extends Fragment {
         if (getArguments().getString("userId") == null) {
             userId = currentUser.getUid();
             emailAddress.setText(currentUser.getEmail());
+        } else {
+            userId = getArguments().getString("userId");
+            //The id of the job the employer is looking to hire this user for.
+            jobId = getArguments().getString("jobId");
         }
-        username.setText(currentUser.getDisplayName());
-        emailAddress.setText(currentUser.getEmail());
         errorText.setVisibility(View.GONE);
 
         // Display and connect job buttons if the profile belongs to the user
@@ -117,6 +119,13 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
+            analyticsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateAnalytics();
+                }
+            });
+
             jobsSavedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -124,9 +133,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
-            userId = getArguments().getString("userId");
-            //The id of the job the employer is looking to hire this user for.
-            jobId = getArguments().getString("jobId");
+            userId = getArguments().getString("UserID");
         }
         username.setText(currentUser.getDisplayName());
         errorText.setVisibility(View.GONE);

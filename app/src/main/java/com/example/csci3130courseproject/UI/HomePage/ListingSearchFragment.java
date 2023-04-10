@@ -24,8 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.csci3130courseproject.R;
+import com.example.csci3130courseproject.UI.ViewJobEmployer.IJobCallback;
+import com.example.csci3130courseproject.UI.ViewJobEmployer.IUserCallback;
 import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.JobRecommendation;
 import com.example.csci3130courseproject.Utils.ObtainingLocation;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.UserObject;
@@ -46,19 +49,30 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import kotlinx.coroutines.Job;
+
 /**
  * Handles the sign-up process
  */
 public class ListingSearchFragment extends Fragment {
-    private FirebaseDatabase database;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference jobsDatabaseReference;
     private DatabaseReference databaseReference;
     private DatabaseReference userRef;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference jobRef = database.getReference("jobs");
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
     private LinearLayout cardPreviewList;
     private SearchView searchBar;
     private Spinner filterSpinner;
     private EditText filterInput;
+    private boolean hasBeenNotified;
+    private UserObject userO;
+    private String jobTitle;
+    private HashMap<String, Boolean> jobsTakenIds = new HashMap<>();
+    private ArrayList<JobPostingObject> allJobs = new ArrayList<>();
+    private ArrayList<String[]> jobsTakenTitles = new ArrayList<>();
+    private ArrayList<String[]> allJobTitles = new ArrayList<>();
 
     public ListingSearchFragment() {
 
@@ -68,6 +82,7 @@ public class ListingSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_listing_search, container, false);
     }
 
@@ -78,11 +93,27 @@ public class ListingSearchFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         userRef = database.getReference("users");
         databaseReference = database.getReference("jobs");
+        jobsDatabaseReference = database.getReference("jobs");
         filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
         filterInput = (EditText)getView().findViewById(R.id.filterInput);
 
+        if(!hasBeenNotified) {
+            setUserObject(new IUserCallback() {
+                @Override
+                public void onGetUserSuccess(UserObject user) {
+                    String jobRecommended = populateJobs();
+                    String message = String.format("%s", jobRecommended);
+                    if(!message.equals("None")){
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    }
+                    setHasBeenNotified(true);
+                }
+            });
+        }
+
+
         // TODO: Replace hardcoded query with a spinner read
-        Query query = databaseReference.orderByChild("salary");
+        Query query = jobsDatabaseReference.orderByChild("salary");
 
         // Retrieves all Listing records from firebase and
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -93,6 +124,7 @@ public class ListingSearchFragment extends Fragment {
 
                 for (DataSnapshot listingSnapshot: dataSnapshot.getChildren()) {
                     createListingPreview(listingSnapshot);
+                    allJobs.add(listingSnapshot.getValue(JobPostingObject.class));
                 }
 
                 updateList();
@@ -271,6 +303,10 @@ public class ListingSearchFragment extends Fragment {
         return(filterSpinner.getSelectedItem().toString());
     }
 
+    private void setHasBeenNotified(Boolean b) {
+        this.hasBeenNotified = b;
+    }
+
     /**
      * Determines if the job posting was posted by the current user
      * @param employerID String representation of query used to filter
@@ -374,6 +410,84 @@ public class ListingSearchFragment extends Fragment {
             // Adding view to list layout
             cardPreviewList.addView((View)listingReference[1]);
         }
+    }
+
+    public void setUserObject(IUserCallback callback) {
+        String Uid = user.getUid();
+        database.getReference("users").child(Uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    Log.w("FetchUser", Uid);
+                    userO = task.getResult().getValue(UserObject.class);
+                    userO.setUserId(Uid);
+                    if (user != null) {
+                        callback.onGetUserSuccess(userO);
+                    } else {
+                        Log.w("UserError",  "User is null");
+                    }
+                }
+            }
+        });
+    }
+
+    public String populateJobs() {
+        if (userO == null) {
+            System.out.println("User object is null");
+            return "None";
+        } else {
+            for(JobPostingObject job: allJobs) {
+                allJobTitles.add(job.getJobTitle().split(" ", 2));
+                if(job.getJobEmployeeID().equals(user.getUid())){
+                    jobsTakenTitles.add(job.getJobTitle().split(" ", 2));
+                }
+            }
+            String message = recommendJob();
+            return message;
+        }
+    }
+
+    public String recommendJob() {
+        String recommendation;
+        if(jobsTakenTitles == null || allJobTitles == null) {
+            System.out.println("Arrays are empty");
+            return "";
+        }
+        for (String[] title: jobsTakenTitles) {
+            String firstWord = title[0];
+            for (String[] titleCompare: allJobTitles) {
+                String firstWordToCompare = titleCompare[0];
+                if(firstWord.equals(firstWordToCompare)){
+                    if(title.length > 1) {
+                        recommendation = String.format("%s %s is similar to other jobs you have done and is available to apply to!", firstWord, title[1]);
+                        return recommendation;
+                    } else {
+                        recommendation = String.format("%s is similar to other jobs you have done and is available to apply to!", firstWord);
+                        return recommendation;
+                    }
+
+                }
+            }
+        }
+        recommendation = "None";
+        return recommendation;
+    }
+
+    public void setUserObject(UserObject u) {
+        this.userO = u;
+    }
+
+    private void getJob(IJobCallback callback, String jobId){
+        database.getReference("jobs").child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    JobPostingObject job = task.getResult().getValue(JobPostingObject.class);
+                    Log.w("GotJob", job.getJobTitle());
+                    callback.onGetJobSuccess(job);
+                }
+            }
+        });
     }
 
     private String getLocation(JobLocation location) {

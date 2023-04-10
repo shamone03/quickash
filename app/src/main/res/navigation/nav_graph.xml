@@ -45,6 +45,10 @@
         <action
             android:id="@+id/action_listingSearchFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
+        <argument
+            android:name="signIn"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/createListingFragment"
