@@ -5,6 +5,7 @@
     android:id="@+id/fragment_view_job_employer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme"
     tools:context=".UI.ViewJobEmployer.ViewJobEmployer">
 
     <ScrollView
@@ -22,29 +23,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="112dp"
+                    android:layout_height="184dp"
+                    android:layout_marginTop="52dp"
+                    app:layout_constraintHeight_percent="0.3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.8"
+                    app:srcCompat="@drawable/logo"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="16dp" />
+
                 <TextView
                     android:id="@+id/ViewJobEmployerJobTitle"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="55dp"
-                    android:layout_marginTop="145dp"
-                    android:layout_marginEnd="55dp"
+                    android:layout_width="239dp"
+                    android:layout_height="33dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_marginEnd="16dp"
                     android:text="Example Job"
+                    android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/ViewJobEmployerJobDescription"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="45dp"
+                    android:layout_width="236dp"
+                    android:layout_height="97dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="40dp"
                     android:clickable="false"
                     android:ems="10"
                     android:fontFamily="sans-serif"
@@ -55,8 +68,7 @@
                     android:textColor="#404040"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ViewJobEmployerJobTitle" />
+                    app:layout_constraintStart_toEndOf="@+id/imageView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,6 +83,8 @@
                     android:layout_marginEnd="25dp"
                     android:layout_marginBottom="5dp"
                     android:text="Save"
+                    android:backgroundTint="#1C085D"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -81,6 +95,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:text="Complete Job"
+                    android:backgroundTint="#1C085D"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/ViewJobEmployerSaveButton"
                     app:layout_constraintHorizontal_bias="0.18"
@@ -92,21 +108,22 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="563dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="65dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="17dp"
                     android:layout_marginEnd="253dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="516dp"
                     android:fontFamily="sans-serif-black"
                     android:text="Job Applicants"
                     android:textColor="#000000"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.662"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
