@@ -382,7 +382,7 @@ public class ListingSearchFragment extends Fragment {
             List<Address> addresses = geocoder.getFromLocation(location.getLat(), location.getLon(), 1);
             return addresses.get(0).getCountryName() + " " + addresses.get(0).getLocality() + " " + addresses.get(0).getPostalCode();
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Error getting location name", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "Error getting location name", Toast.LENGTH_SHORT).show();
         }
         return "Location unavailable";
     }
