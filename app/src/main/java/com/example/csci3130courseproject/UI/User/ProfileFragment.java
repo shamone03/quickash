@@ -69,12 +69,10 @@ public class ProfileFragment extends Fragment {
         jobsTakenButton = (Button)requireView().findViewById(R.id.showJobsTaken);
         jobsCreatedButton = (Button)requireView().findViewById(R.id.showJobsCreated);
         jobsSavedButton = (Button)requireView().findViewById(R.id.showJobsSaved);
-        analyticsButton = (Button)requireView().findViewById(R.id.showAnalytics);
         username = (TextView)requireView().findViewById(R.id.profileUsername);
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
         userRating = (TextView)requireView().findViewById(R.id.rating);
-        ratingButton = requireView().findViewById(R.id.ratingButton);
 
 
         // If no UserID, assume we're viewing our own profile
@@ -107,20 +105,6 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     populateJobs(true,false, false);
-                }
-            });
-
-            analyticsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateAnalytics();
-                }
-            });
-
-            ratingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
                 }
             });
 
@@ -165,13 +149,6 @@ public class ProfileFragment extends Fragment {
                                 @Override
                                 public void onClick(View view) {
                                     populateJobs(true,false, false);
-                                }
-                            });
-
-                            analyticsButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    populateAnalytics();
                                 }
                             });
 
