@@ -79,7 +79,7 @@
     <fragment
         android:id="@+id/editUserProfileFragment"
         android:name="com.example.csci3130courseproject.UI.User.EditUserProfileFragment"
-        android:label="fragment_edit_user_profile"
+        android:label="Edit Profile"
         tools:layout="@layout/fragment_edit_user_profile">
     <action
         android:id="@+id/action_editUserProfile_to_userProfileFragment"
