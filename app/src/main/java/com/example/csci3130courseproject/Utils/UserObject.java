@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -30,6 +31,8 @@ public class UserObject {
 
     /** Contains the jobId of all jobs taken by the user.*/
     private HashMap<String, Boolean> jobsTaken;
+
+    private HashMap<String, Boolean> jobsSaved;
 
     private double employerRating;
 
@@ -104,6 +107,13 @@ public class UserObject {
         return jobsTaken;
     }
 
+    public HashMap<String, Boolean> getJobsSaved() {
+        return jobsSaved;
+    }
+
+    public void setJobsSaved(HashMap<String, Boolean> jobsSaved) {
+        this.jobsSaved = jobsSaved;
+    }
 
     public double getEmployeeRating() {
         return employeeRating;
