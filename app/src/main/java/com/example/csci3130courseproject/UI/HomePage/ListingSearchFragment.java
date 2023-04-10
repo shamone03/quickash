@@ -233,7 +233,8 @@ public class ListingSearchFragment extends Fragment {
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             UserObject currentUser = task.getResult().getValue(UserObject.class);
                             if (currentUser != null) {
-                                if (currentUser.getJobsTaken().containsKey(listingSnapshot.getKey())) {
+                                if (currentUser.getJobsTaken() != null) {
+                                    currentUser.getJobsTaken().containsKey(listingSnapshot.getKey());
                                     applyButton.setText("Unapply");
                                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
                                 }

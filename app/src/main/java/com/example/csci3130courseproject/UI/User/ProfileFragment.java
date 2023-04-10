@@ -124,7 +124,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
-            userId = getArguments().getString("UserID");
+            userId = getArguments().getString("userId");
         }
         username.setText(currentUser.getDisplayName());
         errorText.setVisibility(View.GONE);
