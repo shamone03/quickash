@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
@@ -40,7 +41,7 @@ public class ViewJobEmployer extends UserListListener {
     LinearLayout applicantsContainer;
     // Contains reference to applicantButton [0] and user [1]
     ArrayList<Object[]> jobApplicants = new ArrayList<>();
-    ArrayList<UserObject> userApplied = new ArrayList<>();
+    HashMap<String, UserObject> userApplied = new HashMap<>();
 
     FirebaseDatabase database;
     DatabaseReference userReference;
@@ -88,6 +89,15 @@ public class ViewJobEmployer extends UserListListener {
 
     }
 
+    private String getUserId(UserObject applicant){
+        for (String uid : userApplied.keySet()){
+            if (applicant == userApplied.get(uid)){
+                return uid;
+            }
+        }
+        return "Not found";
+    }
+
     private void createApplicantPreview(UserObject applicant){
         // currentApplicant = applicantSnapshot.getValue(UserObject.class);
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
@@ -95,7 +105,6 @@ public class ViewJobEmployer extends UserListListener {
         applicantsContainer.addView(jobApplicantPreview);
         Object[] newPreview = {applicant, jobApplicantPreview};
         Log.w("GotUser", "Username: " + applicant.getUsername());
-        Log.w("JobApplicantPreview", "Applicants Button: " + jobApplicantPreview.toString());
         jobApplicants.add(newPreview);
     }
 
@@ -116,6 +125,9 @@ public class ViewJobEmployer extends UserListListener {
             @Override
             public void onClick(View view) {
                 //TODO: Move to user profile & acceptance button
+                Bundle bundle = new Bundle();
+                bundle.putString("UserID", getUserId(applicant));
+                Navigation.findNavController(view).navigate(R.id.action_viewJobEmployer_to_userProfileFragment, bundle);
             }
         });
 
@@ -146,8 +158,8 @@ public class ViewJobEmployer extends UserListListener {
             return;
         }
         clearApplicantsListView();
-        for (UserObject user : userApplied){
-            createApplicantPreview(user);
+        for (String uid : userApplied.keySet()){
+            createApplicantPreview(userApplied.get(uid));
         }
         for (Object[] e : jobApplicants){
             loadApplicantInfo((UserObject) e[0], (View) e[1]);
@@ -169,7 +181,7 @@ public class ViewJobEmployer extends UserListListener {
     }
 
     @Override
-    public void updateList(ArrayList<UserObject> updatedList) {
+    public void updateList(HashMap<String, UserObject> updatedList) {
         userApplied = updatedList;
         populateApplicantListView();
     }

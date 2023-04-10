@@ -91,5 +91,9 @@
         android:id="@+id/viewJobEmployer"
         android:name="com.example.csci3130courseproject.UI.ViewJobEmployer.ViewJobEmployer"
         android:label="fragment_view_job_employer"
-        tools:layout="@layout/fragment_view_job_employer" />
+        tools:layout="@layout/fragment_view_job_employer" >
+        <action
+            android:id="@+id/action_viewJobEmployer_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
 </navigation>

@@ -10,11 +10,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 public class UsersList implements UserListener{
 
-    ArrayList<UserObject> users = new ArrayList<>();
+    HashMap<String, UserObject> users = new HashMap<>();
     UserListListener client;
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static DatabaseReference userDatabase = database.getReference("users");
@@ -27,7 +28,7 @@ public class UsersList implements UserListener{
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (task.isSuccessful() && task.isComplete()) {
-                        users.add(task.getResult().getValue(UserObject.class));
+                        users.put(uid, task.getResult().getValue(UserObject.class));
                         updateUserList();
                     }
                 }
