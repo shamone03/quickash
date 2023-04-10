@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Title"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="10pt"/>
 
@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Hours: 0"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
     <TextView
@@ -37,8 +37,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Salary: 0"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
     <TextView
@@ -47,8 +47,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Employees: 0"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
     <TextView
@@ -57,8 +57,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Paid: 0"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
 </LinearLayout>

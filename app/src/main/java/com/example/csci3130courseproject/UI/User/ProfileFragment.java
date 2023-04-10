@@ -46,10 +46,10 @@ public class ProfileFragment extends Fragment {
     private Button editInformationButton;
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
+    private Button paymentHistoryButton;
     private Button jobsSavedButton;
     private Button acceptApplicantButton;
     private TextView username;
-    private TextView emailAddress;
     private TextView errorText;
     private TextView userRating;
     private LinearLayout jobsList;
@@ -72,10 +72,10 @@ public class ProfileFragment extends Fragment {
         editInformationButton = (Button)requireView().findViewById(R.id.editProfile);
         jobsTakenButton = (Button)requireView().findViewById(R.id.showJobsTaken);
         jobsCreatedButton = (Button)requireView().findViewById(R.id.showJobsCreated);
+        paymentHistoryButton = (Button)requireView().findViewById(R.id.showAnalytics);
         jobsSavedButton = (Button)requireView().findViewById(R.id.showJobsSaved);
         acceptApplicantButton = (Button)requireView().findViewById(R.id.acceptApplicantButton);
         username = (TextView)requireView().findViewById(R.id.profileUsername);
-        emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
         errorText = (TextView)requireView().findViewById(R.id.errorText);
         userRating = (TextView)requireView().findViewById(R.id.rating);
 
@@ -84,7 +84,6 @@ public class ProfileFragment extends Fragment {
         // If no UserID, assume we're viewing our own profile
         if (getArguments().getString("userId") == null) {
             userId = currentUser.getUid();
-            emailAddress.setText(currentUser.getEmail());
         } else {
             userId = getArguments().getString("userId");
             //The id of the job the employer is looking to hire this user for.
@@ -117,6 +116,13 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
+            paymentHistoryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateAnalytics();
+                }
+            });
+
             jobsSavedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -142,7 +148,6 @@ public class ProfileFragment extends Fragment {
                     if (targetUser != null) {
                         // Display and connect job buttons if the profile belongs to the user
                         if (isOwnProfile()) {
-                            emailAddress.setText(currentUser.getEmail());
                             acceptApplicantLayout.setVisibility(View.GONE);
                             populateJobs(true,true, false);
 
@@ -174,7 +179,6 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                         } else {
-                            emailAddress.setText(" ");
                             editInformationButton.setVisibility(View.GONE);
                             buttonsLayout.setVisibility(View.GONE);
                             populateAnalytics();
