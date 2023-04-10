@@ -1,5 +1,7 @@
 package com.example.csci3130courseproject.UI.HomePage;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -7,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +25,10 @@ import android.widget.Toast;
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.UI.ViewJobEmployer.IJobCallback;
 import com.example.csci3130courseproject.UI.ViewJobEmployer.IUserCallback;
+import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
 import com.example.csci3130courseproject.Utils.JobRecommendation;
+import com.example.csci3130courseproject.Utils.ObtainingLocation;
 import com.example.csci3130courseproject.Utils.Permissions;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +44,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import kotlinx.coroutines.Job;
@@ -142,6 +150,23 @@ public class ListingSearchFragment extends Fragment {
                 return false;
             }
         });
+
+        filterInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                updateList();
+            }
+        });
     }
 
     /**
@@ -175,17 +200,22 @@ public class ListingSearchFragment extends Fragment {
                     TextView hours = listingPreview.findViewById(R.id.hoursLabel);
                     TextView salary = listingPreview.findViewById(R.id.salaryLabel);
                     TextView employer = listingPreview.findViewById(R.id.employerLabel);
+                    TextView locationName = listingPreview.findViewById(R.id.locationLabel);
 
                     if (jobPosting != null) {
                         title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
                         hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
                         salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
                         employer.setText(String.format("Employer ID: %s", employerObject.getUsername()));
+                        if (jobPosting.getJobLocation() != null) {
+                            locationName.setText(String.format("Location: %s", JobLocation.getLocationName(getContext(), jobPosting.getJobLocation())));
+                        }
                     } else {
                         title.setText("Title: NULL");
                         hours.setText("Hours: NULL");
                         salary.setText("Salary: NULL");
                         employer.setText("Employer: NULL");
+                        Log.d("LOCATION", jobPosting.getJobTitle() + " is null");
                     }
 
                     // Connecting button event listener to apply the user to a job listing
@@ -266,12 +296,13 @@ public class ListingSearchFragment extends Fragment {
         return (lowerBounds < 0 || salary >= lowerBounds);
     }
 
-    public static boolean filterLocation(Location jobLocation, double distanceLimit) {
+    public boolean filterLocation(Location jobLocation, double distanceLimit) {
         if (jobLocation == null) {
             // The job has no location because it is a remote listing, and so cannot be filtered
             return true;
         } else {
-            return (jobLocation.distanceTo(jobLocation) < distanceLimit);
+            Location userLocation = (new ObtainingLocation(getContext())).getLocation(getContext());
+            return (userLocation.distanceTo(jobLocation) < distanceLimit);
         }
     }
 
@@ -319,7 +350,11 @@ public class ListingSearchFragment extends Fragment {
                     }
                 } else if (getFilter().equals("Distance")) {
                     try {
-                        if (filterLocation(listing.getJobLocation().getConvertedLocation(),
+                        Location jobLocation = new Location("");
+                        jobLocation.setAccuracy(listing.getJobLocation().getAccuracy());
+                        jobLocation.setLongitude(listing.getJobLocation().getLon());
+                        jobLocation.setLatitude(listing.getJobLocation().getLat());
+                        if (filterLocation(jobLocation,
                                 Double.parseDouble(filterInput.getText().toString())) == false) {
                             continue;
                         }
@@ -410,5 +445,16 @@ public class ListingSearchFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private String getLocation(JobLocation location) {
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLat(), location.getLon(), 1);
+            return addresses.get(0).getCountryName() + " " + addresses.get(0).getLocality() + " " + addresses.get(0).getPostalCode();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error getting location name", Toast.LENGTH_LONG).show();
+        }
+        return "Location unavailable";
     }
 }
