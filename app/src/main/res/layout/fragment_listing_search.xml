@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.HomePage.ListingSearchFragment"
     android:orientation="vertical"
-    android:id="@+id/searchPage">
+    tools:context=".UI.HomePage.ListingSearchFragment">
 
     <!--suppress AndroidUnresolvableTag -->
     <SearchView
         android:id="@+id/searchBar"
-        android:layout_width="411dp"
+        android:layout_width="416dp"
         android:layout_height="66dp"
-        android:queryHint="Search"
-        android:clickable="true"
         android:layout_marginBottom="5dp"
-        android:focusable="true">
-    </SearchView>
+        android:background="@android:drawable/divider_horizontal_textfield"
+        android:backgroundTint="@color/theme"
+        android:clickable="true"
+        android:focusable="true"
+        android:foregroundTint="@color/theme"
+        android:queryHint="Search"></SearchView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,10 +40,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/black"
             android:ems="10"
+            android:hint="Enter limit"
             android:inputType="textPersonName"
-            android:text=""
-            android:hint="Enter limit"/>
+            android:text="" />
     </LinearLayout>
 
     <ScrollView
@@ -50,17 +52,17 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
+
         <LinearLayout
             android:id="@+id/listingCardList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:divider="@drawable/empty_divider"
             android:orientation="vertical"
             android:showDividers="middle"
-            android:divider="@drawable/empty_divider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
     </ScrollView>
 </LinearLayout>

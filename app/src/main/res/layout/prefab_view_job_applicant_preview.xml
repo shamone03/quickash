@@ -43,7 +43,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginBottom="15dp"
         android:text="John Doe"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
         android:translationZ="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/jobApplicantButton"
         app:layout_constraintStart_toEndOf="@+id/jobApplicantAvatar"
@@ -57,7 +57,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="5dp"
         android:text="Employee Rating:"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
         android:translationZ="2dp"
         app:layout_constraintStart_toEndOf="@+id/jobApplicantAvatar"
         app:layout_constraintTop_toBottomOf="@+id/jobApplicantName" />
