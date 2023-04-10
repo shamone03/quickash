@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.csci3130courseproject.Utils.JobLocation;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
@@ -94,6 +95,10 @@ public class CreateListingFragment extends Fragment {
                 jobPostingObject.setPriority(getJobPriority());
 
                 Location loc = (new ObtainingLocation(getContext())).getLocation(getContext());
+                if (loc == null) {
+                    Toast.makeText(getContext(), "Error getting location, check if location is on", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 jobPostingObject.setJobLocation(new JobLocation(loc));
 
                 DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").push();
