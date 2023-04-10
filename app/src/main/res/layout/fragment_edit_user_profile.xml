@@ -140,27 +140,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Credit_Card_Num" />
 
-        android:text="CCV" />
+
     <EditText
         android:id="@+id/Expire"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textSize="14sp"
         android:layout_weight="1"
-        android:text="Credit Card Expiry Date" />
+        android:text="Credit Card Expiry Date"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Ccv" />
+
     <Button
         android:id="@+id/submitChangesButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="48dp"
         android:layout_weight="1"
         android:backgroundTint="#1C085D"
         android:text="Submit Changes"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Ccv" />
 
@@ -181,10 +184,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="96dp"
-        android:layout_marginTop="512dp"
+        android:layout_marginTop="572dp"
         android:layout_marginEnd="97dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.8"
