@@ -101,7 +101,7 @@
     <fragment
         android:id="@+id/viewJobEmployer"
         android:name="com.example.csci3130courseproject.UI.ViewJobEmployer.ViewJobEmployer"
-        android:label="fragment_view_job_employer"
+        android:label="View Job"
         tools:layout="@layout/fragment_view_job_employer" >
         <action
             android:id="@+id/action_viewJobEmployer_to_userRatingFragment"

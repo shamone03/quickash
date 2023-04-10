@@ -58,8 +58,8 @@
         android:layout_height="wrap_content"
         android:text=""
         android:hint="Location:"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="8pt"/>
 
     <LinearLayout
