@@ -205,10 +205,13 @@ public class ListingSearchFragment extends Fragment {
                                     applyButton.setText("Unapply");
                                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
                                 }
-                                if (currentUser.getJobsSaved().containsKey(listingSnapshot.getKey())) {
-                                    saveButton.setText("Unsave");
-                                    saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+                                if (currentUser.getJobsSaved() != null) {
+                                    if (currentUser.getJobsSaved().containsKey(listingSnapshot.getKey())) {
+                                        saveButton.setText("Unsave");
+                                        saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+                                    }
                                 }
+
                             }
                         }
                     });
@@ -231,6 +234,22 @@ public class ListingSearchFragment extends Fragment {
                                 Map<String, Object> val = new HashMap<>();
                                 val.put(user.getUid(), false);
                                 jobRef.child("employees").updateChildren(val);
+
+                            }
+                        }
+                    });
+
+                    saveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (saveButton.getText().toString().equals("Save")) {
+                                saveButton.setText("Unsave");
+                                saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+
+                                DatabaseReference jobsSavedRef = userRef.child("jobsSaved");
+                                Map<String, Object> savedJob = new HashMap<>();
+                                savedJob.put(listingSnapshot.getKey(), false);
+                                jobsSavedRef.updateChildren(savedJob);
 
                             }
                         }
