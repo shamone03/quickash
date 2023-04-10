@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
@@ -181,6 +182,7 @@ public class ListingSearchFragment extends Fragment {
             return;
         }
 
+
         userRef.child(jobPosting.getJobPoster()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> employerTask) {
@@ -220,6 +222,31 @@ public class ListingSearchFragment extends Fragment {
 
                     // Connecting button event listener to apply the user to a job listing
                     AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+                    AppCompatButton saveButton = listingPreview.findViewById(R.id.saveButton);
+
+
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                    DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
+
+                    userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            UserObject currentUser = task.getResult().getValue(UserObject.class);
+                            if (currentUser != null) {
+                                if (currentUser.getJobsTaken().containsKey(listingSnapshot.getKey())) {
+                                    applyButton.setText("Unapply");
+                                    applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+                                }
+                                if (currentUser.getJobsSaved() != null) {
+                                    if (currentUser.getJobsSaved().containsKey(listingSnapshot.getKey())) {
+                                        saveButton.setText("Unsave");
+                                        saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+                                    }
+                                }
+
+                            }
+                        }
+                    });
                     applyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -239,6 +266,22 @@ public class ListingSearchFragment extends Fragment {
                                 Map<String, Object> val = new HashMap<>();
                                 val.put(user.getUid(), false);
                                 jobRef.child("employees").updateChildren(val);
+
+                            }
+                        }
+                    });
+
+                    saveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (saveButton.getText().toString().equals("Save")) {
+                                saveButton.setText("Unsave");
+                                saveButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+
+                                DatabaseReference jobsSavedRef = userRef.child("jobsSaved");
+                                Map<String, Object> savedJob = new HashMap<>();
+                                savedJob.put(listingSnapshot.getKey(), false);
+                                jobsSavedRef.updateChildren(savedJob);
 
                             }
                         }

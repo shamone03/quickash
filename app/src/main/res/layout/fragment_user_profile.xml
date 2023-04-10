@@ -19,7 +19,7 @@
     <TextView
         android:id="@+id/rating"
         android:layout_width="75dp"
-        android:layout_height="40dp"
+        android:layout_height="75dp"
         android:layout_gravity="left"
         android:layout_marginLeft="5dp"
         android:typeface="sans"
@@ -90,7 +90,7 @@
 
         <Button
             android:id="@+id/showJobsTaken"
-            android:layout_width="wrap_content"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Jobs Taken" />
@@ -103,7 +103,7 @@
 
         <Button
             android:id="@+id/showJobsCreated"
-            android:layout_width="wrap_content"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Jobs Created" />
@@ -116,7 +116,7 @@
 
         <Button
             android:id="@+id/showAnalytics"
-            android:layout_width="wrap_content"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Analytics"
@@ -140,6 +140,20 @@
         android:autoSizeTextType="uniform"
         android:text="Accept Applicant"
         android:visibility="visible" />
+
+
+        <FrameLayout
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/showJobsSaved"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Jobs Saved" />
 
     </LinearLayout>
 

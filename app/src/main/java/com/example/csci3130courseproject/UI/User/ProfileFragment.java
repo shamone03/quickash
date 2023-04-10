@@ -46,6 +46,7 @@ public class ProfileFragment extends Fragment {
     private Button editInformationButton;
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
+    private Button jobsSavedButton;
     private Button analyticsButton;
     private Button acceptApplicantButton;
     private TextView username;
@@ -72,6 +73,7 @@ public class ProfileFragment extends Fragment {
         editInformationButton = (Button)requireView().findViewById(R.id.editProfile);
         jobsTakenButton = (Button)requireView().findViewById(R.id.showJobsTaken);
         jobsCreatedButton = (Button)requireView().findViewById(R.id.showJobsCreated);
+        jobsSavedButton = (Button)requireView().findViewById(R.id.showJobsSaved);
         analyticsButton = (Button)requireView().findViewById(R.id.showAnalytics);
         acceptApplicantButton = (Button)requireView().findViewById(R.id.acceptApplicantButton);
         username = (TextView)requireView().findViewById(R.id.profileUsername);
@@ -92,6 +94,55 @@ public class ProfileFragment extends Fragment {
         }
         errorText.setVisibility(View.GONE);
 
+        // Display and connect job buttons if the profile belongs to the user
+        if (isOwnProfile()) {
+            populateJobs(true,true, false);
+
+            editInformationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editInformation(view);
+                }
+            });
+
+            jobsTakenButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateJobs(true,true, false);
+                }
+            });
+
+            jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateJobs(true,false, false);
+                }
+            });
+
+            analyticsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateAnalytics();
+                }
+            });
+
+            ratingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
+                }
+            });
+
+            jobsSavedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateJobs(true, false, true);
+                }
+            });
+        } else {
+            userId = getArguments().getString("UserID");
+        }
+
         userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -108,6 +159,7 @@ public class ProfileFragment extends Fragment {
                             emailAddress.setText(currentUser.getEmail());
                             acceptApplicantLayout.setVisibility(View.GONE);
                             populateJobs(true,true);
+                            populateJobs(true,true, false);
 
                             editInformationButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -119,14 +171,14 @@ public class ProfileFragment extends Fragment {
                             jobsTakenButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    populateJobs(true,true);
+                                    populateJobs(true,true, false);
                                 }
                             });
 
                             jobsCreatedButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    populateJobs(true,false);
+                                    populateJobs(true,false, false);
                                 }
                             });
 
@@ -134,6 +186,13 @@ public class ProfileFragment extends Fragment {
                                 @Override
                                 public void onClick(View view) {
                                     populateAnalytics();
+                                }
+                            });
+
+                            jobsSavedButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    populateJobs(true, false, true);
                                 }
                             });
                         } else {
@@ -207,7 +266,7 @@ public class ProfileFragment extends Fragment {
      * @param history
      * @param taken
      */
-    private void populateJobs(boolean history, boolean taken) {
+    private void populateJobs(boolean history, boolean taken, boolean saved) {
         clearJobList();
         boolean shownJobs = false;
         userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -233,6 +292,9 @@ public class ProfileFragment extends Fragment {
                             jobIdList = (HashMap<String, Boolean>) profileUser.getJobsTaken();
                         } else {
                             jobIdList = (HashMap<String, Boolean>) profileUser.getJobPostings();
+                        }
+                        if (saved) {
+                            jobIdList = (HashMap<String, Boolean>) profileUser.getJobsSaved();
                         }
                         // Safe guard
                         if (jobIdList == null)
@@ -307,6 +369,7 @@ public class ProfileFragment extends Fragment {
                     TextView salary = listingPreview.findViewById(R.id.salaryLabel);
                     TextView employer = listingPreview.findViewById(R.id.employerLabel);
                     TextView locationName = listingPreview.findViewById(R.id.locationLabel);
+                    listingPreview.findViewById(R.id.saveButton).setVisibility(View.GONE);
 
                     // Setting job card text
                     if (jobPosting != null) {
