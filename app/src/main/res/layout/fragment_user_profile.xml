@@ -71,7 +71,8 @@
             android:layout_weight="1"
             android:text="Jobs Taken"
             android:backgroundTint="#1C085D"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
 
         <FrameLayout
             android:layout_width="5dp"
@@ -85,7 +86,8 @@
             android:layout_weight="1"
             android:text="Jobs Created"
             android:backgroundTint="#1C085D"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
 
         <FrameLayout
             android:layout_width="5dp"
@@ -95,12 +97,14 @@
 
         <Button
             android:id="@+id/showAnalytics"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Payments"
-            android:autoSizeTextType="uniform"
-            android:visibility="visible" />
+            android:backgroundTint="#1C085D"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
 
         <FrameLayout
             android:layout_width="5dp"
@@ -114,7 +118,8 @@
             android:layout_weight="1"
             android:text="Jobs Saved"
             android:backgroundTint="#1C085D"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
 
     </LinearLayout>
     <LinearLayout
