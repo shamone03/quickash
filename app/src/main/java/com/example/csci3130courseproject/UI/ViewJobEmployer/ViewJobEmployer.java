@@ -1,5 +1,8 @@
 package com.example.csci3130courseproject.UI.ViewJobEmployer;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,18 +15,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.PaymentProcessor;
 import com.example.csci3130courseproject.Utils.UserObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,9 +48,11 @@ public class ViewJobEmployer extends UserListListener {
     UsersList userListGetter = new UsersList();
     String jobID;
     JobPostingObject currentJob;
+    UserObject employeeObject;
+    UserObject employerObject;
     HashMap<String, Boolean> applicants;
-
     Button saveEdit;
+    Button completeJobButton;
     EditText jobDescription;
     TextView jobTitle, applicantName;
     LinearLayout applicantsContainer;
@@ -45,9 +62,16 @@ public class ViewJobEmployer extends UserListListener {
 
     FirebaseDatabase database;
     DatabaseReference userReference;
+    PaymentProcessor paymentProcessor;
 
     // required empty constructor
     public ViewJobEmployer() { }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        activityIntentLauncher = initializeActivityLauncher();
+    }
 
     @Nullable
     @Override
@@ -68,6 +92,13 @@ public class ViewJobEmployer extends UserListListener {
         jobTitle = (TextView) getView().findViewById(R.id.ViewJobEmployerJobTitle);
         jobDescription = (EditText) getView().findViewById(R.id.ViewJobEmployerJobDescription);
         saveEdit = (Button) getView().findViewById(R.id.ViewJobEmployerSaveButton);
+        completeJobButton = (Button) getView().findViewById(R.id.ViewJobEmployerCompleteButton);
+        completeJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showConfirmationMessage(view);
+            }
+        });
         saveEdit.setEnabled(false);
         getJob(new IJobCallback() {
             @Override
@@ -82,11 +113,7 @@ public class ViewJobEmployer extends UserListListener {
                 populateApplicantListView();
             }
         });
-
-
         // TODO: OrderByRating
-
-
     }
 
     private String getUserId(UserObject applicant){
@@ -115,11 +142,9 @@ public class ViewJobEmployer extends UserListListener {
         TextView applicantRating = jobApplicantPreview.findViewById(R.id.jopApplicantRating);
         Button applicantButton = jobApplicantPreview.findViewById(R.id.jobApplicantButton);
 
-
         profilePicture.setImageURI(Uri.parse(""));
         applicantName.setText(applicant.getUsername());
         applicantRating.setText(String.format("Employee Rating: %.2f", applicant.getEmployeeRating()));
-
 
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +160,7 @@ public class ViewJobEmployer extends UserListListener {
 
 
     private void getJob(IJobCallback callback){
-        database.getReference("jobs").child(jobID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        database.getReference("jobs").child(jobId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){

@@ -16,33 +16,6 @@
         android:layout_marginHorizontal="5dp"
         android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="left"
-        android:layout_marginLeft="5dp"
-        />
-
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="5dp"
-        android:text="Edit Profile"
-        android:layout_marginLeft="200dp"
-        android:visibility="visible" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="5dp"
-        android:orientation="horizontal">
-
         <ImageView
             android:id="@+id/userProfileImage"
             android:layout_width="75dp"
@@ -63,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:hint="Username"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/profileEmail"
@@ -71,6 +45,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="email@address.com"/>
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
         </LinearLayout>
 
     </LinearLayout>
@@ -79,29 +61,31 @@
         android:id="@+id/profileButtonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_marginHorizontal="5dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="5dp">
 
         <Button
             android:id="@+id/showJobsTaken"
-            android:layout_width="105dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Jobs Taken" />
+            android:text="Jobs Taken"
+            android:backgroundTint="#1C085D"
+            android:textColor="@color/white"/>
 
         <FrameLayout
             android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-        </FrameLayout>
+            android:layout_weight="1"></FrameLayout>
 
         <Button
             android:id="@+id/showJobsCreated"
-            android:layout_width="105dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Jobs Created" />
+            android:text="Jobs Created"
+            android:backgroundTint="#1C085D"
+            android:textColor="@color/white"/>
 
         <FrameLayout
             android:layout_width="5dp"
@@ -111,27 +95,59 @@
 
         <Button
             android:id="@+id/showAnalytics"
-            android:layout_width="105dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Analytics"
+            android:text="Payments"
             android:autoSizeTextType="uniform"
             android:visibility="visible" />
 
         <FrameLayout
             android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-        </FrameLayout>
+            android:layout_weight="1"></FrameLayout>
 
         <Button
             android:id="@+id/showJobsSaved"
-            android:layout_width="105dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Jobs Saved" />
+            android:text="Jobs Saved"
+            android:backgroundTint="#1C085D"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/applicantButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/acceptApplicantButton"
+            android:layout_width="378dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="#1C085D"
+            android:text="Accept Applicant"
+            android:textColor="@color/white"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/editProfile"
+        android:layout_width="378dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:backgroundTint="#1C085D"
+        android:text="Edit Profile"
+        android:textColor="@color/white"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/errorText"
@@ -164,9 +180,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/ratingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="rating button" />
 </LinearLayout>

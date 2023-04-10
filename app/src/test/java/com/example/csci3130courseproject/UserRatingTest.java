@@ -37,5 +37,4 @@ public class UserRatingTest {
         Mockito.when(rating.updateUserRating(user, 3)).thenReturn(4.0);
         Mockito.verify(rating, Mockito.atLeastOnce()).getUserRating(user);
     }
-
 }
