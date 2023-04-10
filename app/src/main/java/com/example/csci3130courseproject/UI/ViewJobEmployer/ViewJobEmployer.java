@@ -18,7 +18,9 @@ import androidx.annotation.Nullable;
 
 import com.example.csci3130courseproject.R;
 import com.example.csci3130courseproject.Utils.JobPostingObject;
+import com.example.csci3130courseproject.Utils.UserListListener;
 import com.example.csci3130courseproject.Utils.UserObject;
+import com.example.csci3130courseproject.Utils.UsersList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ViewJobEmployer extends Fragment {
+public class ViewJobEmployer extends UserListListener {
+
+    UsersList userListGetter = new UsersList();
     String jobID;
     JobPostingObject currentJob;
     HashMap<String, Boolean> applicants;
@@ -39,6 +43,7 @@ public class ViewJobEmployer extends Fragment {
     LinearLayout applicantsContainer;
     // Contains reference to applicantButton [0] and user [1]
     ArrayList<Object[]> jobApplicants = new ArrayList<>();
+    ArrayList<UserObject> userApplied = new ArrayList<>();
 
     FirebaseDatabase database;
     DatabaseReference userReference;
@@ -52,6 +57,7 @@ public class ViewJobEmployer extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         this.jobID = getArguments().getString("JobID");
+        userListGetter.addListener(this);
         return inflater.inflate(R.layout.fragment_view_job_employer, container, false);
     }
 
@@ -74,7 +80,7 @@ public class ViewJobEmployer extends Fragment {
                 jobTitle.setText(job.getJobTitle());
                 jobDescription.setText(job.getJobDescription());
                 saveEdit.setEnabled(true);
-
+                userListGetter.getUsers(applicants.keySet());
                 populateApplicantListView();
             }
         });
@@ -87,9 +93,16 @@ public class ViewJobEmployer extends Fragment {
 
     private void createApplicantPreview(UserObject applicant){
         // currentApplicant = applicantSnapshot.getValue(UserObject.class);
+        LayoutInflater inflater = LayoutInflater.from(this.getContext());
+        View jobApplicantPreview = inflater.inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, false);
+        applicantsContainer.addView(jobApplicantPreview);
+        Object[] newPreview = {applicant, jobApplicantPreview};
         Log.w("GotUser", "Username: " + applicant.getUsername());
-        View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, true);
+        Log.w("JobApplicantPreview", "Applicants Button: " + jobApplicantPreview.toString());
+        jobApplicants.add(newPreview);
+    }
 
+    private void loadApplicantInfo(UserObject applicant, View jobApplicantPreview){
         // Job Posting Preview Modifiable attributes:
         ImageView profilePicture = jobApplicantPreview.findViewById(R.id.jobApplicantAvatar);
         TextView applicantName = jobApplicantPreview.findViewById(R.id.jobApplicantName);
@@ -105,11 +118,9 @@ public class ViewJobEmployer extends Fragment {
         applicantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Move to user profile & acceptance button
+                //TODO: Move to user profile & acceptance button
             }
         });
-
-        jobApplicants.add(new Object[]{applicant, jobApplicantPreview});
 
     }
 
@@ -127,22 +138,9 @@ public class ViewJobEmployer extends Fragment {
         });
     }
 
-
-    private void getUser(IUserCallback callback, String userID) {
-        database.getReference("users").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()){
-                    Log.w("FetchUser", userID);
-                    UserObject user = task.getResult().getValue(UserObject.class);
-                    if (user != null) {
-                        callback.onGetUserSuccess(user);
-                    } else {
-                        Log.w("UserError",  "User is null");
-                    }
-                }
-            }
-        });
+    private void clearApplicantsListView(){
+        applicantsContainer.removeAllViews();
+        jobApplicants.clear();
     }
 
     public void populateApplicantListView(){
@@ -150,14 +148,12 @@ public class ViewJobEmployer extends Fragment {
             Log.w("Applicants", "Failed to initialize (no applicants or error occurred)");
             return;
         }
-        for (String userid : applicants.keySet()){
-            getUser(new IUserCallback() {
-                @Override
-                public void onGetUserSuccess(UserObject user) {
-
-                    createApplicantPreview(user);
-                }
-            }, userid);
+        clearApplicantsListView();
+        for (UserObject user : userApplied){
+            createApplicantPreview(user);
+        }
+        for (Object[] e : jobApplicants){
+            loadApplicantInfo((UserObject) e[0], (View) e[1]);
         }
     }
 
@@ -175,4 +171,9 @@ public class ViewJobEmployer extends Fragment {
         return jobDescription.getText().toString();
     }
 
+    @Override
+    public void updateList(ArrayList<UserObject> updatedList) {
+        userApplied = updatedList;
+        populateApplicantListView();
+    }
 }
