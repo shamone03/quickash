@@ -124,12 +124,6 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
-            ratingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(view).navigate(R.id.action_userProfileFragment_to_userRatingFragment);
-                }
-            });
 
             jobsSavedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,7 +154,7 @@ public class ProfileFragment extends Fragment {
                         if (isOwnProfile()) {
                             emailAddress.setText(currentUser.getEmail());
                             acceptApplicantLayout.setVisibility(View.GONE);
-                            populateJobs(true,true);
+                            populateJobs(true,true, false);
 
                             editInformationButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
