@@ -367,7 +367,6 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                         }
-
                         // If there are no jobs, let the user know
                         if (shownJobs == false) {
                             setError("You have not paid any employees");

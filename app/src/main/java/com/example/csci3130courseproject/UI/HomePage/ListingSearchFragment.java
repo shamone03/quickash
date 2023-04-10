@@ -235,7 +235,7 @@ public class ListingSearchFragment extends Fragment {
                             if (currentUser != null) {
                                 if (currentUser.getJobsTaken() != null) {
                                     currentUser.getJobsTaken().containsKey(listingSnapshot.getKey());
-                                    applyButton.setText("Unapply");
+                                    applyButton.setText("Apply");
                                     applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
                                 }
                                 if (currentUser.getJobsSaved() != null) {
