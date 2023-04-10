@@ -47,7 +47,6 @@ public class ProfileFragment extends Fragment {
     private Button jobsTakenButton;
     private Button jobsCreatedButton;
     private Button jobsSavedButton;
-    private Button analyticsButton;
     private Button acceptApplicantButton;
     private TextView username;
     private TextView emailAddress;
@@ -74,7 +73,6 @@ public class ProfileFragment extends Fragment {
         jobsTakenButton = (Button)requireView().findViewById(R.id.showJobsTaken);
         jobsCreatedButton = (Button)requireView().findViewById(R.id.showJobsCreated);
         jobsSavedButton = (Button)requireView().findViewById(R.id.showJobsSaved);
-        analyticsButton = (Button)requireView().findViewById(R.id.showAnalytics);
         acceptApplicantButton = (Button)requireView().findViewById(R.id.acceptApplicantButton);
         username = (TextView)requireView().findViewById(R.id.profileUsername);
         emailAddress = (TextView)requireView().findViewById(R.id.profileEmail);
@@ -116,13 +114,6 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     populateJobs(true,false, false);
-                }
-            });
-
-            analyticsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    populateAnalytics();
                 }
             });
 
