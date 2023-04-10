@@ -317,7 +317,61 @@ public class ProfileFragment extends Fragment {
      * Shows the payment history of jobs that the user has completed as an employer
      */
     private void populateAnalytics() {
-        setError("Analytics TBD in iteration 3");
+        clearJobList();
+        userRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            boolean shownJobs = false;
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    setError("There was a problem retrieving your data");
+                }
+                else {
+                    boolean shownJobs = false;
+                    UserObject profileUser = task.getResult().getValue(UserObject.class);
+                    if (profileUser == null) {
+                        setError("Could not find user data");
+                        return;
+                    } else {
+                        //calling getUserRating in here for now since it is stored on userObj. Can probably extract later.
+                        userRating.setText(String.valueOf(profileUser.getEmployeeRating()));
+                        Map<String, Boolean> jobIdList = profileUser.getJobsTaken();
+
+                        // Safe guard
+                        if (jobIdList == null)
+                            return;
+
+                        // Populate jobList with jobs
+                        for (Map.Entry<String, Boolean> job : jobIdList.entrySet()) {
+                            shownJobs = true;
+                            Log.d("ProfileTesting",job.getKey());
+                            jobRef.child(job.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> listingTask) {
+                                    if (!listingTask.isSuccessful()) {
+                                        Log.e("firebase", "Error getting data", listingTask.getException());
+                                    }
+                                    else {
+                                        JobPostingObject jobPosting = listingTask.getResult().getValue(JobPostingObject.class);
+
+                                        if (jobPosting == null) {
+                                            return;
+                                        } else if (jobPosting.getJobComplete() == true) {
+                                            createPaymentCard(jobPosting);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        // If there are no jobs, let the user know
+                        if (shownJobs == false) {
+                            setError("You have not paid any employees");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private double getUserRating(UserObject user) {

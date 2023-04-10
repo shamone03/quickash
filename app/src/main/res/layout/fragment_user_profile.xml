@@ -90,6 +90,21 @@
         <FrameLayout
             android:layout_width="5dp"
             android:layout_height="match_parent"
+            android:layout_weight="1">
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/showAnalytics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Payments"
+            android:autoSizeTextType="uniform"
+            android:visibility="visible" />
+
+        <FrameLayout
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"></FrameLayout>
 
         <Button
