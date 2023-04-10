@@ -48,6 +48,8 @@ import kotlinx.coroutines.Job;
 public class ListingSearchFragment extends Fragment {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference jobsDatabaseReference;
+    private DatabaseReference databaseReference;
+    private DatabaseReference userRef;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference jobRef = database.getReference("jobs");
     private ArrayList<Object[]> pagedListings = new ArrayList<>();
@@ -80,6 +82,8 @@ public class ListingSearchFragment extends Fragment {
         cardPreviewList = (LinearLayout)getView().findViewById(R.id.listingCardList);
         searchBar = (SearchView)getView().findViewById(R.id.searchBar);
         database = FirebaseDatabase.getInstance();
+        userRef = database.getReference("users");
+        databaseReference = database.getReference("jobs");
         jobsDatabaseReference = database.getReference("jobs");
         filterSpinner = (Spinner)getView().findViewById(R.id.filterSpinner);
         filterInput = (EditText)getView().findViewById(R.id.filterInput);
@@ -147,55 +151,76 @@ public class ListingSearchFragment extends Fragment {
     public void createListingPreview(DataSnapshot listingSnapshot) {
         // Creating Listing object and view to display data to user
         JobPostingObject jobPosting = listingSnapshot.getValue(JobPostingObject.class);
-        View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
 
-        // Modifying placeholder text to match data from Listing object
-        TextView title = listingPreview.findViewById(R.id.titleLabel);
-        TextView hours = listingPreview.findViewById(R.id.hoursLabel);
-        TextView salary = listingPreview.findViewById(R.id.salaryLabel);
-        TextView employer = listingPreview.findViewById(R.id.employerLabel);
-
-        if (jobPosting != null) {
-            title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
-            hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
-            salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
-            employer.setText(String.format("Employer ID: %s", jobPosting.getJobPoster()));
-        } else {
-            title.setText("Title: NULL");
-            hours.setText("Hours: NULL");
-            salary.setText("Salary: NULL");
-            employer.setText("Employer ID: NULL");
+        if (jobPosting.getJobPoster() == null) {
+            return;
         }
 
-        // Connecting button event listener to apply the user to a job listing
-        AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
-        applyButton.setOnClickListener(new View.OnClickListener() {
+        userRef.child(jobPosting.getJobPoster()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onClick(View view) {
-                if (applyButton.getText().toString().equals("Apply")) {
-                    applyButton.setText("Applied");
-                    applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
+            public void onComplete(@NonNull Task<DataSnapshot> employerTask) {
+                if (!employerTask.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", employerTask.getException());
+                } else {
+                    UserObject employerObject = employerTask.getResult().getValue(UserObject.class);
+
+                    if (employerObject == null) {
+                        return;
+                    }
+
+                    View listingPreview = getLayoutInflater().inflate(R.layout.prefab_listing_preview,null,false);
+
+                    // Modifying placeholder text to match data from Listing object
+                    TextView title = listingPreview.findViewById(R.id.titleLabel);
+                    TextView hours = listingPreview.findViewById(R.id.hoursLabel);
+                    TextView salary = listingPreview.findViewById(R.id.salaryLabel);
+                    TextView employer = listingPreview.findViewById(R.id.employerLabel);
+
+                    if (jobPosting != null) {
+                        title.setText(String.format("Title: %s", jobPosting.getJobTitle()));
+                        hours.setText(String.format("Hours: %s", jobPosting.getJobDuration()));
+                        salary.setText(String.format("Salary: %.2f", jobPosting.getJobSalary()));
+                        employer.setText(String.format("Employer ID: %s", employerObject.getUsername()));
+                    } else {
+                        title.setText("Title: NULL");
+                        hours.setText("Hours: NULL");
+                        salary.setText("Salary: NULL");
+                        employer.setText("Employer: NULL");
+                    }
+
+                    // Connecting button event listener to apply the user to a job listing
+                    AppCompatButton applyButton = listingPreview.findViewById(R.id.applyButton);
+                    applyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (applyButton.getText().toString().equals("Apply")) {
+                                applyButton.setText("Applied");
+                                applyButton.setBackground(getResources().getDrawable(R.drawable.background_rounded_button_inactive));
 
 
-                    // adds the job id to current user
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
-                    DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
-                    Map<String, Object> takenJob = new HashMap<>();
-                    takenJob.put(listingSnapshot.getKey(), false);
-                    jobsTakenRef.updateChildren(takenJob);
-                    // add user to jobObject
-                    DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
-                    Map<String, Object> val = new HashMap<>();
-                    val.put(user.getUid(), false);
-                    jobRef.child("employees").updateChildren(val);
-                    
+                                // adds the job id to current user
+                                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+                                DatabaseReference jobsTakenRef = userRef.child(user.getUid()).child("jobsTaken");
+                                Map<String, Object> takenJob = new HashMap<>();
+                                takenJob.put(listingSnapshot.getKey(), false);
+                                jobsTakenRef.updateChildren(takenJob);
+                                // add user to jobObject
+                                DatabaseReference jobRef = FirebaseDatabase.getInstance().getReference("jobs").child(listingSnapshot.getKey());
+                                Map<String, Object> val = new HashMap<>();
+                                val.put(user.getUid(), false);
+                                jobRef.child("employees").updateChildren(val);
+
+                            }
+                        }
+                    });
+
+                    // Adding Listing object and View to ArrayList to be referenced later
+                    Object[] listing = {jobPosting, listingPreview};
+                    pagedListings.add(listing);
+                    updateList();
                 }
             }
         });
-
-        // Adding Listing object and View to ArrayList to be referenced later
-        Object[] listing = {jobPosting, listingPreview};
-        pagedListings.add(listing);
     }
 
     /**
@@ -273,6 +298,11 @@ public class ListingSearchFragment extends Fragment {
         for (Object[] listingReference : pagedListings) {
             JobPostingObject listing = (JobPostingObject) listingReference[0];
             String query = searchBar.getQuery().toString().toLowerCase();
+
+            // Removing entries where the employer is the user
+            if (listing.getJobPoster() == null || listing.getJobPoster().equals(user.getUid()) == true) {
+                continue;
+            }
 
             // Filtering listings based on criteria provided by the user
             if (filterTitle(String.valueOf(listing.getJobTitle()), query) == false) {
