@@ -1,5 +1,9 @@
 package com.example.csci3130courseproject.Utils;
 
+import android.location.Location;
+
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -17,6 +21,7 @@ public class UserObject {
     private String province;
     private String city;
     private String address;
+    private Location location;
 
 
     /** Contains the jobId of all jobs created by the user.*/
@@ -43,7 +48,7 @@ public class UserObject {
         this.username = username;
     }
 
-    public UserObject(String username, HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken){
+    public UserObject(String username, HashMap<String, Boolean> jobPostings, HashMap<String, Boolean> jobsTaken, Location location){
         this.username = username;
         this.jobsTaken = jobsTaken;
         this.jobPostings = jobPostings;
@@ -52,6 +57,7 @@ public class UserObject {
         this.numberOfEmployeeRatings = 0;
         this.employeeRating = 0;
         this.employerRating = 0;
+        this.location = location;
     }
 
     public void updateUser(String username, String phoneNumber, String dateOfBirth,
@@ -170,6 +176,18 @@ public class UserObject {
         numberOfEmployeeRatings += 1;
         employeeRatingScore += rating;
         employerRating = employeeRatingScore/numberOfEmployeeRatings;
+    }
+
+    public void setLocation(Location location){
+        this.location = location;
+    }
+
+    public Location getLocation(){
+        return location;
+    }
+
+    public void updateLocation(ObtainingLocation obtainingLocation){
+        this.location = obtainingLocation.location;
     }
 }
 
