@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/listingSearchFragment"
         android:name="com.example.csci3130courseproject.UI.HomePage.ListingSearchFragment"
-        android:label="fragment_listing_search"
+        android:label="Home"
         tools:layout="@layout/fragment_listing_search" >
         <action
             android:id="@+id/action_listingSearchFragment_to_userProfileFragment"
@@ -49,7 +49,7 @@
     <fragment
         android:id="@+id/createListingFragment"
         android:name="com.example.csci3130courseproject.UI.JobCreation.CreateListingFragment"
-        android:label="fragment_create_listing"
+        android:label="Post a New Job"
         tools:layout="@layout/fragment_create_listing" >
         <action
             android:id="@+id/action_createListingFragment_to_listingSearchFragment"
@@ -58,17 +58,19 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.csci3130courseproject.UI.User.ProfileFragment"
-        android:label="fragment_user_profile"
+        android:label="Your Profile"
         tools:layout="@layout/fragment_user_profile">
         <action
             android:id="@+id/action_userProfileFragment_to_editUserProfileFragment"
             app:destination="@id/editUserProfileFragment" />
         <action
-            android:id="@+id/action_userProfileFragment_to_userRatingFragment"
-            app:destination="@id/userRatingFragment" />
-        <action
             android:id="@+id/action_userProfileFragment_to_viewJobEmployer"
             app:destination="@id/viewJobEmployer" />
+        <argument android:name="userId" />
+        <action
+            android:id="@+id/action_userProfileFragment_self"
+            app:destination="@id/userProfileFragment" />
+        <argument android:name="jobId" />
     </fragment>
     <fragment
         android:id="@+id/editUserProfileFragment"
@@ -83,7 +85,12 @@
         android:id="@+id/userRatingFragment"
         android:name="com.example.csci3130courseproject.UI.User.Rating.UserRatingFragment"
         android:label="fragment_user_rating"
-        tools:layout="@layout/fragment_user_rating" />
+        tools:layout="@layout/fragment_user_rating" >
+        <argument android:name="userId" />
+        <action
+            android:id="@+id/action_userRatingFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_userRatingFragment"
         app:destination="@id/userRatingFragment" />
@@ -91,5 +98,12 @@
         android:id="@+id/viewJobEmployer"
         android:name="com.example.csci3130courseproject.UI.ViewJobEmployer.ViewJobEmployer"
         android:label="fragment_view_job_employer"
-        tools:layout="@layout/fragment_view_job_employer" />
+        tools:layout="@layout/fragment_view_job_employer" >
+        <action
+            android:id="@+id/action_viewJobEmployer_to_userRatingFragment"
+            app:destination="@id/userRatingFragment" />
+        <action
+            android:id="@+id/action_viewJobEmployer_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
 </navigation>

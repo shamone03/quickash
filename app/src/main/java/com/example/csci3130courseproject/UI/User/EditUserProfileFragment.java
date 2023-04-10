@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EditUserProfileFragment extends Fragment {
@@ -28,9 +29,11 @@ public class EditUserProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     UserObject profileUser;
     FirebaseUser currentUser = getUser();
+    DatabaseReference userIDRef = FirebaseDatabase.getInstance().getReference()
+        .child("users").child(currentUser.getUid());
     private EditText emailField, passwordField, nameField, phoneNumberField, dateOfBirthField,
-            locationField, preferredJobsField, creditCardField, creditCardCVVField, countryField,
-            provinceField, cityField, addressField;
+            locationField, preferredJobsField, creditCardField, creditCardCVVField, credCardExpireField,
+            countryField, provinceField, cityField, addressField;
 
     public EditUserProfileFragment() {
         // Required empty public constructor
@@ -74,6 +77,9 @@ public class EditUserProfileFragment extends Fragment {
         if(creditCardCVVField.getText().toString().trim().equals("")) {
             return false;
         }
+        if(credCardExpireField.getText().toString().trim().equals("")) {
+            return false;
+        }
         if(countryField.getText().toString().trim().equals("")) {
             return false;
         }
@@ -98,12 +104,11 @@ public class EditUserProfileFragment extends Fragment {
                     profileUser.updateUser(nameField.getText().toString().trim(), phoneNumberField.getText().toString().trim(),
                             dateOfBirthField.getText().toString().trim(),
                             creditCardField.getText().toString().trim(), creditCardCVVField.getText().toString().trim(),
+                            credCardExpireField.getText().toString().trim(),
                             countryField.getText().toString().trim(), provinceField.getText().toString().trim(),
                             cityField.getText().toString().trim(), addressField.getText().toString().trim());
-//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                .setDisplayName(nameField.getText().toString().trim()
-//                .updateEmail(emailField.getText().toString().trim())
-//                ).build()
+
+                    userIDRef.setValue(profileUser);
                 }
             }
         });
@@ -166,14 +171,18 @@ public class EditUserProfileFragment extends Fragment {
                     if(profileUser.getCreditCardCVV() != null) {
                         creditCardCVVField.setText(profileUser.getCreditCardCVV());
                     }
+                    credCardExpireField = (EditText)getView().findViewById(R.id.Expire);
+                    if(profileUser.getCreditCardExpire() != null) {
+                        credCardExpireField.setText(profileUser.getCreditCardExpire());
+                    }
                 }
             }
         });
 
 
         /*
-            New On click listener which calls getUser() and changeUserValues.
-            changeUserValues takes in the currentUser, and the nameField, and changes the user name.
+            New On click listener which calls changeUserValues.
+            changeUserValues takes in the currentUser and changes the user name.
             If changeUserValues returns true, then a Toast saying details changed successfully,
             Else error called, and a Toast for the same.
          */
@@ -182,15 +191,10 @@ public class EditUserProfileFragment extends Fragment {
             public void onClick(View view) {
 
                 boolean changeResult = changeUserValues(currentUser);
-                profileUser.updateUser(nameField.getText().toString(), phoneNumberField.getText().toString(),
-                        dateOfBirthField.getText().toString(), creditCardField.getText().toString(),
-                        creditCardCVVField.getText().toString(), countryField.getText().toString(),
-                        provinceField.getText().toString(), cityField.getText().toString(),
-                        addressField.getText().toString());
 
                 //Toast for the result.
                 if(changeResult){
-                    Toast.makeText(getActivity(),"Details Changes Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Details Changed Successfully", Toast.LENGTH_SHORT).show();
                     editUserProfileToUserProfile(view);
                 }else{
                     Toast.makeText(getActivity(),"Error Occurred. Try again!", Toast.LENGTH_SHORT).show();
