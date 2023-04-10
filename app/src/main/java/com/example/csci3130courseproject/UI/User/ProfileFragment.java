@@ -325,6 +325,7 @@ public class ProfileFragment extends Fragment {
                     TextView salary = listingPreview.findViewById(R.id.salaryLabel);
                     TextView employer = listingPreview.findViewById(R.id.employerLabel);
                     TextView locationName = listingPreview.findViewById(R.id.locationLabel);
+                    listingPreview.findViewById(R.id.saveButton).setVisibility(View.GONE);
 
                     // Setting job card text
                     if (jobPosting != null) {
