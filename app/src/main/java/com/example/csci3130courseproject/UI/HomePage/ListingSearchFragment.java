@@ -380,8 +380,14 @@ public class ListingSearchFragment extends Fragment {
             for (String[] titleCompare: allJobTitles) {
                 String firstWordToCompare = titleCompare[0];
                 if(firstWord.equals(firstWordToCompare)){
-                    recommendation = String.format("%s %s is similar to other jobs you have done and is available to apply to!", firstWord, title[1]);
-                    return recommendation;
+                    if(title.length > 1) {
+                        recommendation = String.format("%s %s is similar to other jobs you have done and is available to apply to!", firstWord, title[1]);
+                        return recommendation;
+                    } else {
+                        recommendation = String.format("%s is similar to other jobs you have done and is available to apply to!", firstWord);
+                        return recommendation;
+                    }
+
                 }
             }
         }
