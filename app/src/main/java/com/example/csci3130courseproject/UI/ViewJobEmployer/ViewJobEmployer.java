@@ -128,8 +128,8 @@ public class ViewJobEmployer extends Fragment {
     private void createApplicantPreview(UserObject applicant){
         // currentApplicant = applicantSnapshot.getValue(UserObject.class);
         Log.w("GotUser", "Username: " + applicant.getUsername());
-        View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, true);
-
+        View jobApplicantPreview = getLayoutInflater().inflate(R.layout.prefab_view_job_applicant_preview, applicantsContainer, false);
+        applicantsContainer.addView(jobApplicantPreview);
         // Job Posting Preview Modifiable attributes:
         ImageView profilePicture = jobApplicantPreview.findViewById(R.id.jobApplicantAvatar);
         TextView applicantName = jobApplicantPreview.findViewById(R.id.jobApplicantName);
