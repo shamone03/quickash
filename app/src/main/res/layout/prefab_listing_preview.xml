@@ -51,6 +51,16 @@
         android:textColor="@color/white"
         android:textSize="8pt"/>
 
+    <TextView
+        android:id="@+id/locationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:hint="Location:"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="8pt"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/applyButton"
         android:layout_width="150dp"

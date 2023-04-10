@@ -6,16 +6,19 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
 
+@RunWith(AndroidJUnit4.class)
 public class UserProfileEspressoTest {
-    @Before
-    public void gotoUserProfile() throws InterruptedException {
+    @BeforeClass
+    public static void gotoUserProfile() throws InterruptedException {
         ActivityScenario.launch(MainActivity.class);
-        SignInTest sign = new SignInTest();
-        sign.userSignedIn();
-
+        SignInTest.grantPermission();
+        SignInTest.signInUser();
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.userProfileFragment)).perform(click());
     }
