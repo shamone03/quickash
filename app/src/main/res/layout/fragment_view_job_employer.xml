@@ -132,9 +132,11 @@
                     android:layout_height="392dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="4dp">
-                    >
+                    tools:ignore="SpeakableTextPresentCheck">
+
 
                     <LinearLayout
                         android:id="@+id/ViewJobEmployerJobApplicantsContainer"
