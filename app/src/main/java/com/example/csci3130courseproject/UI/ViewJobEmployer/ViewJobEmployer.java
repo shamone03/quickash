@@ -106,6 +106,12 @@ public class ViewJobEmployer extends Fragment {
                 jobTitle.setText(job.getJobTitle());
                 jobDescription.setText(job.getJobDescription());
                 saveEdit.setEnabled(true);
+                saveEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        database.getReference("jobs").child(jobId).child("jobDescription").setValue(getJobDescription());
+                    }
+                });
                 String employeeId = currentJob.getJobEmployeeID();
                 if(!employeeId.equals("")) {
                     database.getReference("users").child(currentJob.getJobEmployeeID()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
